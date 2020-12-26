@@ -8,7 +8,8 @@ class ViewDonorComponent extends Component {
         super(props)
         this.state = {
             id: this.props.match.params.id,
-            identityNumber: '',
+            code: '',
+            citizenshipNumber: '',
             name: '',
             surname: '',
             telephone: '',
@@ -27,7 +28,9 @@ class ViewDonorComponent extends Component {
             .then(res => {
                 let donor = res.data;
                 this.setState({
-                    identityNumber: donor.identityNumber,
+                    id: donor.id,
+                    code: donor.code,
+                    citizenshipNumber: donor.citizenshipNumber,
                     name: donor.name,
                     surname: donor.surname,
                     telephone: donor.telephone,
@@ -53,17 +56,20 @@ class ViewDonorComponent extends Component {
                         <div className="card-body"> 
                         <form>
                             <div className="form-group">
-                                <label>Donor No:</label>
-                                <input placeholder="####" name="identityNumber" className="form-control"
-                                value={this.state.identityNumber} disabled />
+                                <label>Donor Kodu:</label>
+                                <input placeholder="" name="code" className="form-control"
+                                value={this.state.code} disabled />
                             </div>
-                        
+                            <div className="form-group">
+                                <label>TC Numarası:</label>
+                                <input placeholder="" name="citizenshipNumber" className="form-control"
+                                value={this.state.citizenshipNumber} disabled />
+                            </div>
                             <div className="form-group">
                                 <label>İsim:</label>
                                 <input placeholder="Ali" name="name" className="form-control"
                                 value={this.state.name} disabled />
                             </div>
-
                             <div className="form-group">
                                 <label>Soyisim:</label>
                                 <input placeholder="Yılmaz" name="surname" className="form-control"

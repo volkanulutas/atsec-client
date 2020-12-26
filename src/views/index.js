@@ -38,7 +38,6 @@ import ListDonorComponent from '../components/donor/ListDonorComponent';
 import CreateDonorComponent from '../components/donor/CreateDonorComponent';
 import ViewDonorComponent from '../components/donor/ViewDonorComponent';
 
-
 import ListCustomerComponent from '../components/customer/ListCustomerComponent';
 import CreateCustomerComponent from '../components/customer/CreateCustomerComponent';
 import ViewCustomerComponent from '../components/customer/ViewCustomerComponent';
@@ -47,11 +46,18 @@ import ListProductComponent from '../components/product/ListProductComponent';
 import CreateProductComponent from '../components/product/CreateProductComponent';
 import ViewProductComponent from '../components/product/ViewProductComponent';
 
+import ListRawProductComponent from '../components/rawproduct/ListRawProductComponent';
+import CreateRawProductComponent from '../components/rawproduct/CreateRawProductComponent';
+import ViewRawProductComponent from '../components/rawproduct/ViewRawProductComponent';
+
+import ListDonorInstituteComponent from '../components/donorinstitute/ListDonorInstituteComponent';
+import CreateDonorInstituteComponent from '../components/donorinstitute/CreateDonorInstituteComponent';
+import ViewDonorInstituteComponent from '../components/donorinstitute/ViewDonorInstituteComponent';
 
 // See React Router documentation for details: https://reacttraining.com/react-router/web/api/Route
 const pageList = [
   {
-    name: 'Dashboard',
+    name: 'Anasayfa',
     path: '/home',
     component: Dashboard,
   },
@@ -129,6 +135,36 @@ const pageList = [
     name: 'Müşteri Detayı',
     path: '/view-customer/:id',
     component: ViewCustomerComponent,
+  },
+  {
+    name: 'Ham Ürün Listesi',
+    path: '/rawproducts/',
+    component: ListRawProductComponent,
+  },
+  {
+    name: 'Ham Ürün Ekle/Güncelle',
+    path: '/add-rawproduct/:id',
+    component: CreateRawProductComponent,
+  },
+  {
+    name: 'Ham Ürün Görüntüle',
+    path: '/view-rawproduct/:id',
+    component: ViewRawProductComponent,
+  },
+  {
+    name: 'Donor Kurum Listesi',
+    path: '/donorinstitutes/',
+    component: ListDonorInstituteComponent,
+  },
+  {
+    name: 'Kurum Donor Ekle/Güncelle',
+    path: '/add-donorinstitute/:id',
+    component: CreateDonorInstituteComponent,
+  },
+  {
+    name: 'Kurum Donor Detayı',
+    path: '/view-donorinstitute/:id',
+    component: ViewDonorInstituteComponent,
   },
   {
     name: 'Ürün Listesi',

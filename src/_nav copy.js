@@ -24,11 +24,11 @@ export default {
       ]
     },
     {
-      name: 'Ürün Yönetimi',
+      name: 'Ham Ürün Yönetimi',
       icon: 'Layers',
       children: [
         {
-          name: 'Ürünler',
+          name: 'Ham Ürünler',
           url: '/products/',
           icon: 'Home',
         },

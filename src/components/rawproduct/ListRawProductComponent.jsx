@@ -1,40 +1,39 @@
 import React, { Component } from 'react';
-import ProductService from '../../services/ProductService';
+import RawProductService from '../../services/RawProductService';
 
-class ListProductComponent extends Component {
+class ListRawProductComponent extends Component {
     constructor(props)
     {
         super(props)
         this.state = {
             products :[]
         }
-        this.addProduct = this.addProduct.bind(this);
-        this.updateProduct = this.updateProduct.bind(this);
-        this.viewProduct = this.viewProduct.bind(this);
+        this.addRawProduct = this.addRawProduct.bind(this);
+        this.updateRawProduct = this.updateRawProduct.bind(this);
+        this.viewRawProduct = this.viewRawProduct.bind(this);
     }
     componentDidMount(){
-        ProductService.getAllProducts().then((res) => {
+        RawProductService.getAllRawProducts().then((res) => {
             console.log(res.data);
             this.setState({products : res.data});
-
         });
     }
 
-    addProduct(){
-        this.props.history.push('/add-product/_add');
+    addRawProduct(){
+        this.props.history.push('/add-rawproduct/_add');
     }
 
-    viewProduct(id){
-        this.props.history.push(`/view-product/${id}`);
+    viewRawProduct(id){
+        this.props.history.push(`/view-rawproduct/${id}`);
     }
 
-    updateProduct(id){
-        this.props.history.push(`/add-product/${id}`);
+    updateRawProduct(id){
+        this.props.history.push(`/add-rawproduct/${id}`);
     }
 
-    deleteProduct(id){
-        ProductService.deleteProduct(id).then(res => {
-            ProductService.getAllProducts().then((res) => {
+    deleteRawProduct(id){
+        RawProductService.deleteRawProduct(id).then(res => {
+            RawProductService.getAllRawProducts().then((res) => {
                 this.setState({products : res.data});
             });
         });
@@ -43,14 +42,14 @@ class ListProductComponent extends Component {
     render() {
         return (
             <div>
-                <h2 className="text-center">Ürün Listesi</h2> 
+                <h2 className="text-center">Ham Ürün Listesi</h2> 
                      <button type="button" className="btn btn-primary addButton" onClick={this.addProduct}>Ürün Ekle</button>
                  <div className="row">
                     <table className="table table-striped table-bordered"> 
                         <thead>
                             <tr>
-                                <th>Adı</th>
-                                <th>Açıklaması</th>
+                                <th>Donor Kodu</th>
+                                <th>Yerİ</th>
                                 <th>Durumu</th>
                                 <th>Tİpİ</th>
                                 <th>İşlemler</th>
@@ -61,14 +60,14 @@ class ListProductComponent extends Component {
                                 this.state.products.map(
                                     p => 
                                     <tr key = {p.id}> 
-                                        <td> {p.name} </td>
-                                        <td> {p.definition} </td>
+                                        <td> {p.donorCode} </td>
+                                        <td> {p.location} </td>
                                         <td> {p.status} </td>
                                         <td> {p.type} </td>
                                         <td>   
-                                            <button type="button" style={{marginRight:"10px"}} onClick={() => this.viewProduct(p.id)} className="btn btn-success">Görüntüle</button>
-                                            <button type="button" style={{marginRight:"10px"}} onClick={() => this.updateProduct(p.id)} className="btn btn-info">Güncelle</button>
-                                            <button type="button" onClick={() => this.deleteProduct(p.id)} className="btn btn-danger">Sil</button>
+                                            <button type="button" style={{marginRight:"10px"}} onClick={() => this.viewRawProduct(p.id)} className="btn btn-success">Görüntüle</button>
+                                            <button type="button" style={{marginRight:"10px"}} onClick={() => this.updateRawProduct(p.id)} className="btn btn-info">Güncelle</button>
+                                            <button type="button" onClick={() => this.deleteRawProduct(p.id)} className="btn btn-danger">Sil</button>
                                         </td>
                                     </tr>
                                 )
@@ -81,4 +80,4 @@ class ListProductComponent extends Component {
     }
 }
 
-export default ListProductComponent;
+export default ListRawProductComponent;

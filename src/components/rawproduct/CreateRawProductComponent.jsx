@@ -1,43 +1,38 @@
 import React, { Component } from 'react';
 
-import ProductService from '../../services/ProductService';
+import RawProductService from '../../services/RawProductService';
 import DonorService from '../../services/DonorService';
-import CustomerService from '../../services/CustomerService';
 
-class CreateProductComponent extends Component {
+class CreateRawProductComponent extends Component {
     constructor(props)
     {
         super(props)
         this.state = {
             id: this.props.match.params.id,
             name: '',
+            location: '',
             definition: '',
             status: '',
             type: '',
-            expirationDate: '', 
-            splitLength: '',
+            acceptanceDate: '',
             information: '',
-            secCode: '',
-            donorId: '',
-            customerId: '',
+            donorCode: '',
             deleted: false,
 
+            productLocationList: [],
             productDonorList: [],
-            productCustomerList: [],
             productStatusList: [ "Karantina", "Stok", "Numune", "Zaiyat", "Geri Çağrılmış"],
             productTypeList: ["NONE"],
         }
         this.saveProduct = this.saveProduct.bind(this);
         this.changeNameHandler = this.changeNameHandler.bind(this);
+        this.changeLocationHandler = this.changeLocationHandler.bind(this);
         this.changeDefinitionHandler = this.changeDefinitionHandler.bind(this);
         this.changeStatusHandler = this.changeStatusHandler.bind(this);
         this.changeTypeHandler = this.changeTypeHandler.bind(this);
-        this.changeExpirationDateHandler = this.changeExpirationDateHandler.bind(this);
-        this.changeSplitLengthHandler = this.changeSplitLengthHandler.bind(this);
+        this.changeAcceptanceDateHandler = this.changeAcceptanceDateHandler.bind(this);
         this.changeInformationHandler = this.changeInformationHandler.bind(this);
-        this.changeSecCodeHandler = this.changeSecCodeHandler.bind(this);
-        this.changeDonorIdHandler = this.changeDonorIdHandler.bind(this);
-        this.changeCustomerIdHandler = this.changeCustomerIdHandler.bind(this);
+        this.changeDonorCodeHandler = this.changeDonorCodeHandler.bind(this);
     } 
 
     componentDidMount(){
@@ -47,29 +42,28 @@ class CreateProductComponent extends Component {
             console.error(ex);
         });
 
-        CustomerService.getAllCustomers().then(res=> {
-            this.setState({productCustomerList: res.data});
+         RawProductService.getAllProductLocations().then(res=> {
+            this.setState({productLocationList: res.data});
          }).catch(ex => {
             console.error(ex);
          });
 
+        
         if(this.state.id === "_add"){
             return;
         }else{
-            ProductService.getProductById(this.state.id)
+            RawProductService.getRawProductById(this.state.id)
             .then(res => {
                 let product = res.data;
                 this.setState({
                     name: product.name,
+                    location: product.location,
                     definition: product.definition,
                     status: product.status,
                     type: product.type,
-                    expirationDate: this.convertExpDate(product.expirationDate),
-                    splitLength: product.splitLength,
-                    information: product.information,
-                    secCode: product.secCode,
-                    customerId: product.customerId,
-                    donorId: product.donorId,
+                    acceptanceDate: this.convertDate(product.acceptanceDate),
+        
+                    donorCode: product.donorCode,
                 });
                 console.log('product: ' + JSON.stringify(product));
             }).catch(ex=> {
@@ -82,8 +76,17 @@ class CreateProductComponent extends Component {
         this.setState({name:event.target.value});
     }
 
+    changeLocationHandler = (event) => {
+        this.setState({location:event.target.value});
+    }
+
     changeDefinitionHandler = (event) => {
         this.setState({definition:event.target.value});
+    }
+
+    changeAcceptanceDateHandler = (event) => {
+        let date = new Date (event.target.value).getTime();
+        this.setState({acceptanceDate:date});
     }
 
     changeStatusHandler = (event) => {
@@ -94,38 +97,20 @@ class CreateProductComponent extends Component {
         this.setState({type:event.target.value});
     }
 
-    changeExpirationDateHandler = (event) => {
-        let date = new Date (event.target.value).getTime();
-        this.setState({expirationDate:date});
-    }
-
-    changeSplitLengthHandler = (event) => {
-        this.setState({splitLength:event.target.value});
-    }
-
     changeInformationHandler = (event) => {
         this.setState({information:event.target.value});
     }
 
-    changeSecCodeHandler = (event) => {
-        this.setState({secCode:event.target.value});
+    changeDonorCodeHandler = (event) => {
+        this.setState({donorCode:event.target.value});
     }
 
-    changeDonorIdHandler = (event) => {
-        this.setState({donorId:event.target.value});
-    }
-
-    changeCustomerIdHandler = (event) => {
-        this.setState({customerId:event.target.value});
-    }
-
-    saveProduct= (event) => {
+    saveProduct = (event) => {
         event.preventDefault();
         let idParam = undefined;
         let statusParam = this.state.productStatusList[0];
         let typeParam = this.state.productTypeList[0];
         let donorParam = this.state.productDonorList[0].id;
-        let customerParam = this.state.productCustomerList[0].id;
 
         if(this.state.id !== "_add"){
             idParam = this.state.id;
@@ -136,25 +121,22 @@ class CreateProductComponent extends Component {
         if(this.state.type !== ""){
             typeParam = this.state.type;
         }
-        if(this.state.donorId !== ""){
-            donorParam = this.state.donorId;
-        }
-        if(this.state.customerId !== ""){
-            customerParam = this.state.customerId;
+        if(this.state.donorCode !== ""){
+            donorParam = this.state.donorCode;
         }
 
-        let product = {id: idParam, name: this.state.name, definition: this.state.definition,
-        status:  statusParam, type: typeParam, expirationDate: this.state.expirationDate, splitLength: this.state.splitLength,
-        information: this.state.information, secCode: this.state.secCode,  donorId: donorParam,  customerId: customerParam, deleted: this.state.deleted };
+        let product = {id: idParam, name: this.state.name, location: this.state.location, definition: this.state.definition,
+        status:  statusParam, type: typeParam, acceptanceDate: this.state.acceptanceDate,
+        information: this.state.information, donorCode: donorParam, deleted: this.state.deleted };
         console.log('product: ' + JSON.stringify(product));
         if(this.state.id === "_add"){
-            ProductService.createProduct(product).then(res => {
+            RawProductService.createRawProduct(product).then(res => {
                     this.props.history.push('/products'); 
                 }).catch(ex=> {
                 console.error(ex);
             });
         }else{ 
-            ProductService.updateProduct(this.state.id, product).then(res => { 
+            RawProductService.updateRawProduct(this.state.id, product).then(res => { 
                     this.props.history.push('/products');
                 }).catch(ex=> {
                 console.error(ex);
@@ -163,22 +145,20 @@ class CreateProductComponent extends Component {
     }
 
     cancel = (event) => {
-        this.props.history.push('/products');
+        this.props.history.push('/rawproducts');
     }
 
     getTitle(){
-        if(this.state.id === "_add")
-        {
-            return <h3 className="text-center">Ürün Ekle</h3>;
+        if(this.state.id === "_add"){
+            return <h3 className="text-center">Ham Ürün Ekle</h3>;
         }
         else{
-            return <h3 className="text-center">Ürün Güncelle</h3>
+            return <h3 className="text-center">Ham Ürün Güncelle</h3>
         }
     }
 
     getButtonText() {
-        if(this.state.id === "_add")
-        {
+        if(this.state.id === "_add"){
             return "Kaydet";
         }
         else{
@@ -186,7 +166,7 @@ class CreateProductComponent extends Component {
         }
     }
 
-    convertExpDate(dateLong){
+    convertDate(dateLong){
         if(dateLong !== undefined){
             let date = new Date(dateLong);
             let year = date.getFullYear();
@@ -211,7 +191,6 @@ class CreateProductComponent extends Component {
                                 <input placeholder="Adı" name="name" className="form-control"
                                 value={this.state.name} onChange={this.changeNameHandler} />
                             </div>
-                   
                             <div className="form-group">
                                 <label>Açıklama:</label>
                                 <input placeholder="Açıklama" name="definition" className="form-control"
@@ -237,17 +216,10 @@ class CreateProductComponent extends Component {
                             </div>
 
                             <div className="form-group">
-                                <label>SKT:</label>
-                                <input type="date" id="expirationDate" name="expirationDate" 
-                                 value={this.state.expirationDate} onChange={this.changeExpirationDateHandler} />
+                                <label>Kabul Tarihi:</label>
+                                <input type="date" id="acceptanceDate" name="acceptanceDate" 
+                                 value={this.state.acceptanceDate} onChange={this.changeAcceptanceDateHandler} />
                             </div>
-
-                            <div className="form-group">
-                                <label>Parça No:</label>
-                                <input placeholder="1" name="splitLength" className="form-control"
-                                value={this.state.splitLength} onChange={this.changeSplitLengthHandler} />
-                            </div>
-                            
                             <div className="form-group">
                                 <label>Ek Bilgi:</label>
                                 <input placeholder="Ek Bilgi" name="information" className="form-control"
@@ -256,18 +228,18 @@ class CreateProductComponent extends Component {
 
                             <div className="form-group">
                                 <label>Donor:</label>
-                                <select className="form-control"  value={this.state.donorId} onChange={this.changeDonorIdHandler}>
+                                <select className="form-control"  value={this.state.donorCode} onChange={this.changeDonorCodeHandler}>
                                 {this.state.productDonorList.map((option) => (
-                                    <option value={option.id}>{option.id} - {option.name} {option.surname}</option>
+                                    <option value={option.donorCode}></option>
                                 ))}
                                 </select>
                             </div>
                             
                             <div className="form-group">
-                                <label>Müşteri:</label>
-                                <select className="form-control"  value={this.state.customerId} onChange={this.changeCustomerIdHandler}>
-                                {this.state.productCustomerList.map((option) => (
-                                    <option value={option.id}>{option.id} - {option.name}</option>
+                                <label>Donor Kurumu:</label>
+                                <select className="form-control"  value={this.state.location} onChange={this.changeLocationHandler}>
+                                {this.state.productLocationList.map((option) => (
+                                    <option value={option}></option>
                                 ))}
                                 </select>
                             </div>
@@ -285,4 +257,4 @@ class CreateProductComponent extends Component {
     }
 }
 
-export default CreateProductComponent;
+export default CreateRawProductComponent;

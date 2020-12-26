@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import ReactFormInputValidation from "react-form-input-validation";
+
 import UserService from '../../services/UserService';
 import RoleService from '../../services/RoleService';
 
@@ -18,7 +20,7 @@ class CreateUserComponent extends Component {
             deleted: false,
             allRoles: [],
             success: false,
-        }
+        };
         this.changeNameHandler = this.changeNameHandler.bind(this);
         this.changeSurnameHandler = this.changeSurnameHandler.bind(this);
         this.changeUsernameHandler = this.changeUsernameHandler.bind(this);
@@ -73,18 +75,18 @@ class CreateUserComponent extends Component {
         }
         let user = {id: idTmp, name: this.state.name, surname: this.state.surname, username: this.state.username, 
             password: this.state.password, enabled: this.state.enabled, role: roleTmp};
-        alert('user: ' + JSON.stringify(user));
+        console.log('user: ' + JSON.stringify(user));
         if(this.state.id === "_add"){
             UserService.createUser(user).then(res => {
                  this.props.history.push('/users');
             }).catch(ex=> {
-                alert(ex);
+                console.error(ex);
             });  
         }else{
             UserService.updateUser(this.state.id, user).then(res => {
                  this.props.history.push('/users');
             }).catch(ex=> {
-                alert(ex);
+                console.error(ex);
             });
         }   
     }

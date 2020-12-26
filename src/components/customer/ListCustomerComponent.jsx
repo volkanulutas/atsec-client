@@ -61,9 +61,9 @@ class ListCustomerComponent extends Component {
                     <table className="table table-striped table-bordered"> 
                         <thead>
                             <tr>
-                                <th>Müşteri No</th>
+                                <th>Müşteri Kodu</th>
                                 <th>Adı</th>
-                                <th>Müşteri Tipi</th>
+                                <th>Müşteri Tİpİ</th>
                                 <th>Açıklama</th>
                                 <th>İşlemler</th>
                             </tr>

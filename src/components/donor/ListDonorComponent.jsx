@@ -54,7 +54,7 @@ class ListDonorComponent extends Component {
                     <table className="table table-striped table-bordered"> 
                         <thead>
                             <tr>
-                                <th>Donor No</th>
+                                <th>Donor Kodu</th>
                                 <th>Adı</th>
                                 <th>Soyadı</th>
                                 <th>İşlemler</th>
@@ -65,7 +65,7 @@ class ListDonorComponent extends Component {
                                 this.state.donors.map(
                                     d => 
                                     <tr key = {d.id}> 
-                                        <td> {d.identityNumber} </td>
+                                        <td> {d.code} </td>
                                         <td> {d.name} </td>
                                         <td> {d.surname} </td>
                                         <td>   

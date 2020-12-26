@@ -12,15 +12,40 @@ export default {
         {
           name: 'Kullanıcılar',
           url: '/users/',
+          icon: 'User',
         },
         {
           name: 'Roller',
           url: '/roles/',
+          icon: 'User',
         },
         {
           name: 'Yetkiler',
           url: '/permissions/',
+          icon: 'User',
         },
+      ]
+    },
+    {
+      name: 'Ham Ürün Yönetimi',
+      icon: 'Layers',
+      children: [
+        {
+          name: 'Ham Ürünler',
+          url: '/rawproducts/',
+          icon: 'Home',
+        },
+        {
+          name: 'Donor',
+          url: '/donors/',
+          icon: 'Home',
+        },
+        {
+          name: 'Donor Kurumları',
+          url: '/donorinstitutes/',
+          icon: 'Home',
+        },
+
       ]
     },
     {
@@ -32,17 +57,6 @@ export default {
           url: '/products/',
           icon: 'Home',
         },
-        {
-          name: 'Donor',
-          url: '/donors/',
-          icon: 'Home',
-        },
-      ]
-    },
-    {
-      name: 'Satış Yönetimi',
-      icon: 'Home',
-      children: [
         {
           name: 'Müşteriler',
           url: '/customers/',

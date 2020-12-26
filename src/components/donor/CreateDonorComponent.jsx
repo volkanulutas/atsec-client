@@ -8,7 +8,8 @@ class CreateDonorComponent extends Component {
         super(props)
         this.state = {
             id: this.props.match.params.id,
-            identityNumber: '',
+            code: '',
+            citizenshipNumber: '',
             name: '',
             surname: '',
             telephone: '',
@@ -17,15 +18,20 @@ class CreateDonorComponent extends Component {
             deleted: false,
         }
         this.saveDonor = this.saveDonor.bind(this);
-        this.changeIdentityNumberHandler = this.changeIdentityNumberHandler.bind(this);
+        this.changeCitizenshipNumberHandler = this.changeCitizenshipNumberHandler.bind(this);
+        this.changeCodeHandler = this.changeCodeHandler.bind(this);
         this.changeNameHandler = this.changeNameHandler.bind(this);
         this.changeSurnameHandler = this.changeSurnameHandler.bind(this);
         this.changeTelephoneHandler = this.changeTelephoneHandler.bind(this);
         this.changeAddressHandler = this.changeAddressHandler.bind(this);
     } 
 
-    changeIdentityNumberHandler = (event) => {
-        this.setState({identityNumber:event.target.value});
+    changeCodeHandler = (event) => {
+        this.setState({code:event.target.value});
+    }
+
+    changeCitizenshipNumberHandler = (event) => {
+        this.setState({citizenshipNumber:event.target.value});
     }
 
     changeNameHandler = (event) => {
@@ -52,7 +58,7 @@ class CreateDonorComponent extends Component {
             .then(res => {
                 let donor = res.data;
                 this.setState({
-                    identityNumber: donor.identityNumber,
+                    code: donor.code,
                     name: donor.name,
                     surname: donor.surname,
                     telephone: donor.telephone,
@@ -71,7 +77,7 @@ class CreateDonorComponent extends Component {
             idParam = this.state.id;
         }
 
-        let donor = {id: idParam, identityNumber: this.state.identityNumber,  name: this.state.name, surname: this.state.surname, address: this.state.address, telephone: this.state.telephone, deleted: this.state.deleted };
+        let donor = {id: idParam, code: this.state.code, citizenshipNumber: this.state.citizenshipNumber,  name: this.state.name, surname: this.state.surname, address: this.state.address, telephone: this.state.telephone, deleted: this.state.deleted };
         console.log('donor: ' + JSON.stringify(donor));
         if(this.state.id === "_add"){ // create user
             DonorService.createDonor(donor).then(
@@ -96,8 +102,7 @@ class CreateDonorComponent extends Component {
         this.props.history.push('/donors');
     }
 
-    getTitle()
-    {
+    getTitle(){
         if(this.state.id === "_add")
         {
             return <h3 className="text-center">Donor Ekle</h3>;
@@ -107,8 +112,7 @@ class CreateDonorComponent extends Component {
         }
     }
 
-    getButtonText()
-    {
+    getButtonText(){
         if(this.state.id === "_add")
         {
             return "Kaydet";
@@ -128,23 +132,20 @@ class CreateDonorComponent extends Component {
                         <div className="card-body"> 
                         <form>
                             <div className="form-group">
-                                <label>Donor Numarası:</label>
-                                <input placeholder="####" name="identityNumber" className="form-control"
-                                value={this.state.identityNumber} onChange={this.changeIdentityNumberHandler} />
-                            </div>
-                        
-                            <div className="form-group">
-                                <label>İsim:</label>
+                                <label>Donor Adı:</label>
                                 <input placeholder="Ali" name="name" className="form-control"
                                 value={this.state.name} onChange={this.changeNameHandler} />
                             </div>
-
                             <div className="form-group">
-                                <label>Soyisim:</label>
+                                <label>Donor Soyadı:</label>
                                 <input placeholder="Yılmaz" name="surname" className="form-control"
                                 value={this.state.surname} onChange={this.changeSurnameHandler} />
                             </div>
-
+                            <div className="form-group">
+                                <label>TC Numarası:</label>
+                                <input placeholder="10203320214" name="citizenshipNumber" className="form-control"
+                                value={this.state.citizenshipNumber} onChange={this.changeCitizenshipNumberHandler} />
+                            </div>
                             <div className="form-group">
                                 <label>Telefon:</label>
                                 <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="(90)5321234567" name="telephone" className="form-control"

@@ -10,6 +10,7 @@ export const API_URL_DONOR = '/donor/';
 export const API_URL_PRODUCT = '/product/';
 export const API_URL_RAWPRODUCT = '/rawproduct/';
 export const API_URL_DONOR_INSTITUTE = '/donorinstitute/';
+export const API_URL_AUTH = '/auth/';
 
 export const  CONFIG = {
     headers: {

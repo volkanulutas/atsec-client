@@ -10,13 +10,10 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-      <Route path="/login" component={LoginComponent} exact />
-      <Route component={DashboardLayout} exact />
-
-
+        <Route component={DashboardLayout} />
+        <Route component={LoginComponent} />
       </Switch>
     </BrowserRouter>
-    
      
   );
 }

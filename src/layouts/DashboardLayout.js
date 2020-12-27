@@ -88,7 +88,7 @@ export default class DashboardLayout extends Component {
             </Page>
           </div>
           <Footer>
-            <span>Copyright © 2020 ATSec. All rights reserved.</span>
+            <span>Copyright © 2021 ATSec. All rights reserved.</span>
             <span>
               <a href="#!">Terms</a> | <a href="#!">Privacy Policy</a>
             </span>

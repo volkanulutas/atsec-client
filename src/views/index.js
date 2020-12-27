@@ -53,6 +53,8 @@ import ViewRawProductComponent from '../components/rawproduct/ViewRawProductComp
 import ListDonorInstituteComponent from '../components/donorinstitute/ListDonorInstituteComponent';
 import CreateDonorInstituteComponent from '../components/donorinstitute/CreateDonorInstituteComponent';
 import ViewDonorInstituteComponent from '../components/donorinstitute/ViewDonorInstituteComponent';
+import ChangePasswordComponent from '../components/auth/ChangePassword';
+import LoginComponent from '../components/auth/LoginComponent';
 
 // See React Router documentation for details: https://reacttraining.com/react-router/web/api/Route
 const pageList = [
@@ -61,6 +63,12 @@ const pageList = [
     path: '/home',
     component: Dashboard,
   },
+  {
+    name: 'Şifre Değiştir',
+    path: '/change-password/:id',
+    component: ChangePasswordComponent,
+  },
+
   {
     name: 'Kullanıcılar',
     path: '/users/',

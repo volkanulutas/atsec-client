@@ -45,7 +45,6 @@ export default {
           url: '/donorinstitutes/',
           icon: 'Home',
         },
-
       ]
     },
     {

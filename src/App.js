@@ -12,8 +12,6 @@ function App() {
       <Switch>
       <Route path="/login" component={LoginComponent} exact />
       <Route component={DashboardLayout} exact />
-
-
       </Switch>
     </BrowserRouter>
     

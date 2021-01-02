@@ -43,6 +43,8 @@ class ViewProductComponent extends Component {
                     secCode: product.secCode,
                 });
                 console.log('product: ' + JSON.stringify(product));
+            }).catch(ex => {
+                console.error(ex);
             });
         }  
     }

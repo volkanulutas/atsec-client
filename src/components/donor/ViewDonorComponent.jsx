@@ -38,6 +38,8 @@ class ViewDonorComponent extends Component {
                     bloodTestPdfFile: donor.bloodTestPdfFile,
                 });
                 console.log('donor: ' + JSON.stringify(donor));
+            }).catch(ex => {
+                console.error(ex);
             });
         }  
     }

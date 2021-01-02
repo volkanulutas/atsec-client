@@ -15,6 +15,8 @@ class CreateCustomerComponent extends Component {
             address: '', 
             telephone: '',
             deleted: false,
+            errors: [],
+
             customerTypeList: ["Hastane", "Firma", "Bireysel", "Yurt Dışı Acenta"],
         }
         this.saveCustomer = this.saveCustomer.bind(this);
@@ -42,6 +44,8 @@ class CreateCustomerComponent extends Component {
                     telephone: customer.telephone,
                 });
                 console.log('customer: ' + JSON.stringify(customer));
+            }).catch(ex => {
+                console.error(ex);
             });
         }  
     }
@@ -72,6 +76,32 @@ class CreateCustomerComponent extends Component {
 
     saveCustomer = (event) => {
         event.preventDefault();
+        var errors = [];
+        if(this.state.identityNumber === ""){
+            errors.push("identityNumber");
+        }
+        if(this.state.definition === ""){
+            errors.push("definition");
+        }
+        if(this.state.name === ""){
+            errors.push("name");
+        }
+        if(this.state.surname === ""){
+            errors.push("surname");
+        }
+        if(this.state.address === ""){
+            errors.push("address");
+        }
+        if(this.state.telephone === ""){
+            errors.push("telephone");
+        }
+        /* TODO: Telephone formati */
+
+       this.setState({errors: errors});
+       if(errors.length > 0){
+           return false;
+       }
+        
 
         let idParam = undefined;
         let customerTypeParam = this.state.customerTypeList[0];
@@ -85,18 +115,18 @@ class CreateCustomerComponent extends Component {
         definition: this.state.definition, name: this.state.name, address: this.state.address, telephone: this.state.telephone, deleted: this.state.deleted };
         console.log('customer: ' + JSON.stringify(customer));
         if(this.state.id === "_add"){
-            CustomerService.createCustomer(customer).then(
-                (response) => { console.log(response); 
+            CustomerService.createCustomer(customer).then(res => {
+                    console.log(res); 
                     this.props.history.push('/customers'); 
                 }).catch(ex=>{
-                console.log(ex);
+                    console.error(ex);
             });
         }else{     // TODO: alert basarili
-            CustomerService.updateCustomer(this.state.id, customer).then(
-                (response) => { console.log(response); 
+            CustomerService.updateCustomer(this.state.id, customer).then(res => {
+                    console.log(res); 
                     this.props.history.push('/customers');
-                }).catch(ex=>{
-                console.log(ex);
+                }).catch(ex => {
+                    console.error(ex);
             });
         }   
     }
@@ -105,26 +135,24 @@ class CreateCustomerComponent extends Component {
         this.props.history.push('/customers');
     }
 
-    getTitle()
-    {
-        if(this.state.id === "_add")
-        {
+    getTitle(){
+        if(this.state.id === "_add"){
             return <h3 className="text-center">Müşteri Ekle</h3>;
-        }
-        else{
+        } else{
             return <h3 className="text-center">Müşteri Güncelle</h3>
         }
     }
 
-    getButtonText()
-    {
-        if(this.state.id === "_add")
-        {
+    getButtonText(){
+        if(this.state.id === "_add"){
             return "Kaydet";
-        }
-        else{
+        } else{
             return "Güncelle";
         }
+    }
+
+    hasError(key){
+        return this.state.errors.indexOf(key) !== -1;
     }
 
     render() {
@@ -137,9 +165,12 @@ class CreateCustomerComponent extends Component {
                         <div className="card-body"> 
                         <form>
                             <div className="form-group">
-                                <label>Müşteri No:</label>
+                                <label>Müşteri Kodu:</label>
                                 <input placeholder="123" name="identityNumber" className="form-control"
                                 value={this.state.identityNumber} onChange={this.changeIdentityNumberHandler} />
+                                <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
+                                    Müşteri kodunu girmelisiniz.
+                                </div>
                             </div>
                             <div className="form-group">
                                 <label>Müşteri Tipi: {this.state.customerType}</label>
@@ -153,24 +184,36 @@ class CreateCustomerComponent extends Component {
                                 <label>Açıklama:</label>
                                 <input placeholder="Açıklama" name="definition" className="form-control"
                                 value={this.state.definition} onChange={this.changeDefinitionHandler} />
+                                <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
+                                    Açıklamayı girmelisiniz.
+                                </div>
                             </div>
 
                             <div className="form-group">
                                 <label>İsim:</label>
                                 <input placeholder="Ela" name="name" className="form-control"
                                 value={this.state.name} onChange={this.changeNameHandler} />
+                                <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
+                                    İsmi girmelisiniz.
+                                </div>
                             </div>
 
                             <div className="form-group">
                                 <label>Adres:</label>
                                 <input placeholder="Adres" name="address" className="form-control"
                                 value={this.state.address} onChange={this.changeAddressHandler} />
+                                <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
+                                    Adresi girmelisiniz.
+                                </div>
                             </div>
 
                             <div className="form-group">
                                 <label>Telefon:</label>
                                 <input placeholder="(90)5321234567" name="telephone" className="form-control"
                                 value={this.state.telephone} onChange={this.changeTelephoneHandler} />
+                                <div className={this.hasError("telephone") ? "inline-errormsg" : "hidden"}>
+                                    Telefon numarası uygun formatta değil veya girilmemiş.
+                                </div>
                             </div>
 
                             <button className="btn btn-success" onClick={this.saveCustomer.bind(this)}>{this.getButtonText()}</button>

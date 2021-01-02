@@ -12,6 +12,7 @@ class CreatePermissionComponent extends Component {
             name: '',
             definition: '',
             deleted: false,
+            errors: [],
         }
         this.savePermission = this.savePermission.bind(this);
         this.changeNameHandler = this.changeNameHandler.bind(this);
@@ -31,6 +32,8 @@ class CreatePermissionComponent extends Component {
                     definition: permission.definition,
                 });
                 console.log('permission: ' + JSON.stringify(permission));
+            }).catch(ex=> {
+                console.error(ex);
             });
         }  
     }
@@ -49,6 +52,15 @@ class CreatePermissionComponent extends Component {
 
     savePermission = (event) => {
         event.preventDefault();
+        var errors = [];
+        if(this.state.name === ""){
+            errors.push("name");
+        }
+       this.setState({errors: errors});
+       if(errors.length > 0){
+           return false;
+       }
+
         let idTmp = undefined;
         if(this.state.id !== "_add"){
             idTmp = this.state.id;
@@ -56,21 +68,19 @@ class CreatePermissionComponent extends Component {
         let permission = {id: idTmp, name: this.state.name,  definition: this.state.definition, deleted: this.state.deleted };
         console.log('permission: ' + JSON.stringify(permission));
         if(this.state.id === "_add"){
-            PermissionService.createPermission(permission).then(
-                (response) => { console.log(response); 
+            PermissionService.createPermission(permission).then(res => { 
+                    console.log(res); 
                     this.props.history.push('/permissions'); 
-                },
-                (error) => { console.log(error); 
-                }
-            );
-        }else{
-            PermissionService.updatePermission(this.state.id, permission).then(
-                (response) => { console.log(response); 
+                }).catch(ex => {
+                    console.error(ex);
+                });
+        }else {
+            PermissionService.updatePermission(this.state.id, permission).then(res => { 
+                    console.log(res); 
                     this.props.history.push('/permissions');
-                },
-                (error) => { console.log(error);
-                }
-            );
+                }).catch(ex => {
+                    console.error(ex);
+                });
         }   
     }
 
@@ -89,15 +99,17 @@ class CreatePermissionComponent extends Component {
         }
     }
 
-    getButtonText()
-    {
-        if(this.state.id === "_add")
-        {
+    getButtonText(){
+        if(this.state.id === "_add"){
             return "Kaydet";
         }
         else{
             return "Güncelle";
         }
+    }
+
+    hasError(key){
+        return this.state.errors.indexOf(key) !== -1;
     }
 
     render() {
@@ -111,8 +123,14 @@ class CreatePermissionComponent extends Component {
                         <form>
                             <div className="form-group">
                                 <label>İsim:</label>
-                                <input placeholder="Yetki İsmi" name="name" className="form-control"
+                                <input placeholder="Yetki İsmi" name="name" 
+                                className={this.hasError("name") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.name} onChange={this.changeNameHandler} />
+                                <div className={this.hasError("name") ? "inline-errormsg" : "hidden"}>
+                                    İsmi girmelisiniz.
+                                </div>
                             </div>
 
                             <div className="form-group">

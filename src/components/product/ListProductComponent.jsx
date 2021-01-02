@@ -16,7 +16,8 @@ class ListProductComponent extends Component {
         ProductService.getAllProducts().then((res) => {
             console.log(res.data);
             this.setState({products : res.data});
-
+        }).catch(ex => {
+            console.error(ex);
         });
     }
 
@@ -37,6 +38,10 @@ class ListProductComponent extends Component {
             ProductService.getAllProducts().then((res) => {
                 this.setState({products : res.data});
             });
+        }).catch(ex => {
+            console.error(ex);
+        }).catch(ex => {
+            console.error(ex);
         });
     }
 

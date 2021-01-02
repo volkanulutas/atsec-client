@@ -20,6 +20,7 @@ class CreateUserComponent extends Component {
             deleted: false,
             allRoles: [],
             success: false,
+            errors: [],
         };
         this.changeNameHandler = this.changeNameHandler.bind(this);
         this.changeSurnameHandler = this.changeSurnameHandler.bind(this);
@@ -31,16 +32,14 @@ class CreateUserComponent extends Component {
     } 
 
     componentDidMount(){
-        RoleService.getAllRoles().then(
-            (response) => { console.log(response); 
-               let roles = response.data;
+        RoleService.getAllRoles().then(res => { 
+               console.log(res); 
+               let roles = res.data;
                this.setState({allRoles: roles});
             }
         ).catch(ex=>{
             console.error(ex);
         });
-
-
         if(this.state.id === "_add"){
             return;
         }else{
@@ -64,6 +63,33 @@ class CreateUserComponent extends Component {
 
     saveUser = (event) => {
         event.preventDefault();
+
+        var errors = [];
+        if(this.state.name === ""){
+            errors.push("name");
+        }
+        if(this.state.surname === ""){
+            errors.push("surname");
+        }
+        if(this.state.user === ""){
+            errors.push("username");
+        }
+        if(this.state.password === ""){
+            errors.push("password2");
+        }
+        if(this.state.password2=== ""){
+            errors.push("password2");
+        }
+        const expression = /\S+@\S+/;
+        var validEmail = expression.test(String(this.state.username).toLowerCase());
+        if (!validEmail) {
+          errors.push("username");
+        }
+        this.setState({errors: errors});
+        if(errors.length > 0){
+            return false;
+        }
+ 
 
         let idTmp = undefined;
         let roleTmp = this.state.allRoles[0].id;
@@ -124,18 +150,30 @@ class CreateUserComponent extends Component {
         this.setState({role:event.target.value}); 
     }
 
-    getUsername()
-    {
+    hasError(key){
+        return this.state.errors.indexOf(key) !== -1;
+    }
+
+    getUsername(){
         if(this.state.id === "_add"){
             return <div className="form-group">
                         <label>Kullanıcı Adı:</label>
-                        <input placeholder="ayilmaz@atg.eu.com" name="username" className="form-control"
+                        <input placeholder="ayilmaz@atg.eu.com" name="username" 
+                        className={this.hasError("username") 
+                        ? "form-control is-invalid" 
+                        : "form-control"}
                         value={this.state.username} onChange={this.changeUsernameHandler} />
+                        <div className={this.hasError("name") ? "inline-errormsg" : "hidden"}>
+                            E-posta adresi geçersiz veya girilmemiştir.
+                        </div>
                     </div>;
         }else{
             return <div className="form-group">
             <label>Kullanıcı Adı:</label>
-            <input placeholder="ayilmaz@atg.eu.com" name="username" className="form-control"
+            <input placeholder="ayilmaz@atg.eu.com" name="username" 
+            className={this.hasError("username") 
+            ? "form-control is-invalid" 
+            : "form-control"}
             value={this.state.username} onChange={this.changeUsernameHandler}  disabled/>
         </div>;
         }
@@ -170,24 +208,48 @@ class CreateUserComponent extends Component {
                         <form>
                             <div className="form-group">
                                 <label>Adı:</label>
-                                <input placeholder="Ahmet" name="name" className="form-control"
-                                value={this.state.name} onChange={this.changeNameHandler} />
+                                <input placeholder="Ahmet" name="name" 
+                                className={this.hasError("name") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
+                                value={this.state.name} onChange={this.changeNameHandler}/>
+                                <div className={this.hasError("name") ? "inline-errormsg" : "hidden"}>
+                                       Adı girmelisiniz.
+                                </div>
                             </div>
                             <div className="form-group">
                                 <label>Soyadı:</label>
-                                <input placeholder="Yılmaz" name="surname" className="form-control"
+                                <input placeholder="Yılmaz" name="surname" 
+                                className={this.hasError("surname") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.surname} onChange={this.changeSurnameHandler} />
+                                <div className={this.hasError("surname") ? "inline-errormsg" : "hidden"}>
+                                       Adı girmelisiniz.
+                                </div>
                             </div>
                             {this.getUsername()}
                             <div className="form-group">
                                 <label>Şifre:</label>
-                                <input placeholder="******" name="username" className="form-control"
+                                <input placeholder="Şifre" name="password" 
+                                className={this.hasError("password") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.password} onChange={this.changePassword1Handler} />
+                                <div className={this.hasError("password") ? "inline-errormsg" : "hidden"}>
+                                    Şifreyi girmelisiniz.
+                                </div>
                             </div>
                             <div className="form-group">
                                 <label>Şifreyi Tekrarla:</label>
-                                <input placeholder="******" name="username" className="form-control"
+                                <input placeholder="Şifre" name="password2" 
+                                className={this.hasError("password2") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.password2} onChange={this.changePassword2Handler} />
+                                <div className={this.hasError("password2") ? "inline-errormsg" : "hidden"}>
+                                    Şifreyi girmelisiniz.
+                                </div>
                             </div>
                             <div className="form-group">
                                 <label>Rol:</label>

@@ -11,6 +11,9 @@ export const API_URL_PRODUCT = '/product/';
 export const API_URL_RAWPRODUCT = '/rawproduct/';
 export const API_URL_DONOR_INSTITUTE = '/donorinstitute/';
 export const API_URL_AUTH = '/auth/';
+export const API_URL_TISSUE_TYPE = '/tissuetype/';
+export const API_URL_LOCATION = '/location/';
+export const API_URL_VERSION = '/version/';
 
 export const  CONFIG = {
     headers: {

@@ -28,6 +28,8 @@ class ViewPermissionComponent extends Component {
                     definition: permission.definition,
                 });
                 console.log('permission: ' + JSON.stringify(permission));
+            }).catch(ex => {
+                console.error(ex);
             });
     }
 

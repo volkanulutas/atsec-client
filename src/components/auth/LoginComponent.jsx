@@ -3,6 +3,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
 import AuthService from '../../services/AuthService';
 
+import VersionService from '../../services/VersionService';
+
 class LoginComponent extends Component {
     constructor(props)
     {
@@ -11,7 +13,9 @@ class LoginComponent extends Component {
             username: '',
             password: '',
             showForgetPassword: false,
-            model: false,
+
+            version: '',
+            errors: [],
         }
         this.handleShowModal = this.handleShowModal.bind(this);
         this.handleHideModal = this.handleHideModal.bind(this);
@@ -20,6 +24,22 @@ class LoginComponent extends Component {
         this.changeUsernameHandler = this.changeUsernameHandler.bind(this);
         this.changePasswordHandler = this.changePasswordHandler.bind(this);
     } 
+
+    componentDidMount(){
+        VersionService.getVersion().then(res => {
+            this.setState({version: res.data});
+        }).catch( ex => {
+            console.error(ex);
+        });
+    } 
+
+    changeUsernameHandler = (event) => {
+        this.setState({username:event.target.value});   
+    }
+
+    changePasswordHandler = (event) => {
+        this.setState({password:event.target.value});   
+    }
 
     handleShowModal() {
         this.setState({ showForgetPassword: true });
@@ -30,6 +50,14 @@ class LoginComponent extends Component {
     }
 
     sendForgetPassword() {
+        var errors = [];
+        if(this.state.username === ""){
+            errors.push("username");
+        }
+        this.setState({errors: errors});
+        if(errors.length > 0){
+           return false;
+        }
         this.setState({ showForgetPassword: false });
 
         let userRequest = {username: this.state.username};
@@ -41,21 +69,28 @@ class LoginComponent extends Component {
     }
 
     login() {
+        var errors = [];
+        if(this.state.username === ""){
+            errors.push("username");
+        }
+        if(this.state.password === ""){
+            errors.push("password");
+        }
+        this.setState({errors: errors});
+        if(errors.length > 0){
+           return false;
+        }
         let loginRequest = {username: this.state.username, password: this.state.password};
-        this.props.history.push('/home');
         AuthService.login(loginRequest).then(res => {
+            console.log(res);
             this.props.history.push('/home');
         }).catch(ex => {
-            this.props.history.push('/home');
+            console.error(ex);
         });
     }
 
-    changeUsernameHandler = (event) => {
-        this.setState({username:event.target.value});   
-    }
-
-    changePasswordHandler = (event) => {
-        this.setState({password:event.target.value});   
+    hasError(key){
+        return this.state.errors.indexOf(key) !== -1;
     }
 
     render() {
@@ -67,9 +102,7 @@ class LoginComponent extends Component {
            <div className="col-sm-6 bg-dark text-white">
                <div className="row pt-5">
                    <div className="col-md-8 col-sm-10 offset-sm-1 offset-md-2">
-       
-
-                        <div className="text-center">
+                      <div className="text-center">
                       <div>
                       <img src="/images/login/bio2.svg" width="50px" height="50px"  className="img-fluid" alt=""></img>
                        
@@ -78,17 +111,33 @@ class LoginComponent extends Component {
                         </div>
                        
                          <p>SEC Kodu Üretim ve Süreç Yönetimi</p>
-
+                         <p>v {this.state.version}</p>
                        </div>
                
                       <div className="login ">
                        <form action="" className="pt-3">
-                           <input type="email" name="" id="" className="form-control" 
-                           value={this.state.username} onChange={this.changeUsernameHandler}
-                           required placeholder="E-posta"/>
-                           <input type="password" name="" id="" className="form-control"
-                           value={this.state.password} onChange={this.changePasswordHandler}
-                           required placeholder="Şifre"/>
+                           <div>
+                                <input type="email" name="username" id="username"
+                                className={this.hasError("username") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
+                                value={this.state.username} onChange={this.changeUsernameHandler}
+                                placeholder="E-posta"/>
+                           </div>
+                           <div className={this.hasError("username") ? "inline-errormsg" : "hidden"}>
+                                    E-posta girmelisiniz.
+                                </div>
+                           <div>
+                                <input type="password" name="password" id="password"
+                                className={this.hasError("passowrd") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
+                                value={this.state.password} onChange={this.changePasswordHandler}
+                                placeholder="Şifre"/>
+                            <div className={this.hasError("password") ? "inline-errormsg" : "hidden"}>
+                                    Şifre girmelisiniz.
+                            </div>
+                           </div>
                            <button className="btn btn-success btn-block" onClick={this.login}>Giriş</button>
                       </form>
 
@@ -101,6 +150,9 @@ class LoginComponent extends Component {
                                 <input type="email" name="" id="username" className="form-control"
                                 value={this.state.username} onChange={this.changeUsernameHandler}
                                 required placeholder="E-posta"/>
+                                <div className={this.hasError("username") ? "inline-errormsg" : "hidden"}>
+                                   E-posta girmelisiniz.
+                                </div>
                                 </ModalBody>
                                 <ModalFooter>
                                     <button className="btn btn-danger" onClick={this.handleHideModal}>İptal</button>{' '}

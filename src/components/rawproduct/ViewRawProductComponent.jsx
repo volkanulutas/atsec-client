@@ -28,17 +28,17 @@ class ViewRawProductComponent extends Component {
     } 
 
     componentDidMount(){
-        DonorService.getAllDonors().then(res=> {
+        DonorService.getAllDonors().then(res => {
             this.setState({productDonorList: res.data});
          }).catch(ex => {
              console.error(ex);
          });
  
-          RawProductService.getAllProductLocations().then(res=> {
-             this.setState({productLocationList: res.data});
-          }).catch(ex => {
-             console.error(ex);
-          });
+        RawProductService.getAllProductLocations().then(res => {
+            this.setState({productLocationList: res.data});
+        }).catch(ex => {
+            console.error(ex);
+        });
 
         if(this.state.id === "_add"){
             return;
@@ -57,6 +57,8 @@ class ViewRawProductComponent extends Component {
                     information: product.information,
                 });
                 console.log('product: ' + JSON.stringify(product));
+            }).catch(ex => {
+                console.error(ex);
             });
         }  
     }
@@ -124,7 +126,7 @@ class ViewRawProductComponent extends Component {
                             </div>
                             
                             <div className="form-group">
-                                <label>Donor Kurumu:</label>
+                                <label>Donör Kurumu:</label>
                                 <select className="form-control"  value={this.state.location} disabled>
                                 {this.state.productLocationList.map((option) => (
                                     <option value={option}></option>

@@ -13,6 +13,7 @@ class CreateDonorInstituteComponent extends Component {
             name: '', 
             rawProducts: [],
             deleted: false,
+            errors: [],
         }
         this.saveDonorInstitute = this.saveDonorInstitute.bind(this);
         this.changeNameHandler = this.changeNameHandler.bind(this);
@@ -31,8 +32,12 @@ class CreateDonorInstituteComponent extends Component {
                     name: dI.name,
                     rawProducts: dI.rawProducts,
                     deleted: dI.deleted,
+                }).catch(ex => {
+                    console.error(ex);
                 });
                 console.log('dI: ' + JSON.stringify(dI));
+            }).catch(ex => {
+                console.error(ex);
             });
         }  
     }
@@ -47,34 +52,47 @@ class CreateDonorInstituteComponent extends Component {
 
     saveDonorInstitute = (event) => {
         event.preventDefault();
-        let idTmp = undefined;
-        if(this.state.id !== "_add"){
-            idTmp = this.state.id;
+
+        var errors = [];
+        if(this.state.code === ""){
+            errors.push("code");
+        }
+        if(this.state.name === ""){
+            errors.push("name");
+        }
+
+
+       this.setState({errors: errors});
+       if(errors.length > 0){
+           return false;
        }
+
+       let idTmp = undefined;
+       if(this.state.id !== "_add"){
+           idTmp = this.state.id;
+        }
 
         let dI = {id: idTmp, name: this.state.name, code: this.state.code,
              rawProducts: this.state.rawProducts, deleted: this.state.deleted };
         if(this.state.id === "_add"){ // create user
-            DonorInstituteService.createDonorInstitute(dI).then(
-                (response) => { console.log(response); 
-                    this.props.history.push('/donorinstitutes'); 
-                },
-                (error) => { console.log(error); 
-                }
-            );
-        }else{    
-            DonorInstituteService.updateDonorInstitute(this.state.id, dI).then(res => { console.log(res); 
-                    this.props.history.push('/donorinstitutes');
-                }
-            ).catch(ex=> {
+            DonorInstituteService.createDonorInstitute(dI).then(res => { 
+                console.log(res);
+                this.props.history.push('/donorinstitutes'); 
+            }).catch(ex => {
                 console.error(ex);
+            });
+        }else{    
+            DonorInstituteService.updateDonorInstitute(this.state.id, dI).then(res => {
+                    console.log(res); 
+                    this.props.history.push('/donorinstitutes');
+                }).catch(ex=> {
+                    console.error(ex);
             });
         }   
     }
 
     getTitle(){
-        if(this.state.id === "_add")
-        {
+        if(this.state.id === "_add"){
             return <h3 className="text-center">Kurum Ekle</h3>;
         }
         else{
@@ -87,13 +105,16 @@ class CreateDonorInstituteComponent extends Component {
     }
 
     getButtonText() {
-        if(this.state.id === "_add")
-        {
+        if(this.state.id === "_add"){
             return "Kaydet";
         }
         else{
             return "Güncelle";
         }
+    }
+
+    hasError(key){
+        return this.state.errors.indexOf(key) !== -1;
     }
 
     render() {
@@ -103,18 +124,30 @@ class CreateDonorInstituteComponent extends Component {
                 <div className="row">
                     <div className="card col-md-6 offset-md-3 offset-md-3"> 
                         {this.getTitle()}
-                        <div className="card-body"> 
+                        <div className= "card-body">
                         <form>
                             <div className="form-group">
                                 <label>Kurum Kodu:</label>
-                                <input placeholder="Kurum Kodu" name="code" className="form-control"
+                                <input placeholder="Kurum Kodu..." name="code" 
+                                className={this.hasError("code") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.code} onChange={this.changeCodeHandler} />
+                                <div className={this.hasError("code") ? "inline-errormsg" : "hidden"}>
+                                    Kurum kodunu girmelisiniz.
+                                </div>
                             </div>
 
                             <div className="form-group">
                                 <label>Kurum Adı:</label>
-                                <input placeholder="Kurum Adı" name="name" className="form-control"
+                                <input placeholder="Kurum Adı..." name="name" 
+                                className={this.hasError("name") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.name} onChange={this.changeNameHandler} />
+                                <div className={this.hasError("code") ? "inline-errormsg" : "hidden"}>
+                                    Kurum adını girmelisiniz.
+                                </div>
                             </div>
 
                             <button className="btn btn-success" onClick={this.saveDonorInstitute.bind(this)}>{this.getButtonText()}</button>

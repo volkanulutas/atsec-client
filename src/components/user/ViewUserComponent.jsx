@@ -22,19 +22,16 @@ class ViewUserComponent extends Component {
     } 
 
     componentDidMount(){
-        RoleService.getAllRoles().then(
-            (response) => { console.log(response); 
-               let roles = response.data;
+        RoleService.getAllRoles().then(res => {
+               console.log(res); 
+               let roles = res.data;
                this.setState({allRoles: roles});
-            },
-            (error) => { console.log(error); 
-            }
-        );
-
-
+            }).catch(ex => {
+                console.error(ex);
+            });
         if(this.state.id === "_add"){
             return;
-        }else{
+        }else {
             UserService.getUserById(this.state.id)
             .then(res => {
                 let user = res.data;
@@ -47,6 +44,8 @@ class ViewUserComponent extends Component {
                     role: user.role,
                 });
                 console.log('user: ' + JSON.stringify(user));
+            }).catch(ex => {
+                console.error(ex);
             });
         }  
     }

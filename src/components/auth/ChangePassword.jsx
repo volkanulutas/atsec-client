@@ -10,16 +10,27 @@ class ChangePasswordComponent extends Component {
             username: '',
             password: '',
             password2: '',
+            errors: [],
         }
         this.changePassword = this.changePassword.bind(this);
     } 
 
     componentDidMount(){
-        console.log(this.state.id);
-        console.log(this.state.id);
     }
 
     changePassword = (event) => {
+        event.preventDefault();
+        var errors = [];
+        if(this.state.password === ""){
+            errors.push("password");
+        }
+        if(this.state.password2 === ""){
+            errors.push("password2");
+        }
+       this.setState({errors: errors});
+       if(errors.length > 0){
+           return false;
+       }
         let changePassword = {token: this.state.id, password: this.state.password};
 
         AuthService.changePassword(changePassword).then(res => {
@@ -27,7 +38,6 @@ class ChangePasswordComponent extends Component {
         }).catch(ex => {
             console.error(ex);
         });
-    
     }
 
     changePasswordHandler = (event) => {
@@ -42,6 +52,10 @@ class ChangePasswordComponent extends Component {
         this.props.history.push('/home');
     }
 
+    hasError(key){
+        return this.state.errors.indexOf(key) !== -1;
+    }
+
     render() {
         return (
             <div>
@@ -53,14 +67,26 @@ class ChangePasswordComponent extends Component {
                         <form>
                             <div className="form-group">
                                 <label>Şifre:</label>
-                                <input placeholder="Şifre" name="name" className="form-control"
+                                <input placeholder="Şifre" name="password"
+                                className={this.hasError("password") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.password} onChange={this.changePasswordHandler} />
+                                <div className={this.hasError("password") ? "inline-errormsg" : "hidden"}>
+                                    Şifrenizi girmelisiniz.
+                                </div>
                             </div>
 
                             <div className="form-group">
                                 <label>Şifrenizi Tekrar Giriniz:</label>
-                                <input placeholder="Şifrenizi Tekrar Giriniz:" name="definition" className="form-control"
+                                <input placeholder="Şifrenizi Tekrar Giriniz:" name="password2"
+                                className={this.hasError("password2") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.password2} onChange={this.changePassword2Handler} />
+                                <div className={this.hasError("password2") ? "inline-errormsg" : "hidden"}>
+                                    Şifrenizi tekrarlayınız.
+                                </div>
                             </div>
 
                             <button className="btn btn-success" onClick={this.changePassword.bind(this)}>Kaydet</button>

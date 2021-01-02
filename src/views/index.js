@@ -53,6 +53,15 @@ import ViewRawProductComponent from '../components/rawproduct/ViewRawProductComp
 import ListDonorInstituteComponent from '../components/donorinstitute/ListDonorInstituteComponent';
 import CreateDonorInstituteComponent from '../components/donorinstitute/CreateDonorInstituteComponent';
 import ViewDonorInstituteComponent from '../components/donorinstitute/ViewDonorInstituteComponent';
+
+import ListTissueTypeComponent from '../components/tissuetype/ListTissueTypeComponent';
+import CreateTissueTypeComponent from '../components/tissuetype/CreateTissueTypeComponent';
+import ViewTissueTypeComponent from '../components/tissuetype/ViewTissueTypeComponent';
+
+import ListLocationComponent from '../components/location/ListLocationComponent';
+import CreateLocationComponent from '../components/location/CreateLocationComponent';
+import ViewLocationComponent from '../components/location/ViewLocationComponent';
+
 import ChangePasswordComponent from '../components/auth/ChangePassword';
 import LoginComponent from '../components/auth/LoginComponent';
 
@@ -160,17 +169,32 @@ const pageList = [
     component: ViewRawProductComponent,
   },
   {
-    name: 'Donor Kurum Listesi',
+    name: 'Doku Tipi Listesi',
+    path: '/tissuetypes/',
+    component: ListTissueTypeComponent,
+  },
+  {
+    name: 'Doku Tipi Ekle/Güncelle',
+    path: '/add-tissuetype/:id',
+    component: CreateTissueTypeComponent,
+  },
+  {
+    name: 'Doku Tipi Detayı',
+    path: '/view-tissuetype/:id',
+    component: ViewTissueTypeComponent,
+  },
+  {
+    name: 'Donör Kurum Listesi',
     path: '/donorinstitutes/',
     component: ListDonorInstituteComponent,
   },
   {
-    name: 'Kurum Donor Ekle/Güncelle',
+    name: 'Kurum Donör Ekle/Güncelle',
     path: '/add-donorinstitute/:id',
     component: CreateDonorInstituteComponent,
   },
   {
-    name: 'Kurum Donor Detayı',
+    name: 'Kurum Donör Detayı',
     path: '/view-donorinstitute/:id',
     component: ViewDonorInstituteComponent,
   },
@@ -188,6 +212,21 @@ const pageList = [
     name: 'Ürün Görüntüle',
     path: '/view-product/:id',
     component: ViewProductComponent,
+  },
+  {
+    name: 'Lokasyon Listesi',
+    path: '/locations/',
+    component: ListLocationComponent,
+  },
+  {
+    name: 'Lokasyon Ekle/Güncelle',
+    path: '/add-location/:id',
+    component: CreateLocationComponent,
+  },
+  {
+    name: 'Lokasyon Detayı',
+    path: '/view-location/:id',
+    component: ViewLocationComponent,
   },
   {
     name: 'Buttons',

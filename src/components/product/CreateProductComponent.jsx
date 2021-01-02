@@ -73,7 +73,7 @@ class CreateProductComponent extends Component {
                 });
                 console.log('product: ' + JSON.stringify(product));
             }).catch(ex=> {
-                console.error("ex");
+                console.error(ex);
             });
         }  
     }
@@ -157,7 +157,7 @@ class CreateProductComponent extends Component {
             ProductService.updateProduct(this.state.id, product).then(res => { 
                     this.props.history.push('/products');
                 }).catch(ex=> {
-                console.error(ex);
+                    console.error(ex);
             });
         }   
     }

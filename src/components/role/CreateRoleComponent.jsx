@@ -13,6 +13,7 @@ class CreateRoleComponent extends Component {
             definition: '', 
             permissions: [],
             deleted: false,
+            errors: [],
         }
         this.saveRole = this.saveRole.bind(this);
         this.changeNameHandler = this.changeNameHandler.bind(this);
@@ -35,6 +36,8 @@ class CreateRoleComponent extends Component {
                     permissions: role.permissions,
                 });
                 console.log('role: ' + JSON.stringify(role));
+            }).catch(ex => {
+                console.error(ex);
             });
         }  
     }
@@ -53,6 +56,15 @@ class CreateRoleComponent extends Component {
 
     saveRole = (event) => {
         event.preventDefault();
+        var errors = [];
+        if(this.state.name === ""){
+            errors.push("name");
+        }
+       this.setState({errors: errors});
+       if(errors.length > 0){
+           return false;
+       }
+
         let idTmp = undefined;
         if(this.state.id !== "_add"){
             idTmp = this.state.id;
@@ -60,48 +72,49 @@ class CreateRoleComponent extends Component {
 
         let role = {id: idTmp, name: this.state.name, definition: this.state.definition,
              permissions: this.state.permissions, deleted: this.state.deleted };
-        if(this.state.id === "_add"){ // create user
-            RoleService.createRole(role).then(
-                (response) => { console.log(response); 
-                    this.props.history.push('/roles'); 
-                },
-                (error) => { console.log(error); 
-                }
-            );
-        }else{    
-            RoleService.updateRole(this.state.id, role).then(res => { console.log(res); 
-                    this.props.history.push('/roles');
-                }
-            ).catch(ex=> {
+        if(this.state.id === "_add"){
+            RoleService.createRole(role).then(res => { 
+                console.log(res); 
+                this.props.history.push('/roles');
+            }).catch(ex => {
                 console.error(ex);
+            });
+        }else{    
+            RoleService.updateRole(this.state.id, role).then(res => {
+                console.log(res); 
+                this.props.history.push('/roles');
+                }).catch(ex => {
+                    console.error(ex);
             });
         }   
     }
 
-    getTitle()
-    {
-        if(this.state.id === "_add")
-        {
+    getTitle(){
+        if(this.state.id === "_add") {
             return <h3 className="text-center">Rol Ekle</h3>;
-        }
-        else{
+        } else{
             return <h3 className="text-center">Rol Güncelle</h3>
         }
+    }   
+    
+    hasError(key){
+        return this.state.errors.indexOf(key) !== -1;
     }
 
     cancel = (event) => {
         this.props.history.push('/roles');
     }
 
-    getButtonText()
-    {
-        if(this.state.id === "_add")
-        {
+    getButtonText(){
+        if(this.state.id === "_add"){
             return "Kaydet";
-        }
-        else{
+        } else{
             return "Güncelle";
         }
+    }
+
+    hasError(key){
+        return this.state.errors.indexOf(key) !== -1;
     }
 
     render() {
@@ -115,13 +128,20 @@ class CreateRoleComponent extends Component {
                         <form>
                             <div className="form-group">
                                 <label>İsim:</label>
-                                <input placeholder="Role İsmi" name="name" className="form-control"
+                                <input placeholder="Role İsmi" name="name" 
+                                className={this.hasError("name") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.name} onChange={this.changeNameHandler} />
+                                <div className={this.hasError("name") ? "inline-errormsg" : "hidden"}>
+                                    İsmi girmelisiniz.
+                                </div>
                             </div>
 
                             <div className="form-group">
                                 <label>Açıklama:</label>
-                                <input placeholder="Açıklama" name="definition" className="form-control"
+                                <input placeholder="Açıklama" name="definition"
+                                className="form-control"
                                 value={this.state.definition} onChange={this.changeDefinitionHandler} />
                             </div>
 

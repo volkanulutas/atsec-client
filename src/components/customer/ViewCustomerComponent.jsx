@@ -24,8 +24,7 @@ class ViewCustomerComponent extends Component {
         if(this.state.id === "_add"){
             return;
         }else{
-            CustomerService.getCustomerById(this.state.id)
-            .then(res => {
+            CustomerService.getCustomerById(this.state.id).then(res => {
                 let customer = res.data;
                 this.setState({
                     identityNumber: customer.identityNumber,
@@ -36,6 +35,8 @@ class ViewCustomerComponent extends Component {
                     telephone: customer.telephone,
                 });
                 console.log('customer: ' + JSON.stringify(customer));
+            }).catch(ex => {
+                console.error(ex);
             });
         }  
     }

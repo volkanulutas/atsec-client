@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 
 import RawProductService from '../../services/RawProductService';
+
+import LocationService from '../../services/LocationService';
 import DonorService from '../../services/DonorService';
+import TissueTypeService from '../../services/TissueTypeService';
+import DonorInstituteService from '../../services/DonorInstituteService';
 
 class CreateRawProductComponent extends Component {
     constructor(props)
@@ -9,108 +13,133 @@ class CreateRawProductComponent extends Component {
         super(props)
         this.state = {
             id: this.props.match.params.id,
-            name: '',
-            location: '',
-            definition: '',
+            donor: {},
+            donorInstitute: {},
+            tissueType: {},
+            location: {},
             status: '',
-            type: '',
-            acceptanceDate: '',
+            issueTissueDate: '',
+            arrivalDate: '',
             information: '',
-            donorCode: '',
             deleted: false,
 
-            productLocationList: [],
-            productDonorList: [],
-            productStatusList: [ "Karantina", "Stok", "Numune", "Zaiyat", "Geri Çağrılmış"],
-            productTypeList: ["NONE"],
+            product_LocationList: [],
+            product_DonorList: [],
+            product_StatusList: ["Karantina", "Red", "Kabul", "Atanmamış"],
+            product_TissueTypeList: [],
+            product_DonorInstituteList: [],
         }
-        this.saveProduct = this.saveProduct.bind(this);
-        this.changeNameHandler = this.changeNameHandler.bind(this);
+
+        this.changeDonorHandler = this.changeDonorHandler.bind(this);
+        this.changeDonorInstituteHandler = this.changeDonorInstituteHandler.bind(this);
+        this.changetTissueTypeHandler = this.changetTissueTypeHandler.bind(this);
+        this.changeIssueTissueDateHandler = this.changeIssueTissueDateHandler.bind(this);
+        this.changeArrivalDateHandler = this.changeArrivalDateHandler.bind(this);
         this.changeLocationHandler = this.changeLocationHandler.bind(this);
-        this.changeDefinitionHandler = this.changeDefinitionHandler.bind(this);
-        this.changeStatusHandler = this.changeStatusHandler.bind(this);
-        this.changeTypeHandler = this.changeTypeHandler.bind(this);
-        this.changeAcceptanceDateHandler = this.changeAcceptanceDateHandler.bind(this);
         this.changeInformationHandler = this.changeInformationHandler.bind(this);
-        this.changeDonorCodeHandler = this.changeDonorCodeHandler.bind(this);
-    } 
+        this.changeStatusHandler = this.changeStatusHandler.bind(this);
+
+        this.saveProduct = this.saveProduct.bind(this);
+  } 
 
     componentDidMount(){
+        LocationService.getAllLocations().then(res=> {
+            this.setState({product_LocationList: res.data});
+         }).catch(ex => {
+             console.error(ex);
+         });
         DonorService.getAllDonors().then(res=> {
-           this.setState({productDonorList: res.data});
+           this.setState({product_DonorList: res.data});
         }).catch(ex => {
             console.error(ex);
         });
-
-         RawProductService.getAllProductLocations().then(res=> {
-            this.setState({productLocationList: res.data});
+        TissueTypeService.getAllTissueTypes().then(res=> {
+            this.setState({product_TissueTypeList: res.data});
          }).catch(ex => {
-            console.error(ex);
+             console.error(ex);
+         });
+         DonorInstituteService.getAllDonorInstitutes().then(res=> {
+            this.setState({product_DonorInstituteList: res.data});
+         }).catch(ex => {
+             console.error(ex);
          });
 
-        
         if(this.state.id === "_add"){
             return;
-        }else{
+        }else {
             RawProductService.getRawProductById(this.state.id)
             .then(res => {
                 let product = res.data;
                 this.setState({
-                    name: product.name,
+                    donor: product.donor,
+                    donorInstitute: product.donorInstitute,
+                    tissueType: product.tissueType,
                     location: product.location,
-                    definition: product.definition,
+                    issueTissueDate: this.convertDate(product.issueTissueDate),
+                    arrivalDate: this.convertDate(product.arrivalDate),
+                    information: product.information,
                     status: product.status,
-                    type: product.type,
-                    acceptanceDate: this.convertDate(product.acceptanceDate),
-        
-                    donorCode: product.donorCode,
+                    deleted: product.deleted,
                 });
-                console.log('product: ' + JSON.stringify(product));
+                alert('product: ' + JSON.stringify(product));
             }).catch(ex=> {
-                console.error("ex");
+                console.error(ex);
             });
         }  
     }
 
-    changeNameHandler = (event) => {
-        this.setState({name:event.target.value});
+    changeDonorHandler = (event) => {
+        let donorParam = this.state.donor;
+        donorParam.code = event.target.value;
+        this.setState({donor:donorParam});
     }
 
-    changeLocationHandler = (event) => {
-        this.setState({location:event.target.value});
+    changeDonorInstituteHandler = (event) => {
+        let donorInstituteParam = this.state.donorInstitute;
+        donorInstituteParam.name = event.target.value;
+        this.setState({donorInstitute:donorInstituteParam});
     }
 
-    changeDefinitionHandler = (event) => {
-        this.setState({definition:event.target.value});
+    changetTissueTypeHandler = (event) => {
+        let tissueTypeParam = this.state.tissueType;
+        tissueTypeParam.name = event.target.value;
+        this.setState({donorInstitute:tissueTypeParam});
     }
 
-    changeAcceptanceDateHandler = (event) => {
+    changeIssueTissueDateHandler = (event) => {
         let date = new Date (event.target.value).getTime();
-        this.setState({acceptanceDate:date});
-    }
+        this.setState({issueTissueDate:date});
+    } 
 
-    changeStatusHandler = (event) => {
-        this.setState({status:event.target.value});
-    }
+    changeArrivalDateHandler = (event) => {
+        let date = new Date (event.target.value).getTime();
+        this.setState({arrivalDate:date});
+    } 
 
-    changeTypeHandler = (event) => {
-        this.setState({type:event.target.value});
-    }
+    changeLocationNameHandler = (event) => {
+        this.setState({location_Name:event.target.value});
+    } 
 
     changeInformationHandler = (event) => {
         this.setState({information:event.target.value});
     }
 
-    changeDonorCodeHandler = (event) => {
-        this.setState({donorCode:event.target.value});
+    changeLocationHandler = (event) => {
+        let locationParam = this.state.location;
+        locationParam.name = event.target.value;
+        this.setState({location:locationParam});
+    }
+
+    changeStatusHandler = (event) => {
+        this.setState({statut:event.target.value});
     }
 
     saveProduct = (event) => {
         event.preventDefault();
         let idParam = undefined;
-        let statusParam = this.state.productStatusList[0];
-        let typeParam = this.state.productTypeList[0];
-        let donorParam = this.state.productDonorList[0].id;
+        let statusParam = this.state.product_StatusList[0];
+        let typeParam = this.state.product_TypeList[0];
+        let donorParam = this.state.product_DonorList[0].id;
 
         if(this.state.id !== "_add"){
             idParam = this.state.id;
@@ -125,21 +154,30 @@ class CreateRawProductComponent extends Component {
             donorParam = this.state.donorCode;
         }
 
-        let product = {id: idParam, name: this.state.name, location: this.state.location, definition: this.state.definition,
-        status:  statusParam, type: typeParam, acceptanceDate: this.state.acceptanceDate,
-        information: this.state.information, donorCode: donorParam, deleted: this.state.deleted };
+        let product = {id: idParam, 
+            donor: this.state.donor, 
+            donorInstitute: this.state.donorInstitute,
+            issueTissueDate: this.state.issueTissueDate,
+            arrivalDate: this.state.arrivalDate,
+            tissueType: this.state.tissueType,
+            location: this.state.location, 
+            status: this.state.status,
+            definition: this.state.definition, 
+            information: this.state.information, 
+            deleted: this.state.deleted };
+
         console.log('product: ' + JSON.stringify(product));
         if(this.state.id === "_add"){
             RawProductService.createRawProduct(product).then(res => {
                     this.props.history.push('/products'); 
                 }).catch(ex=> {
-                console.error(ex);
+                    console.error(ex);
             });
-        }else{ 
+        }else { 
             RawProductService.updateRawProduct(this.state.id, product).then(res => { 
                     this.props.history.push('/products');
                 }).catch(ex=> {
-                console.error(ex);
+                    console.error(ex);
             });
         }   
     }
@@ -187,39 +225,46 @@ class CreateRawProductComponent extends Component {
                         <div className="card-body"> 
                         <form>
                             <div className="form-group">
-                                <label>Adı:</label>
-                                <input placeholder="Adı" name="name" className="form-control"
-                                value={this.state.name} onChange={this.changeNameHandler} />
+                                <label>Donor ID:</label>
+                                <input placeholder="Donor ID" name="donor_code" className="form-control"
+                                value={this.state.donor.code} onChange={this.changeDonorHandler} disabled/>
                             </div>
                             <div className="form-group">
-                                <label>Açıklama:</label>
-                                <input placeholder="Açıklama" name="definition" className="form-control"
-                                value={this.state.definition} onChange={this.changeDefinitionHandler} />
+                                <label>Gönderen Kurum: {this.state.donorInstitute.name}</label>
+                                <select name="donorInstitute_Name" className="form-control" value={this.state.donorInstitute} onChange={this.changeDonorInstituteHandler}>
+                                {this.state.product_DonorInstituteList.map((option) => (
+                                    <option value={option.name}>{option.id} - {option.name}</option>
+                                ))}
+                                </select>
                             </div>
-
                             <div className="form-group">
-                                <label>Durumu: {this.state.status}</label>
-                                <select className="form-control"  value={this.state.status} onChange={this.changeStatusHandler}>
-                                {this.state.productStatusList.map((option) => (
-                                    <option value={option}>{option}</option>
+                                <label>Doku Çıkarım Tarihi:</label>
+                                <input type="date" id="issueTissueDate" name="issueTissueDate" 
+                                 value={this.state.issueTissueDate} onChange={this.changeIssueTissueDateHandler} />
+                            </div>
+                            <div className="form-group">
+                                <label>Merkeze Geliş Tarihi:</label>
+                                <input type="date" id="arrivalDate" name="arrivalDate" 
+                                 value={this.state.arrivalDate} onChange={this.changeArrivalDateHandler} />
+                            </div>
+                            <div className="form-group">
+                                <label>Doku Tipi: {this.state.tissueType.name}</label>
+                                <select name="tissueType_Name" className="form-control"  value={this.state.tissueType.name} onChange={this.changeTissueTypeHandler}>
+                                {this.state.product_TissueTypeList.map((option) => (
+                                    <option value={option.name}>{option.name}</option>
                                 ))}
                                 </select>
                             </div>
 
                             <div className="form-group">
-                                <label>Tipi: {this.state.type}</label>
-                                <select className="form-control"  value={this.state.type} onChange={this.changeTypeHandler}>
-                                {this.state.productTypeList.map((option) => (
-                                    <option value={option}>{option}</option>
+                                <label>Karantina Lokasyonu: {this.state.location.name}</label>
+                                <select className="form-control"  value={this.state.location.name} onChange={this.changeLocationHandler}>
+                                {this.state.product_LocationList.map((option) => (
+                                    <option value={option.name}>{option.name}</option>
                                 ))}
                                 </select>
                             </div>
 
-                            <div className="form-group">
-                                <label>Kabul Tarihi:</label>
-                                <input type="date" id="acceptanceDate" name="acceptanceDate" 
-                                 value={this.state.acceptanceDate} onChange={this.changeAcceptanceDateHandler} />
-                            </div>
                             <div className="form-group">
                                 <label>Ek Bilgi:</label>
                                 <input placeholder="Ek Bilgi" name="information" className="form-control"
@@ -227,19 +272,10 @@ class CreateRawProductComponent extends Component {
                             </div>
 
                             <div className="form-group">
-                                <label>Donor:</label>
-                                <select className="form-control"  value={this.state.donorCode} onChange={this.changeDonorCodeHandler}>
-                                {this.state.productDonorList.map((option) => (
-                                    <option value={option.donorCode}></option>
-                                ))}
-                                </select>
-                            </div>
-                            
-                            <div className="form-group">
-                                <label>Donor Kurumu:</label>
-                                <select className="form-control"  value={this.state.location} onChange={this.changeLocationHandler}>
-                                {this.state.productLocationList.map((option) => (
-                                    <option value={option}></option>
+                                <label>Durumu: {this.state.status}</label>
+                                <select name="status" className="form-control"  value={this.state.status} onChange={this.changeStatusHandler}>
+                                {this.state.product_StatusList.map((option) => (
+                                    <option value={option.name}>{option.name}</option>
                                 ))}
                                 </select>
                             </div>

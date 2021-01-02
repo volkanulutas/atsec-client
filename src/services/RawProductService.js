@@ -26,10 +26,6 @@ class RawProductService {
         console.log('delete rawProduct: id: ' + id);
         return axios.delete(API_BASE_URL + API_URL_RAWPRODUCT + id);
     }
-
-    getAllProductLocations(){
-        return axios.get(API_BASE_URL + API_URL_RAWPRODUCT + "location");
-    }
 }
 
 export default new RawProductService();

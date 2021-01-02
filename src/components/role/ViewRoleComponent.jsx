@@ -31,6 +31,8 @@ class ViewRoleComponent extends Component {
                     permissions: role.permissions,
                 });
                 console.log('role: ' + JSON.stringify(role));
+            }).catch(ex => {
+                console.error(ex);
             });
         }  
     }

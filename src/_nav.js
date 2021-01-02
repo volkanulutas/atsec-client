@@ -36,12 +36,22 @@ export default {
           icon: 'Home',
         },
         {
-          name: 'Donor',
+          name: 'Karantina Lokasyon',
+          url: '/locations/',
+          icon: 'Home',
+        },
+        {
+          name: 'Doku Tipi',
+          url: '/tissuetypes/',
+          icon: 'Home',
+        },
+        {
+          name: 'Donör',
           url: '/donors/',
           icon: 'Home',
         },
         {
-          name: 'Donor Kurumları',
+          name: 'Donör Kurumları',
           url: '/donorinstitutes/',
           icon: 'Home',
         },

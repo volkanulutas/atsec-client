@@ -16,6 +16,7 @@ class CreateDonorComponent extends Component {
             address: '', 
             bloodTestPdfFile: '',
             deleted: false,
+            errors: [],
         }
         this.saveDonor = this.saveDonor.bind(this);
         this.changeCitizenshipNumberHandler = this.changeCitizenshipNumberHandler.bind(this);
@@ -66,35 +67,55 @@ class CreateDonorComponent extends Component {
                     bloodTestPdfFile: donor.bloodTestPdfFile,
                 });
                 console.log('donor: ' + JSON.stringify(donor));
+            }).catch(ex => {
+                console.error(ex);
             });
         }  
     }
 
     saveDonor = (event) => {
         event.preventDefault();
+        var errors = [];
+        if(this.state.name === ""){
+            errors.push("name");
+        }
+        if(this.state.surname === ""){
+            errors.push("surname");
+        }
+        if(this.state.citizenshipNumber === ""){
+            errors.push("citizenshipNumber");
+        }
+        if(this.state.telephone === ""){
+            errors.push("telephone");
+        }
+        if(this.state.address === ""){
+            errors.push("address");
+        }
+       this.setState({errors: errors});
+       if(errors.length > 0){
+           return false;
+       }
+
         let idParam = undefined;
         if(this.state.id !== "_add"){
             idParam = this.state.id;
         }
-
         let donor = {id: idParam, code: this.state.code, citizenshipNumber: this.state.citizenshipNumber,  name: this.state.name, surname: this.state.surname, address: this.state.address, telephone: this.state.telephone, deleted: this.state.deleted };
         console.log('donor: ' + JSON.stringify(donor));
         if(this.state.id === "_add"){ // create user
-            DonorService.createDonor(donor).then(
-                (response) => { console.log(response); 
-                    this.props.history.push('/donors'); 
-                },
-                (error) => { console.log(error); 
-                }
-            );
+            DonorService.createDonor(donor).then(res => { 
+                console.log(res); 
+                this.props.history.push('/donors'); 
+                }).catch(ex => {
+                    console.error(ex);
+                });
         }else{     // TODO: alert basarili
-            DonorService.updateDonor(this.state.id, donor).then(
-                (response) => { console.log(response); 
-                    this.props.history.push('/donors');
-                },
-                (error) => { console.log(error);
-                }
-            );
+            DonorService.updateDonor(this.state.id, donor).then(res => { 
+                console.log(res); 
+                this.props.history.push('/donors');
+            }).catch(ex => {
+                console.error(ex); 
+            });
         }   
     }
 
@@ -103,8 +124,7 @@ class CreateDonorComponent extends Component {
     }
 
     getTitle(){
-        if(this.state.id === "_add")
-        {
+        if(this.state.id === "_add"){
             return <h3 className="text-center">Donor Ekle</h3>;
         }
         else{
@@ -113,13 +133,16 @@ class CreateDonorComponent extends Component {
     }
 
     getButtonText(){
-        if(this.state.id === "_add")
-        {
+        if(this.state.id === "_add"){
             return "Kaydet";
         }
         else{
             return "Güncelle";
         }
+    }
+
+    hasError(key){
+        return this.state.errors.indexOf(key) !== -1;
     }
 
     render() {
@@ -133,28 +156,58 @@ class CreateDonorComponent extends Component {
                         <form>
                             <div className="form-group">
                                 <label>Donor Adı:</label>
-                                <input placeholder="Ali" name="name" className="form-control"
+                                <input placeholder="Ali" name="name"
+                                className={this.hasError("name") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.name} onChange={this.changeNameHandler} />
+                                <div className={this.hasError("name") ? "inline-errormsg" : "hidden"}>
+                                       Adı girmelisiniz.
+                                   </div>
                             </div>
                             <div className="form-group">
                                 <label>Donor Soyadı:</label>
-                                <input placeholder="Yılmaz" name="surname" className="form-control"
+                                <input placeholder="Yılmaz" name="surname" 
+                                className={this.hasError("name") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.surname} onChange={this.changeSurnameHandler} />
+                                <div className={this.hasError("surname") ? "inline-errormsg" : "hidden"}>
+                                       Soyadı girmelisiniz.
+                                   </div>
                             </div>
                             <div className="form-group">
                                 <label>TC Numarası:</label>
-                                <input placeholder="10203320214" name="citizenshipNumber" className="form-control"
+                                <input placeholder="10203320214" name="citizenshipNumber" 
+                                className={this.hasError("name") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.citizenshipNumber} onChange={this.changeCitizenshipNumberHandler} />
+                                <div className={this.hasError("citizenshipNumber") ? "inline-errormsg" : "hidden"}>
+                                    TC numarası uygun formatta değil veya girilmemiş.
+                                </div>
                             </div>
                             <div className="form-group">
                                 <label>Telefon:</label>
-                                <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="(90)5321234567" name="telephone" className="form-control"
+                                <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="(90)5321234567" name="telephone" 
+                                className={this.hasError("name") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.telephone} onChange={this.changeTelephoneHandler} />
+                                <div className={this.hasError("telephone") ? "inline-errormsg" : "hidden"}>
+                                    Telefon formatta değil veya girilmemiş.
+                                </div>
                             </div>
                             <div className="form-group">
                                 <label>Adres:</label>
-                                <input placeholder="Adres" name="address" className="form-control"
+                                <input placeholder="Adres" name="address" 
+                                className={this.hasError("name") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
                                 value={this.state.address} onChange={this.changeAddressHandler} />
+                                <div className={this.hasError("address") ? "inline-errormsg" : "hidden"}>
+                                       Adres girmelisiniz.
+                                </div>
                             </div>
                             <button className="btn btn-success" onClick={this.saveDonor.bind(this)}>{this.getButtonText()}</button>
                             <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>İptal</button>

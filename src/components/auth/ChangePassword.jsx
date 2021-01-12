@@ -67,7 +67,7 @@ class ChangePasswordComponent extends Component {
                         <form>
                             <div className="form-group">
                                 <label>Şifre:</label>
-                                <input placeholder="Şifre" name="password"
+                                <input type="password" placeholder="Şifre" name="password"
                                 className={this.hasError("password") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
@@ -79,7 +79,7 @@ class ChangePasswordComponent extends Component {
 
                             <div className="form-group">
                                 <label>Şifrenizi Tekrar Giriniz:</label>
-                                <input placeholder="Şifrenizi Tekrar Giriniz:" name="password2"
+                                <input type="password" placeholder="Şifrenizi Tekrar Giriniz:" name="password2"
                                 className={this.hasError("password2") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}

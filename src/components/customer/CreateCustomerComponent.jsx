@@ -165,16 +165,16 @@ class CreateCustomerComponent extends Component {
                         <div className="card-body"> 
                         <form>
                             <div className="form-group">
-                                <label>Müşteri Kodu:</label>
-                                <input placeholder="123" name="identityNumber" className="form-control"
+                                <label>Müşteri ID:</label>
+                                <input placeholder="Müşteri ID" name="identityNumber" className="form-control"
                                 value={this.state.identityNumber} onChange={this.changeIdentityNumberHandler} />
                                 <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
-                                    Müşteri kodunu girmelisiniz.
+                                    Müşteri ID girmelisiniz.
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label>Müşteri Tipi: {this.state.customerType}</label>
-                                <select className="form-control"  value={this.state.customerType} onChange={this.changeCustomerTypeHandler}>
+                                <select className="form-control" value={this.state.customerType} onChange={this.changeCustomerTypeHandler}>
                                 {this.state.customerTypeList.map((option) => (
                                     <option value={option}>{option}</option>
                                 ))}

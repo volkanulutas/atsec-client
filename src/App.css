@@ -2,6 +2,10 @@
   display: none;
 }
 
+.at-margin-left {
+  margin-left: 20px;
+}
+
 label {
   margin-top: 15px;
   margin-bottom: 5px;

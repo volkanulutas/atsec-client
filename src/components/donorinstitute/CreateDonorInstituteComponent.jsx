@@ -8,7 +8,7 @@ class CreateDonorInstituteComponent extends Component {
     {
         super(props)
         this.state = {
-            id: this.props.match.params.id,
+            id: this.props.match === undefined ? "_add" : this.props.match.params.id,
             code: '',
             name: '', 
             rawProducts: [],

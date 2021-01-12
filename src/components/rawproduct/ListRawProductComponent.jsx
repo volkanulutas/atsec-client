@@ -16,7 +16,7 @@ class ListRawProductComponent extends Component {
         super(props)
         this.state = {
             products :[],
-            howDeleteModal: false,
+            showDeleteModal: false,
             selectedRowId: '',
             columns: [
                 {
@@ -26,10 +26,27 @@ class ListRawProductComponent extends Component {
                     sort: true, 
                 },
                 {
-                    dataField: 'status',
+                    dataField: 'statusName',
                     text: 'DOKU TİPİ',
                     sort: true,
                     title: true,
+                    formatter: (cell, row) => {
+                        let styleVar = "btn btn-secondary"
+                        if(cell === "Red"){
+                            styleVar = "btn btn-danger";
+                        }
+                        else if(cell === "Karantina"){
+                            styleVar = "btn btn-warning"
+                        }
+                        else if( cell === "Kabul"){
+                            styleVar = "btn btn-success" 
+                        }
+                     return (
+                         <div className={styleVar} >
+                             {cell}
+                        </div>
+                     );
+                     }
                 },
                 {
                     dataField: 'location.name',
@@ -53,9 +70,9 @@ class ListRawProductComponent extends Component {
                        let rowId = row.id;
                     return (
                         <div>
-                            <button type="button" style={{marginRight:"10px"}} onClick={() => this.viewRawProduct(rowId)} className="btn btn-success">V</button> 
-                            <button type="button" style={{marginRight:"10px"}} onClick={() => this.updateRawProduct(rowId)} className="btn btn-info">U</button> 
-                            <button type="button" onClick={() => this.handleShowModal(rowId)} className="btn btn-danger">D</button>            
+                            <button type="button" style={{marginRight:"10px"}} onClick={() => this.viewRawProduct(rowId)} className="btn btn-success">Gör</button> 
+                            <button type="button" style={{marginRight:"10px"}} onClick={() => this.updateRawProduct(rowId)} className="btn btn-info">Gün</button> 
+                            <button type="button" onClick={() => this.handleShowModal(rowId)} className="btn btn-danger">Sil</button>            
                         </div>
                     );
                     }
@@ -150,7 +167,7 @@ class ListRawProductComponent extends Component {
             }, 
             {
               text: 'Tümü', value: this.state.products.length
-            }] // A numeric array is also available. the purpose of above example is custom the text
+            }] 
           };
           
         return (

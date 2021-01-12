@@ -231,7 +231,7 @@ class CreateUserComponent extends Component {
                             {this.getUsername()}
                             <div className="form-group">
                                 <label>Şifre:</label>
-                                <input placeholder="Şifre" name="password" 
+                                <input type="password" placeholder="Şifre" name="password" 
                                 className={this.hasError("password") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
@@ -242,7 +242,7 @@ class CreateUserComponent extends Component {
                             </div>
                             <div className="form-group">
                                 <label>Şifreyi Tekrarla:</label>
-                                <input placeholder="Şifre" name="password2" 
+                                <input type="password" placeholder="Şifre" name="password2" 
                                 className={this.hasError("password2") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}

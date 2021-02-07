@@ -6,6 +6,18 @@
   margin-left: 20px;
 }
 
+.width-select {
+  width: 100%;
+}
+
+.width-select1 {
+  width: 80%;
+}
+
+.width-select2 {
+  width: 20%;
+}
+
 label {
   margin-top: 15px;
   margin-bottom: 5px;

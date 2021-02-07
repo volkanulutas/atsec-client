@@ -1,23 +1,25 @@
 import React, { Component } from "react";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
 
-import RawProductService from "../../services/RawProductService";
-import LocationService from "../../services/LocationService";
-import DonorService from "../../services/DonorService";
-import TissueTypeService from "../../services/TissueTypeService";
-import DonorInstituteService from "../../services/DonorInstituteService";
+import RawProductService from "../../../services/RawProductService";
+import LocationService from "../../../services/LocationService";
+import DonorService from "../../../services/DonorService";
+import TissueTypeService from "../../../services/TissueTypeService";
+import DonorInstituteService from "../../../services/DonorInstituteService";
 
-import AddModal from "../util/modal/AddModal";
+import CreateDonorInstituteComponent from "../../donorinstitute/CreateDonorInstituteComponent";
 
-import CreateDonorInstituteComponent from "../../components/donorinstitute/CreateDonorInstituteComponent";
-
-class CreateRawProductComponent extends Component {
+class ViewRejectArchiveComponent extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      id: this.props.match.params.id,
-      multiple: false,
+      selectedApproveFiles: undefined,
+      currentApproveFile: undefined,
+      progressApprove: 0,
+      messageApprove: "",
+      approveFilesInfos: [],
 
       selectedTransferFiles: undefined,
       currentTransferFile: undefined,
@@ -37,11 +39,14 @@ class CreateRawProductComponent extends Component {
       messageExtra: "",
       extraFilesInfos: [],
 
+      showApproveFileModal: false,
+
+      id: this.props.match.params.id,
       donor: {},
-      donorInstitute: [], // Typeahead needs array.
-      tissueType: [], // Typeahead needs array.
-      location: [], // Typeahead needs array.
-      statusName: [], // Typeahead needs array.
+      donorInstitute: [],
+      tissueType: {},
+      location: {},
+      statusName: "",
       issueTissueDate: "",
       arrivalDate: "",
       information: "",
@@ -49,44 +54,13 @@ class CreateRawProductComponent extends Component {
 
       errors: [],
 
-      // EnumRawProductStatus
-      product_StatusNameList: [
-        "Karantina",
-        "Red",
-        "Kabul",
-        "Atanmamış",
-        "Ön İşlem",
-        "Tıbbi Atık",
-      ],
       product_LocationList: [],
       product_DonorList: [],
+      product_StatusNameList: ["Karantina", "Red", "Kabul", "Atanmamış"],
       product_TissueTypeList: [],
       product_DonorInstituteList: [],
     };
-
-    this.changeDonorHandler = this.changeDonorHandler.bind(this);
-    this.changeIssueTissueDateHandler = this.changeIssueTissueDateHandler.bind(
-      this
-    );
-    this.changeArrivalDateHandler = this.changeArrivalDateHandler.bind(this);
-    this.changeInformationHandler = this.changeInformationHandler.bind(this);
-
-    this.saveProduct = this.saveProduct.bind(this);
-
-    this.selectTransferFile = this.selectTransferFile.bind(this);
-    this.selectTransportationFile = this.selectTransportationFile.bind(this);
-    this.selectExtraFile = this.selectExtraFile.bind(this);
-
-    this.uploadTransferFile = this.uploadTransferFile.bind(this);
-    this.uploadTransportationFile = this.uploadTransportationFile.bind(this);
-    this.uploadExtraFile = this.uploadExtraFile.bind(this);
   }
-
-  handleChange = (selectedOption) => {
-    this.setState({ selectedOption }, () =>
-      console.log(`Option selected:`, this.state.selectedOption)
-    );
-  };
 
   componentDidMount() {
     LocationService.getAllLocations()
@@ -127,284 +101,28 @@ class CreateRawProductComponent extends Component {
           let arrivalDateStr = this.convertString(product.arrivalDate);
 
           let donorInstituteTemp = [product.donorInstitute];
-          let tissueTypeTemp = [product.tissueType];
-          let locationTemp = [product.location];
-          let statusNameTemp = [product.statusName];
-
           this.setState({
             donor: product.donor,
             donorInstitute: donorInstituteTemp,
-            tissueType: tissueTypeTemp,
-            location: locationTemp,
+            tissueType: product.tissueType,
+            location: product.location,
             issueTissueDate: issueTissueDateStr,
             arrivalDate: arrivalDateStr,
             information: product.information,
-            statusName: statusNameTemp,
+            statusName: product.statusName,
             deleted: product.deleted,
           });
+          console.log("raw-product: " + JSON.stringify(product));
         })
         .catch((ex) => {
           console.error(ex);
         });
     }
-  }
-
-  selectTransferFile(event) {
-    this.setState({
-      selectedTransferFiles: event.target.files,
-    });
-  }
-
-  selectTransportationFile(event) {
-    this.setState({
-      selectedTransportationFiles: event.target.files,
-    });
-  }
-
-  selectExtraFile(event) {
-    this.setState({
-      selectedExtraFiles: event.target.files,
-    });
-  }
-
-  changeDonorHandler = (event) => {
-    let donorParam = this.state.donor;
-    donorParam.code = event.target.value;
-    this.setState({ donor: donorParam });
-  };
-
-  changeIssueTissueDateHandler = (event) => {
-    this.setState({ issueTissueDate: event.target.value });
-  };
-
-  changeArrivalDateHandler = (event) => {
-    this.setState({ arrivalDate: event.target.value });
-  };
-
-  changeInformationHandler = (event) => {
-    this.setState({ information: event.target.value });
-  };
-
-  saveProduct = (event) => {
-    event.preventDefault();
-    var errors = [];
-    if (this.state.donor === undefined || this.state.donor.code === "") {
-      errors.push("donor.code");
-    }
-    if (this.state.arrivalDate === "") {
-      errors.push("arrivalDate");
-    }
-    if (this.state.issueTissueDate === "") {
-      errors.push("issueTissueDate");
-    }
-    if (!this.state.selectTransferFile) {
-      errors.push("transferFile");
-    }
-    if (!this.state.selectTransporterFile) {
-      errors.push("transfporterFile");
-    }
-    if (this.state.donorInstitute[0] === undefined) {
-      errors.push("donorInstitute");
-    }
-    if (this.state.location[0] === undefined) {
-      errors.push("location");
-    }
-    if (this.state.tissueType[0] === undefined) {
-      errors.push("tissueType");
-    }
-
-    this.setState({ errors: errors });
-    if (errors.length > 0) {
-      return false;
-    }
-
-    let idParam = undefined;
-    let statusParam = this.state.product_StatusNameList[0];
-    let donorParam = this.state.product_DonorList[0].id;
-
-    if (this.state.id !== "_add") {
-      idParam = this.state.id;
-    }
-    if (this.state.status !== "") {
-      statusParam = this.state.statusName;
-    }
-    if (this.state.donorCode !== "") {
-      donorParam = this.state.donorCode;
-    }
-
-    let product = {
-      id: idParam,
-      donor: this.state.donor,
-      donorInstitute: this.state.donorInstitute[0],
-      issueTissueDate: this.state.issueTissueDate,
-      arrivalDate: this.convertDate(this.state.arrivalDate),
-      tissueType: this.convertDate(this.state.issueTissueDate),
-      location: this.state.location[0],
-      statusName: this.state.statusName[0],
-      definition: this.state.definition,
-      information: this.state.information,
-      deleted: this.state.deleted,
-    };
-
-    console.log("product: " + JSON.stringify(product));
-    if (this.state.id === "_add") {
-      RawProductService.createRawProduct(product)
-        .then((res) => {
-          this.props.history.push("/rawroducts");
-        })
-        .catch((ex) => {
-          console.error(ex);
-        });
-    } else {
-      RawProductService.updateRawProduct(this.state.id, product)
-        .then((res) => {
-          this.props.history.push("/rawproducts");
-        })
-        .catch((ex) => {
-          console.error(ex);
-        });
-    }
-  };
-
-  uploadTransferFile() {
-    let currentTransferFile = this.state.selectedTransferFiles[0];
-
-    this.setState({
-      progressTransfer: 0,
-      currentTransferFile: currentTransferFile,
-    });
-
-    RawProductService.upload(
-      currentTransferFile,
-      "RAW_TRANSFER_FILES",
-      (event) => {
-        this.setState({
-          progressTransfer: Math.round((100 * event.loaded) / event.total),
-        });
-      }
-    )
-      .then((response) => {
-        this.setState({
-          messageTransfer: response.data.message,
-        });
-        return RawProductService.getFiles("RAW_TRANSFER_FILES");
-      })
-      .then((files) => {
-        this.setState({
-          transferFilesInfos: files.data,
-        });
-      })
-      .catch(() => {
-        this.setState({
-          progressTransfer: 0,
-          messageTransfer: "Dosya sunucuya yüklenemedi!",
-          currentTransferFile: undefined,
-        });
-      });
-
-    this.setState({
-      selectedTransferFiles: undefined,
-    });
-  }
-
-  uploadTransportationFile() {
-    let currentTransportationFile = this.state.selectedTransportationFiles[0];
-
-    this.setState({
-      progressTransportation: 0,
-      currentTransportationFile: currentTransportationFile,
-    });
-
-    RawProductService.upload(
-      currentTransportationFile,
-      "RAW_TRANSPORTATION_FILES",
-      (event) => {
-        this.setState({
-          progressTransportation: Math.round(
-            (100 * event.loaded) / event.total
-          ),
-        });
-      }
-    )
-      .then((response) => {
-        this.setState({
-          messageTransportation: response.data.message,
-        });
-        return RawProductService.getFiles("RAW_TRANSPORTATION_FILES");
-      })
-      .then((files) => {
-        this.setState({
-          transportationFilesInfos: files.data,
-        });
-      })
-      .catch(() => {
-        this.setState({
-          progressTransportation: 0,
-          messageTransportation: "Dosya sunucuya yüklenemedi!",
-          currentTransportationFile: undefined,
-        });
-      });
-
-    this.setState({
-      selectedTransportationFiles: undefined,
-    });
-  }
-
-  uploadExtraFile() {
-    let currentExtraFile = this.state.selectedExtraFiles[0];
-
-    this.setState({
-      progressExtra: 0,
-      currentExtraFile: currentExtraFile,
-    });
-
-    RawProductService.upload(currentExtraFile, "RAW_EXTRA_FILES", (event) => {
+    RawProductService.getFiles().then((response) => {
       this.setState({
-        progressExtra: Math.round((100 * event.loaded) / event.total),
+        approveFilesInfos: response.data,
       });
-    })
-      .then((response) => {
-        this.setState({
-          messageExtra: response.data.message,
-        });
-        return RawProductService.getFiles("RAW_EXTRA_FILES");
-      })
-      .then((files) => {
-        this.setState({
-          extraFilesInfos: files.data,
-        });
-      })
-      .catch(() => {
-        this.setState({
-          progressExtra: 0,
-          messageExtra: "Dosya sunucuya yüklenemedi!",
-          currentExtraFile: undefined,
-        });
-      });
-
-    this.setState({
-      selectedExtraFiles: undefined,
     });
-  }
-
-  cancel = (event) => {
-    this.props.history.push("/rawproducts");
-  };
-
-  getTitle() {
-    if (this.state.id === "_add") {
-      return <h3 className="text-center">Ham Ürün Ekle</h3>;
-    } else {
-      return <h3 className="text-center">Ham Ürün Güncelle</h3>;
-    }
-  }
-
-  getButtonText() {
-    if (this.state.id === "_add") {
-      return "Kaydet";
-    } else {
-      return "Güncelle";
-    }
   }
 
   convertDate(stringDate) {
@@ -435,9 +153,13 @@ class CreateRawProductComponent extends Component {
   }
 
   render() {
-    const { multiple } = this.state;
-
     const {
+      selectedApproveFiles,
+      currentApproveFile,
+      progressApprove,
+      messageApprove,
+      approveFilesInfos,
+
       selectedTransferFiles,
       currentTransferFile,
       progressTransfer,
@@ -462,13 +184,13 @@ class CreateRawProductComponent extends Component {
         <div className="container">
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
-              {this.getTitle()}
+              Reddedilmiş Ham Ürün Detayı
               <div className="card-body">
                 <form>
                   <div className="form-group">
-                    <label>Donör Id:</label>
+                    <label>Donor ID:</label>
                     <input
-                      placeholder="Sistem tarafından üretilecektir."
+                      placeholder="Donor ID"
                       name="donor_code"
                       className="form-control"
                       value={this.state.donor.code}
@@ -486,29 +208,14 @@ class CreateRawProductComponent extends Component {
                     </label>
                     <div>
                       <Typeahead
-                        multiple={multiple}
                         id="select-donorInstitute"
                         onChange={(selected) => {
                           this.setState({ donorInstitute: selected });
                         }}
                         labelKey="name"
                         options={this.state.product_DonorInstituteList}
-                        placeholder="Gönderen Kurumu Seç..."
-                        selected={this.state.donorInstitute}
-                      />
-                      <div
-                        className={
-                          this.hasError("donorInstitute")
-                            ? "inline-errormsg"
-                            : "hidden"
-                        }
-                      >
-                        Gönderen Kurumu girmelisiniz.
-                      </div>
-                      <AddModal
-                        style={{ marginRight: "5px" }}
-                        initialModalState={false}
-                        callback={this.delete}
+                        placeholder="Donor Kurumu Seç..."
+                        disabled
                       />
                     </div>
                   </div>
@@ -526,6 +233,7 @@ class CreateRawProductComponent extends Component {
                       }
                       value={this.state.issueTissueDate}
                       onChange={this.changeIssueTissueDateHandler}
+                      disabled
                     />
                     <div
                       className={
@@ -537,7 +245,6 @@ class CreateRawProductComponent extends Component {
                       Doku Çıkarım Tarihini girmelisiniz.
                     </div>
                   </div>
-
                   <div className="form-group">
                     <label>Merkeze Geliş Tarihi:</label>
                     <input
@@ -551,6 +258,7 @@ class CreateRawProductComponent extends Component {
                       }
                       value={this.state.arrivalDate}
                       onChange={this.changeArrivalDateHandler}
+                      disabled
                     />
                     <div
                       className={
@@ -563,75 +271,32 @@ class CreateRawProductComponent extends Component {
                     </div>
                   </div>
                   <div className="form-group">
-                    <label>
-                      Doku Tipi:{" "}
-                      {this.state.tissueType[0] === undefined
-                        ? "Seçilmedi"
-                        : this.state.tissueType[0].name}{" "}
-                    </label>
+                    <label>Doku Tipi: {this.state.tissueType.name}</label>
                     <div>
                       <Typeahead
-                        multiple={multiple}
-                        id="select-tissueType"
-                        onChange={(selected) => {
-                          this.setState({ tissueType: selected });
-                        }}
+                        id="select-donorInstitute"
+                        onChange={this.changetTissueTypeHandler}
                         labelKey="name"
                         options={this.state.product_TissueTypeList}
-                        placeholder="Doku Tipini Seçiniz..."
-                        selected={this.state.tissueType}
+                        placeholder="Doku Tipini Seç...??"
+                        disabled
                       />
-                      <div
-                        className={
-                          this.hasError("tissueType")
-                            ? "inline-errormsg"
-                            : "hidden"
-                        }
-                      >
-                        Doku Tipini girmelisiniz.
-                      </div>
-                      <button
-                        className="btn btn-success width-select2"
-                        /* TODO: onClick={this.}*/
-                      >
-                        +
-                      </button>
                     </div>
                   </div>
 
                   <div className="form-group">
                     <label>
-                      Karantina Lokasyonu:{" "}
-                      {this.state.location[0] === undefined
-                        ? "Seçilmedi"
-                        : this.state.location[0].name}
+                      Karantina Lokasyonu: {this.state.location.name}
                     </label>
                     <div>
                       <Typeahead
-                        multiple={multiple}
                         id="select-location"
-                        onChange={(selected) => {
-                          this.setState({ location: selected });
-                        }}
+                        onChange={this.changeLocationHandler}
                         labelKey="name"
                         options={this.state.product_LocationList}
                         placeholder="Karantina Lokasyonunu Seç..."
-                        selected={this.state.location}
+                        disabled
                       />
-                      <div
-                        className={
-                          this.hasError("location")
-                            ? "inline-errormsg"
-                            : "hidden"
-                        }
-                      >
-                        Karantina Lokasyonunu girmelisiniz.
-                      </div>
-                      <button
-                        className="btn btn-success width-select2" /* TODO: onClick={this.}*/
-                      >
-                        +
-                      </button>
                     </div>
                   </div>
 
@@ -643,26 +308,91 @@ class CreateRawProductComponent extends Component {
                       className="form-control"
                       value={this.state.information}
                       onChange={this.changeInformationHandler}
+                      disabled
                     />
                   </div>
 
                   <div className="form-group">
-                    <label>
-                      Durumu:{" "}
-                      {this.state.statusName[0] === undefined
-                        ? "Seçilmedi..."
-                        : this.state.statusName[0]}
-                    </label>
+                    <label>Durumu: {this.state.statusName}</label>
                     <Typeahead
-                      multiple={multiple}
                       id="select-status"
-                      onChange={(selected) => {
-                        this.setState({ statusName: selected });
-                      }}
+                      onChange={this.changeStatusNameHandler}
+                      labelKey="name"
                       options={this.state.product_StatusNameList}
                       placeholder="Durumu Seç..."
-                      selected={this.state.statusName}
+                      disabled
                     />
+                  </div>
+
+                  <div>
+                    <label>Onam Formu:</label>
+                    <br />
+
+                    <div>
+                      {currentApproveFile && (
+                        <div className="progressApprove">
+                          <div
+                            className="progressApprove-bar progressApprove-bar-info progressApprove-bar-striped"
+                            role="progressApprovebar"
+                            aria-valuenow={progressApprove}
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            style={{ width: progressApprove + "%" }}
+                          >
+                            {progressApprove}%
+                          </div>
+                        </div>
+                      )}
+
+                      <div>
+                        <label className="btn btn-default">
+                          <input
+                            type="file"
+                            onChange={this.selectApproveFile}
+                            className={
+                              this.hasError("approveFile")
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
+                          />
+                          <div
+                            className={
+                              this.hasError("approveFile")
+                                ? "inline-errormsg"
+                                : "hidden"
+                            }
+                          >
+                            Onam Formunu yüklemelisiniz.
+                          </div>
+                        </label>
+                      </div>
+
+                      <button
+                        className="btn btn-success"
+                        disabled={!selectedApproveFiles}
+                        onClick={this.uploadApproveFile}
+                      >
+                        Onam Formu Yükle
+                      </button>
+
+                      <div className="alert alert-light" role="alert">
+                        {messageApprove}
+                      </div>
+
+                      <div className="card">
+                        <div className="card-header">
+                          Yüklenen Onam Formları
+                        </div>
+                        <ul className="list-group list-group-flush">
+                          {approveFilesInfos &&
+                            approveFilesInfos.map((file, index) => (
+                              <li className="list-group-item" key={index}>
+                                <a href={file.url}>{file.name}</a>
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="form-group">
@@ -670,10 +400,10 @@ class CreateRawProductComponent extends Component {
                     <br />
                     <div>
                       {currentTransferFile && (
-                        <div className="progress">
+                        <div className="progressApprove">
                           <div
-                            className="progress-bar progress-bar-info progress-bar-striped"
-                            role="progressbar"
+                            className="progressApprove-bar progressApprove-bar-info progressApprove-bar-striped"
+                            role="progressApprovebar"
                             aria-valuenow={progressTransfer}
                             aria-valuemin="0"
                             aria-valuemax="100"
@@ -690,7 +420,7 @@ class CreateRawProductComponent extends Component {
                             type="file"
                             onChange={this.selectTransferFile}
                             className={
-                              this.hasError("transferFile")
+                              this.hasError("approveFile")
                                 ? "form-control is-invalid"
                                 : "form-control"
                             }
@@ -741,10 +471,10 @@ class CreateRawProductComponent extends Component {
                     <br />
                     <div>
                       {currentTransportationFile && (
-                        <div className="progress">
+                        <div className="progressApprove">
                           <div
-                            className="progress-bar progress-bar-info progress-bar-striped"
-                            role="progress"
+                            className="progressApprove-bar progressApprove-bar-info progressApprove-bar-striped"
+                            role="progressApprovebar"
                             aria-valuenow={progressTransportation}
                             aria-valuemin="0"
                             aria-valuemax="100"
@@ -811,10 +541,10 @@ class CreateRawProductComponent extends Component {
                     <br />
                     <div>
                       {currentExtraFile && (
-                        <div className="progress">
+                        <div className="progressApprove">
                           <div
-                            className="progress-bar progress-bar-info progress-bar-striped"
-                            role="progress"
+                            className="progressApprove-bar progressApprove-bar-info progressApprove-bar-striped"
+                            role="progressApprovebar"
                             aria-valuenow={progressExtra}
                             aria-valuemin="0"
                             aria-valuemax="100"
@@ -854,21 +584,27 @@ class CreateRawProductComponent extends Component {
                       </div>
                     </div>
                   </div>
-
-                  <button
-                    className="btn btn-success"
-                    onClick={this.saveProduct.bind(this)}
-                  >
-                    {this.getButtonText()}
-                  </button>
-                  <button
-                    className="btn btn-danger"
-                    onClick={this.cancel.bind(this)}
-                    style={{ marginLeft: "10px" }}
-                  >
-                    İptal
-                  </button>
                 </form>
+
+                <Modal
+                  isOpen={this.state.showApproveFileModal}
+                  toggle={this.handleApproveFileShowModal}
+                >
+                  <ModalHeader toggle={this.handleApproveFileShowModal}>
+                    Kurum Ekle
+                  </ModalHeader>
+                  <ModalBody>
+                    <CreateDonorInstituteComponent />
+                  </ModalBody>
+                  <ModalFooter>
+                    <button
+                      className="btn btn-danger"
+                      onClick={this.handleApproveFileHideModal}
+                    >
+                      Kapat
+                    </button>
+                  </ModalFooter>
+                </Modal>
               </div>
             </div>
           </div>
@@ -878,4 +614,4 @@ class CreateRawProductComponent extends Component {
   }
 }
 
-export default CreateRawProductComponent;
+export default ViewRejectArchiveComponent;

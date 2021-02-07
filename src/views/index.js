@@ -1,341 +1,354 @@
-import Dashboard from './pages/Dashboard';
-import Buttons from './elements/Buttons';
-import Alerts from './elements/Alerts';
-import Grid from './elements/Grid';
-import Typography from './elements/Typography';
-import Cards from './elements/Cards';
-import Tabs from './elements/Tabs';
-import Tables from './elements/Tables';
-import Breadcrumbs from './elements/Breadcrumbs';
-import Forms from './elements/Forms';
-import Loaders from './elements/Loaders';
-import Avatars from './elements/Avatars';
-import Invoice from './pages/Invoice';
-import Analytics from './pages/Analytics';
-import CmsPage from './pages/Cms';
-import Widgets from './pages/Widgets';
-import BlankPage from './pages/BlankPage';
-import SubNav from './pages/SubNav';
-import Feed from './pages/Feed';
-import Modals from './elements/Modals';
-import ProgressBars from './elements/ProgressBars';
-import PaginationPage from './elements/Pagination';
-import ErrorPage from './pages/404';
+import Dashboard from "./pages/Dashboard";
+import Buttons from "./elements/Buttons";
+import Alerts from "./elements/Alerts";
+import Grid from "./elements/Grid";
+import Typography from "./elements/Typography";
+import Cards from "./elements/Cards";
+import Tabs from "./elements/Tabs";
+import Tables from "./elements/Tables";
+import Breadcrumbs from "./elements/Breadcrumbs";
+import Forms from "./elements/Forms";
+import Loaders from "./elements/Loaders";
+import Avatars from "./elements/Avatars";
+import Invoice from "./pages/Invoice";
+import Analytics from "./pages/Analytics";
+import CmsPage from "./pages/Cms";
+import Widgets from "./pages/Widgets";
+import BlankPage from "./pages/BlankPage";
+import SubNav from "./pages/SubNav";
+import Feed from "./pages/Feed";
+import Modals from "./elements/Modals";
+import ProgressBars from "./elements/ProgressBars";
+import PaginationPage from "./elements/Pagination";
+import ErrorPage from "./pages/404";
 
-import ListUserComponent from '../components/user/ListUserComponent';
-import CreateUserComponent from '../components/user/CreateUserComponent';
-import ViewUserComponent from '../components/user/ViewUserComponent';
+import ListUserComponent from "../components/user/ListUserComponent";
+import CreateUserComponent from "../components/user/CreateUserComponent";
+import ViewUserComponent from "../components/user/ViewUserComponent";
 
-import ListRoleComponent from '../components/role/ListRoleComponent';
-import CreateRoleComponent from '../components/role/CreateRoleComponent';
-import ViewRoleComponent from '../components/role/ViewRoleComponent';
+import ListRoleComponent from "../components/role/ListRoleComponent";
+import CreateRoleComponent from "../components/role/CreateRoleComponent";
+import ViewRoleComponent from "../components/role/ViewRoleComponent";
 
-import ListPermissionComponent from '../components/permission/ListPermissionComponent';
-import CreatePermissionComponent from '../components/permission/CreatePermissionComponent';
-import ViewPermissionComponent from '../components/permission/ViewPermissionComponent';
+import ListPermissionComponent from "../components/permission/ListPermissionComponent";
+import CreatePermissionComponent from "../components/permission/CreatePermissionComponent";
+import ViewPermissionComponent from "../components/permission/ViewPermissionComponent";
 
-import ListDonorComponent from '../components/donor/ListDonorComponent';
-import CreateDonorComponent from '../components/donor/CreateDonorComponent';
-import ViewDonorComponent from '../components/donor/ViewDonorComponent';
+import ListDonorComponent from "../components/donor/ListDonorComponent";
+import CreateDonorComponent from "../components/donor/CreateDonorComponent";
+import ViewDonorComponent from "../components/donor/ViewDonorComponent";
 
-import ListCustomerComponent from '../components/customer/ListCustomerComponent';
-import CreateCustomerComponent from '../components/customer/CreateCustomerComponent';
-import ViewCustomerComponent from '../components/customer/ViewCustomerComponent';
+import ListCustomerComponent from "../components/customer/ListCustomerComponent";
+import CreateCustomerComponent from "../components/customer/CreateCustomerComponent";
+import ViewCustomerComponent from "../components/customer/ViewCustomerComponent";
 
-import ListProductComponent from '../components/product/ListProductComponent';
-import CreateProductComponent from '../components/product/CreateProductComponent';
-import ViewProductComponent from '../components/product/ViewProductComponent';
+import ListProductComponent from "../components/product/ListProductComponent";
+import CreateProductComponent from "../components/product/CreateProductComponent";
+import ViewProductComponent from "../components/product/ViewProductComponent";
 
-import ListRawProductComponent from '../components/rawproduct/ListRawProductComponent';
-import CreateRawProductComponent from '../components/rawproduct/CreateRawProductComponent';
-import ViewRawProductComponent from '../components/rawproduct/ViewRawProductComponent';
+import ListRawProductComponent from "../components/rawproduct/ListRawProductComponent";
+import CreateRawProductComponent from "../components/rawproduct/CreateRawProductComponent";
+import ViewRawProductComponent from "../components/rawproduct/ViewRawProductComponent";
 
-import ListDonorInstituteComponent from '../components/donorinstitute/ListDonorInstituteComponent';
-import CreateDonorInstituteComponent from '../components/donorinstitute/CreateDonorInstituteComponent';
-import ViewDonorInstituteComponent from '../components/donorinstitute/ViewDonorInstituteComponent';
+import ListDonorInstituteComponent from "../components/donorinstitute/ListDonorInstituteComponent";
+import CreateDonorInstituteComponent from "../components/donorinstitute/CreateDonorInstituteComponent";
+import ViewDonorInstituteComponent from "../components/donorinstitute/ViewDonorInstituteComponent";
 
-import ListTissueTypeComponent from '../components/tissuetype/ListTissueTypeComponent';
-import CreateTissueTypeComponent from '../components/tissuetype/CreateTissueTypeComponent';
-import ViewTissueTypeComponent from '../components/tissuetype/ViewTissueTypeComponent';
+import ListTissueTypeComponent from "../components/tissuetype/ListTissueTypeComponent";
+import CreateTissueTypeComponent from "../components/tissuetype/CreateTissueTypeComponent";
+import ViewTissueTypeComponent from "../components/tissuetype/ViewTissueTypeComponent";
 
-import ListLocationComponent from '../components/location/ListLocationComponent';
-import CreateLocationComponent from '../components/location/CreateLocationComponent';
-import ViewLocationComponent from '../components/location/ViewLocationComponent';
+import ListLocationComponent from "../components/location/ListLocationComponent";
+import CreateLocationComponent from "../components/location/CreateLocationComponent";
+import ViewLocationComponent from "../components/location/ViewLocationComponent";
 
-import ChangePasswordComponent from '../components/auth/ChangePassword';
-import LoginComponent from '../components/auth/LoginComponent';
+import ChangePasswordComponent from "../components/auth/ChangePassword";
+import LoginComponent from "../components/auth/LoginComponent";
+
+import ListRejectArchiveComponent from "../components/rawproduct/rejectarchive/ListRejectArchiveComponent";
+import ViewRejectArchiveComponent from "../components/rawproduct/rejectarchive/ViewRejectArchiveComponent";
 
 // See React Router documentation for details: https://reacttraining.com/react-router/web/api/Route
 const pageList = [
   {
-    name: 'Anasayfa',
-    path: '/home',
+    name: "Anasayfa",
+    path: "/home",
     component: Dashboard,
   },
   {
-    name: 'Şifre Değiştir',
-    path: '/change-password/:id',
+    name: "Şifre Değiştir",
+    path: "/change-password/:id",
     component: ChangePasswordComponent,
   },
 
   {
-    name: 'Kullanıcılar',
-    path: '/users/',
+    name: "Kullanıcılar",
+    path: "/users/",
     component: ListUserComponent,
   },
   {
-    name: 'Kullanıcı Ekle/Güncelle',
-    path: '/add-user/:id',
+    name: "Kullanıcı Ekle/Güncelle",
+    path: "/add-user/:id",
     component: CreateUserComponent,
   },
   {
-    name: 'Kullanıcı Detayı',
-    path: '/view-user/:id',
+    name: "Kullanıcı Detayı",
+    path: "/view-user/:id",
     component: ViewUserComponent,
   },
   {
-    name: 'Roller',
+    name: "Roller",
     path: `/roles/`,
     component: ListRoleComponent,
   },
   {
-    name: 'Rol Ekle/Güncelle',
-    path: '/add-role/:id',
+    name: "Rol Ekle/Güncelle",
+    path: "/add-role/:id",
     component: CreateRoleComponent,
   },
   {
-    name: 'Rol Detayı',
-    path: '/view-role/:id',
+    name: "Rol Detayı",
+    path: "/view-role/:id",
     component: ViewRoleComponent,
   },
   {
-    name: 'Yetkiler',
-    path: '/permissions/',
+    name: "Yetkiler",
+    path: "/permissions/",
     component: ListPermissionComponent,
   },
   {
-    name: 'Yetki Ekle/Güncelle',
-    path: '/add-permission/:id',
+    name: "Yetki Ekle/Güncelle",
+    path: "/add-permission/:id",
     component: CreatePermissionComponent,
   },
   {
-    name: 'Yetki Detayı',
-    path: '/view-permission/:id',
+    name: "Yetki Detayı",
+    path: "/view-permission/:id",
     component: ViewPermissionComponent,
   },
   {
-    name: 'Donor Listesi',
-    path: '/donors/',
+    name: "Donor Listesi",
+    path: "/donors/",
     component: ListDonorComponent,
   },
   {
-    name: 'Donor Ekle/Güncelle',
-    path: '/add-donor/:id',
+    name: "Donor Ekle/Güncelle",
+    path: "/add-donor/:id",
     component: CreateDonorComponent,
   },
   {
-    name: 'Donor Detayı',
-    path: '/view-donor/:id',
+    name: "Donor Detayı",
+    path: "/view-donor/:id",
     component: ViewDonorComponent,
   },
   {
-    name: 'Müşteri Listesi',
-    path: '/customers/',
+    name: "Müşteri Listesi",
+    path: "/customers/",
     component: ListCustomerComponent,
   },
   {
-    name: 'Müşteri Ekle/Güncelle',
-    path: '/add-customer/:id',
+    name: "Müşteri Ekle/Güncelle",
+    path: "/add-customer/:id",
     component: CreateCustomerComponent,
   },
   {
-    name: 'Müşteri Detayı',
-    path: '/view-customer/:id',
+    name: "Müşteri Detayı",
+    path: "/view-customer/:id",
     component: ViewCustomerComponent,
   },
   {
-    name: 'Ham Ürün Listesi',
-    path: '/rawproducts/',
+    name: "Ham Ürün Listesi",
+    path: "/rawproducts/",
     component: ListRawProductComponent,
   },
   {
-    name: 'Ham Ürün Ekle/Güncelle',
-    path: '/add-rawproduct/:id',
+    name: "Ham Ürün Ekle/Güncelle",
+    path: "/add-rawproduct/:id",
     component: CreateRawProductComponent,
   },
   {
-    name: 'Ham Ürün Görüntüle',
-    path: '/view-rawproduct/:id',
+    name: "Ham Ürün Görüntüle",
+    path: "/view-rawproduct/:id",
     component: ViewRawProductComponent,
   },
   {
-    name: 'Doku Tipi Listesi',
-    path: '/tissuetypes/',
+    name: "Doku Tipi Listesi",
+    path: "/tissuetypes/",
     component: ListTissueTypeComponent,
   },
   {
-    name: 'Doku Tipi Ekle/Güncelle',
-    path: '/add-tissuetype/:id',
+    name: "Doku Tipi Ekle/Güncelle",
+    path: "/add-tissuetype/:id",
     component: CreateTissueTypeComponent,
   },
   {
-    name: 'Doku Tipi Detayı',
-    path: '/view-tissuetype/:id',
+    name: "Doku Tipi Detayı",
+    path: "/view-tissuetype/:id",
     component: ViewTissueTypeComponent,
   },
   {
-    name: 'Donör Kurum Listesi',
-    path: '/donorinstitutes/',
+    name: "Donör Kurum Listesi",
+    path: "/donorinstitutes/",
     component: ListDonorInstituteComponent,
   },
   {
-    name: 'Kurum Donör Ekle/Güncelle',
-    path: '/add-donorinstitute/:id',
+    name: "Kurum Donör Ekle/Güncelle",
+    path: "/add-donorinstitute/:id",
     component: CreateDonorInstituteComponent,
   },
   {
-    name: 'Kurum Donör Detayı',
-    path: '/view-donorinstitute/:id',
+    name: "Kurum Donör Detayı",
+    path: "/view-donorinstitute/:id",
     component: ViewDonorInstituteComponent,
   },
   {
-    name: 'Ürün Listesi',
-    path: '/products/',
+    name: "Ürün Listesi",
+    path: "/products/",
     component: ListProductComponent,
   },
   {
-    name: 'Ürün Ekle/Güncelle',
-    path: '/add-product/:id',
+    name: "Ürün Ekle/Güncelle",
+    path: "/add-product/:id",
     component: CreateProductComponent,
   },
   {
-    name: 'Ürün Görüntüle',
-    path: '/view-product/:id',
+    name: "Ürün Görüntüle",
+    path: "/view-product/:id",
     component: ViewProductComponent,
   },
   {
-    name: 'Lokasyon Listesi',
-    path: '/locations/',
+    name: "Lokasyon Listesi",
+    path: "/locations/",
     component: ListLocationComponent,
   },
   {
-    name: 'Lokasyon Ekle/Güncelle',
-    path: '/add-location/:id',
+    name: "Lokasyon Ekle/Güncelle",
+    path: "/add-location/:id",
     component: CreateLocationComponent,
   },
   {
-    name: 'Lokasyon Detayı',
-    path: '/view-location/:id',
+    name: "Lokasyon Detayı",
+    path: "/view-location/:id",
     component: ViewLocationComponent,
   },
   {
-    name: 'Buttons',
-    path: '/elements/buttons',
+    name: "Ham Ürün Red Arşivi",
+    path: "/rejectarchives/",
+    component: ListRejectArchiveComponent,
+  },
+  {
+    name: "Ham Ürün Red Detayı",
+    path: "/view-rejectarchive/:id",
+    component: ViewRejectArchiveComponent,
+  },
+  {
+    name: "Buttons",
+    path: "/elements/buttons",
     component: Buttons,
   },
   {
-    name: 'Alerts',
-    path: '/elements/alerts',
+    name: "Alerts",
+    path: "/elements/alerts",
     component: Alerts,
   },
   {
-    name: 'Grid',
-    path: '/elements/grid',
+    name: "Grid",
+    path: "/elements/grid",
     component: Grid,
   },
   {
-    name: 'Typography',
-    path: '/elements/typography',
+    name: "Typography",
+    path: "/elements/typography",
     component: Typography,
   },
   {
-    name: 'Cards',
-    path: '/elements/cards',
+    name: "Cards",
+    path: "/elements/cards",
     component: Cards,
   },
   {
-    name: 'Tabs',
-    path: '/elements/tabs',
+    name: "Tabs",
+    path: "/elements/tabs",
     component: Tabs,
   },
   {
-    name: 'Tables',
-    path: '/elements/tables',
+    name: "Tables",
+    path: "/elements/tables",
     component: Tables,
   },
   {
-    name: 'Progress Bars',
-    path: '/elements/progressbars',
+    name: "Progress Bars",
+    path: "/elements/progressbars",
     component: ProgressBars,
   },
   {
-    name: 'Pagination',
-    path: '/elements/pagination',
+    name: "Pagination",
+    path: "/elements/pagination",
     component: PaginationPage,
   },
   {
-    name: 'Modals',
-    path: '/elements/modals',
+    name: "Modals",
+    path: "/elements/modals",
     component: Modals,
   },
   {
-    name: 'Breadcrumbs',
-    path: '/elements/breadcrumbs',
+    name: "Breadcrumbs",
+    path: "/elements/breadcrumbs",
     component: Breadcrumbs,
   },
   {
-    name: 'Forms',
-    path: '/elements/forms',
+    name: "Forms",
+    path: "/elements/forms",
     component: Forms,
   },
   {
-    name: 'Loaders',
-    path: '/elements/loaders',
+    name: "Loaders",
+    path: "/elements/loaders",
     component: Loaders,
   },
   {
-    name: 'Avatars',
-    path: '/elements/avatars',
+    name: "Avatars",
+    path: "/elements/avatars",
     component: Avatars,
   },
   {
-    name: 'Blank',
-    path: '/pages/blank',
+    name: "Blank",
+    path: "/pages/blank",
     component: BlankPage,
   },
   {
-    name: 'Sub Navigation',
-    path: '/pages/subnav',
+    name: "Sub Navigation",
+    path: "/pages/subnav",
     component: SubNav,
   },
   {
-    name: '404',
-    path: '/pages/404',
+    name: "404",
+    path: "/pages/404",
     component: ErrorPage,
   },
   {
-    name: 'Analytics',
-    path: '/apps/analytics',
+    name: "Analytics",
+    path: "/apps/analytics",
     component: Analytics,
   },
   {
-    name: 'Activity Feed',
-    path: '/apps/feed',
+    name: "Activity Feed",
+    path: "/apps/feed",
     component: Feed,
   },
   {
-    name: 'Invoice',
-    path: '/apps/invoice',
+    name: "Invoice",
+    path: "/apps/invoice",
     component: Invoice,
   },
   {
-    name: 'CMS',
-    path: '/apps/cms',
+    name: "CMS",
+    path: "/apps/cms",
     component: CmsPage,
   },
   {
-    name: 'Widgets',
-    path: '/widgets',
+    name: "Widgets",
+    path: "/widgets",
     component: Widgets,
   },
 ];

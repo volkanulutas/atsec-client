@@ -1,126 +1,94 @@
 import React, { Component } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import paginationFactory from "react-bootstrap-table2-paginator";
-import filterFactory from "react-bootstrap-table2-filter";
+import paginationFactory, {
+  PaginationProvider,
+  PaginationListStandalone,
+} from "react-bootstrap-table2-paginator";
+import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 
-import DeleteModal from "../util/modal/DeleteModal";
-import CustomerService from "../../services/CustomerService";
+import RawProductService from "../../../services/RawProductService";
 
 const { SearchBar } = Search;
 
-class ListCustomerComponent extends Component {
+class ListRejectArchiveComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      customers: [],
+      rejectArchives: [],
       columns: [
         {
-          dataField: "identityNumber",
-          text: "MÜŞTERİ KODU",
+          dataField: "donor.code",
+          text: "DONOR ID",
           align: "center",
           title: true,
           sort: true,
         },
         {
-          dataField: "name",
-          text: "İSİM",
-          align: "center",
-          title: true,
+          dataField: "tissueType.name",
+          text: "DOKU TİPİ",
           sort: true,
+          title: true,
         },
         {
-          dataField: "customerType",
-          text: "MÜŞTERİ TİPİ",
+          dataField: "location.name",
+          text: "LOKASYON",
           align: "center",
-          title: true,
           sort: true,
+          title: true,
+        },
+        {
+          dataField: "statusName",
+          text: "DURUM",
+          align: "center",
+          sort: true,
+          title: true,
+          formatter: (cell, row) => {
+            let styleVar = "btn btn-secondary";
+            return <div className={styleVar}>{cell}</div>;
+          },
         },
         {
           dataField: "df",
           isDummyField: true,
           title: true,
-          align: "center",
           headerStyle: () => {
-            return { width: "30%" };
+            return { width: "40%" };
           },
+          align: "center",
           text: "İŞLEMLER",
-          formatter: (cellContent, row) => {
-            let rowId = row.id;
+          formatter: (cellContent, rowParam) => {
+            let row = rowParam;
             return (
               <div>
                 <button
                   type="button"
-                  style={{ marginRight: "10px" }}
-                  onClick={() => this.view(rowId)}
+                  style={{ marginRight: "5px" }}
+                  onClick={() => this.view(row)}
                   className="btn btn-success"
                 >
                   Görüntüle
                 </button>
-                <button
-                  type="button"
-                  style={{ marginRight: "10px" }}
-                  onClick={() => this.update(rowId)}
-                  className="btn btn-info"
-                >
-                  Güncelle
-                </button>
-                <DeleteModal
-                  style={{ marginRight: "5px" }}
-                  initialModalState={false}
-                  data={row}
-                  callback={this.delete}
-                />
               </div>
             );
           },
         },
       ],
     };
-    this.add = this.add.bind(this);
+
     this.view = this.view.bind(this);
-    this.update = this.update.bind(this);
   }
 
   componentDidMount() {
-    CustomerService.getAllCustomers()
-      .then((res) => {
-        this.setState({ customers: res.data });
-      })
-      .catch((ex) => {
-        console.error(ex);
-      });
-  }
-
-  add() {
-    this.props.history.push("/add-customer/_add");
+    RawProductService.getRejectArchivesRawProducts().then((res) => {
+      this.setState({ rejectArchives: res.data });
+    });
   }
 
   view(id) {
-    this.props.history.push(`/view-customer/${id}`);
+    this.props.history.push(`/view-rejectarchive/${id}`);
   }
-
-  update(id) {
-    this.props.history.push(`/add-customer/${id}`);
-  }
-
-  delete = (row) => {
-    CustomerService.deleteCustomer(row.id)
-      .then((res) => {
-        CustomerService.getAllCustomers()
-          .then((res) => {
-            console.log(res.data);
-            this.setState({ customers: res.data });
-          })
-          .catch((ex) => {
-            console.error(ex);
-          });
-      })
-      .catch((ex) => {
-        console.error(ex);
-      });
-  };
 
   render() {
     const defaultSorted = [
@@ -165,18 +133,18 @@ class ListCustomerComponent extends Component {
         },
         {
           text: "Tümü",
-          value: this.state.customers.length,
+          value: this.state.rejectArchives.length,
         },
       ],
     };
 
     return (
       <div className="container">
-        <div className="col-sm-12 btn btn-info">Müşteri Listesi</div>
+        <div className="col-sm-12 btn btn-info">Ham Ürün Red Arşivi</div>
         <div>
           <ToolkitProvider
             keyField="id"
-            data={this.state.customers}
+            data={this.state.rejectArchives}
             columns={this.state.columns}
             bootstrap4="true"
             search
@@ -184,13 +152,6 @@ class ListCustomerComponent extends Component {
             {(props) => (
               <div>
                 <SearchBar {...props.searchProps} placeholder="Arama" />
-                <button
-                  type="button"
-                  className="btn btn-primary addButton"
-                  onClick={this.add}
-                >
-                  Müşteri Ekle
-                </button>
                 <BootstrapTable
                   {...props.baseProps}
                   striped
@@ -209,4 +170,4 @@ class ListCustomerComponent extends Component {
   }
 }
 
-export default ListCustomerComponent;
+export default ListRejectArchiveComponent;

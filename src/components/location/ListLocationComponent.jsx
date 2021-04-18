@@ -83,15 +83,15 @@ class ListLocationComponent extends Component {
   }
 
   add() {
-    this.props.history.push("/add-location/_add");
+    this.props.history.push("/add-location/add/_add");
   }
 
   view(id) {
-    this.props.history.push(`/view-location/${id}`);
+    this.props.history.push(`/add-location/view/${id}`);
   }
 
   update(id) {
-    this.props.history.push(`/add-location/${id}`);
+    this.props.history.push(`/add-location/update/${id}`);
   }
 
   delete = (row) => {

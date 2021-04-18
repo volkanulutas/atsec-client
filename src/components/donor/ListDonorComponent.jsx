@@ -96,15 +96,15 @@ class ListDonorComponent extends Component {
   }
 
   add() {
-    this.props.history.push("/add-donor/_add");
+    this.props.history.push("/add-donor/add/_add");
   }
 
   view(id) {
-    this.props.history.push(`/view-donor/${id}`);
+    this.props.history.push(`/add-donor/view/${id}`);
   }
 
   update(id) {
-    this.props.history.push(`/add-donor/${id}`);
+    this.props.history.push(`/add-donor/update/${id}`);
   }
 
   delete = (row) => {

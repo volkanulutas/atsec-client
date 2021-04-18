@@ -1,12 +1,29 @@
-import React, { Component } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import { Button, NavItem, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Header, SidebarNav, Footer, PageContent, Avatar, PageAlert, Page } from '../vibe';
-import Logo from '../assets/images/vibe-logo.svg';
-import nav from '../_nav';
-import routes from '../views';
-import ContextProviders from '../vibe/components/utilities/ContextProviders';
-import handleKeyAccessibility, { handleClickAccessibility } from '../vibe/helpers/handleTabAccessibility';
+import React, { Component } from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
+import {
+  Button,
+  NavItem,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
+import {
+  Header,
+  SidebarNav,
+  Footer,
+  PageContent,
+  Avatar,
+  PageAlert,
+  Page,
+} from "../vibe";
+import Logo from "../assets/images/vibe-logo.svg";
+import nav from "../_nav";
+import routes from "../views";
+import ContextProviders from "../vibe/components/utilities/ContextProviders";
+import handleKeyAccessibility, {
+  handleClickAccessibility,
+} from "../vibe/helpers/handleTabAccessibility";
 
 const MOBILE_SIZE = 992;
 
@@ -29,23 +46,28 @@ export default class DashboardLayout extends Component {
   };
 
   componentDidUpdate(prev) {
-    if (this.state.isMobile && prev.location.pathname !== this.props.location.pathname) {
+    if (
+      this.state.isMobile &&
+      prev.location.pathname !== this.props.location.pathname
+    ) {
       this.toggleSideCollapse();
     }
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
-    document.addEventListener('keydown', handleKeyAccessibility);
-    document.addEventListener('click', handleClickAccessibility);
+    window.addEventListener("resize", this.handleResize);
+    document.addEventListener("keydown", handleKeyAccessibility);
+    document.addEventListener("click", handleClickAccessibility);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener("resize", this.handleResize);
   }
 
   toggleSideCollapse = () => {
-    this.setState(prevState => ({ sidebarCollapsed: !prevState.sidebarCollapsed }));
+    this.setState((prevState) => ({
+      sidebarCollapsed: !prevState.sidebarCollapsed,
+    }));
   };
 
   closeChat = () => {
@@ -54,7 +76,7 @@ export default class DashboardLayout extends Component {
 
   render() {
     const { sidebarCollapsed } = this.state;
-    const sidebarCollapsedClass = sidebarCollapsed ? 'side-menu-collapsed' : '';
+    const sidebarCollapsedClass = sidebarCollapsed ? "side-menu-collapsed" : "";
     return (
       <ContextProviders>
         <div className={`app ${sidebarCollapsedClass}`}>
@@ -80,7 +102,11 @@ export default class DashboardLayout extends Component {
               <PageContent>
                 <Switch>
                   {routes.map((page, key) => (
-                    <Route path={page.path} component={page.component} key={key} />
+                    <Route
+                      path={page.path}
+                      component={page.component}
+                      key={key}
+                    />
                   ))}
                   <Redirect from="/" to="/home" />
                 </Switch>
@@ -92,7 +118,6 @@ export default class DashboardLayout extends Component {
             <span>
               <a href="#!">Terms</a> | <a href="#!">Privacy Policy</a>
             </span>
-        
           </Footer>
         </div>
       </ContextProviders>
@@ -105,7 +130,12 @@ function HeaderNav() {
     <React.Fragment>
       <NavItem>
         <form className="form-inline">
-          <input className="form-control mr-sm-1" type="search" placeholder="Arama Yap..." aria-label="Search" />
+          <input
+            className="form-control mr-sm-1"
+            type="search"
+            placeholder="Arama Yap..."
+            aria-label="Search"
+          />
           <Button type="submit" className="d-none d-sm-block">
             <i className="fa fa-search" />
           </Button>

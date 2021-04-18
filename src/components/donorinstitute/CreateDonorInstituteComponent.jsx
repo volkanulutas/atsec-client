@@ -9,6 +9,7 @@ class CreateDonorInstituteComponent extends Component {
         super(props)
         this.state = {
             id: this.props.match === undefined ? "_add" : this.props.match.params.id,
+            isEditable: this.props.match.params.state === "view" ? false : true,
             code: '',
             name: '', 
             rawProducts: [],
@@ -132,7 +133,8 @@ class CreateDonorInstituteComponent extends Component {
                                 className={this.hasError("code") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.code} onChange={this.changeCodeHandler} />
+                                value={this.state.code} onChange={this.changeCodeHandler} 
+                                disabled={!this.state.isEditable}/>
                                 <div className={this.hasError("code") ? "inline-errormsg" : "hidden"}>
                                     Kurum kodunu girmelisiniz.
                                 </div>
@@ -144,13 +146,14 @@ class CreateDonorInstituteComponent extends Component {
                                 className={this.hasError("name") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.name} onChange={this.changeNameHandler} />
+                                value={this.state.name} onChange={this.changeNameHandler} 
+                                disabled={!this.state.isEditable}/>
                                 <div className={this.hasError("code") ? "inline-errormsg" : "hidden"}>
                                     Kurum adını girmelisiniz.
                                 </div>
                             </div>
 
-                            <button className="btn btn-success" onClick={this.saveDonorInstitute.bind(this)}>{this.getButtonText()}</button>
+                            <button className="btn btn-success" onClick={this.saveDonorInstitute.bind(this)}>{this.getButtonText()} disabled={!this.state.isEditable}</button>
                             <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>İptal</button>
                         </form>
                         </div>

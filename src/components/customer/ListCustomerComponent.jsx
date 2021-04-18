@@ -94,15 +94,15 @@ class ListCustomerComponent extends Component {
   }
 
   add() {
-    this.props.history.push("/add-customer/_add");
+    this.props.history.push("/add-customer/add/_add");
   }
 
   view(id) {
-    this.props.history.push(`/view-customer/${id}`);
+    this.props.history.push(`/add-customer/view/${id}`);
   }
 
   update(id) {
-    this.props.history.push(`/add-customer/${id}`);
+    this.props.history.push(`/add-customer/update/${id}`);
   }
 
   delete = (row) => {

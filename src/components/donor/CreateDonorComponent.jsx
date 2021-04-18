@@ -8,6 +8,7 @@ class CreateDonorComponent extends Component {
         super(props)
         this.state = {
             id: this.props.match.params.id,
+            isEditable: this.props.match.params.state === "view" ? false : true,
             code: '',
             citizenshipNumber: '',
             name: '',
@@ -160,7 +161,8 @@ class CreateDonorComponent extends Component {
                                 className={this.hasError("name") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.name} onChange={this.changeNameHandler} />
+                                value={this.state.name} onChange={this.changeNameHandler}
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("name") ? "inline-errormsg" : "hidden"}>
                                        Adı girmelisiniz.
                                    </div>
@@ -171,18 +173,20 @@ class CreateDonorComponent extends Component {
                                 className={this.hasError("name") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.surname} onChange={this.changeSurnameHandler} />
+                                value={this.state.surname} onChange={this.changeSurnameHandler}
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("surname") ? "inline-errormsg" : "hidden"}>
                                        Soyadı girmelisiniz.
                                    </div>
                             </div>
                             <div className="form-group">
-                                <label>TC Numarası:</label>
+                                <label>T.C. Numarası:</label>
                                 <input placeholder="10203320214" name="citizenshipNumber" 
                                 className={this.hasError("name") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.citizenshipNumber} onChange={this.changeCitizenshipNumberHandler} />
+                                value={this.state.citizenshipNumber} onChange={this.changeCitizenshipNumberHandler} 
+                                disabled={!this.state.isEditable}/>
                                 <div className={this.hasError("citizenshipNumber") ? "inline-errormsg" : "hidden"}>
                                     TC numarası uygun formatta değil veya girilmemiş.
                                 </div>
@@ -193,7 +197,8 @@ class CreateDonorComponent extends Component {
                                 className={this.hasError("name") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.telephone} onChange={this.changeTelephoneHandler} />
+                                value={this.state.telephone} onChange={this.changeTelephoneHandler}
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("telephone") ? "inline-errormsg" : "hidden"}>
                                     Telefon formatta değil veya girilmemiş.
                                 </div>
@@ -204,12 +209,13 @@ class CreateDonorComponent extends Component {
                                 className={this.hasError("name") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.address} onChange={this.changeAddressHandler} />
+                                value={this.state.address} onChange={this.changeAddressHandler}
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("address") ? "inline-errormsg" : "hidden"}>
                                        Adres girmelisiniz.
                                 </div>
                             </div>
-                            <button className="btn btn-success" onClick={this.saveDonor.bind(this)}>{this.getButtonText()}</button>
+                            <button className="btn btn-success" onClick={this.saveDonor.bind(this)} disabled={!this.state.isEditable}>{this.getButtonText()}</button>
                             <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>İptal</button>
                         </form>
                         </div>

@@ -8,6 +8,7 @@ class CreateTissueTypeComponent extends Component {
         super(props)
         this.state = {
             id: this.props.match.params.id,
+            isEditable: this.props.match.params.state === "view" ? false : true,
             name: '',
             definition: '',
             deleted: false,
@@ -119,7 +120,8 @@ class CreateTissueTypeComponent extends Component {
                                 className={this.hasError("name") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.name} onChange={this.changeNameHandler} />
+                                value={this.state.name} onChange={this.changeNameHandler}
+                                disabled={!this.state.isEditable}/>
                                 <div className={this.hasError("name") ? "inline-errormsg" : "hidden"}>
                                     Doku Tipini girmelisiniz.
                                 </div>
@@ -128,10 +130,11 @@ class CreateTissueTypeComponent extends Component {
                             <div className="form-group">
                                 <label>Açıklama:</label>
                                 <input placeholder="Açıklama" name="definition" className="form-control"
-                                value={this.state.definition} onChange={this.changeDefinitionHandler} />
+                                value={this.state.definition} onChange={this.changeDefinitionHandler} 
+                                disabled={!this.state.isEditable} />
                             </div>
 
-                            <button className="btn btn-success" onClick={this.saveTissueType.bind(this)}>{this.getButtonText()}</button>
+                            <button className="btn btn-success" onClick={this.saveTissueType.bind(this)} disabled={!this.state.isEditable}>{this.getButtonText()}</button>
                             <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>İptal</button>
                         </form>
                         </div>

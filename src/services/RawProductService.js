@@ -45,6 +45,22 @@ class RawProductService {
       API_BASE_URL + API_URL_RAWPRODUCT + "getFiles/" + fileType
     );
   }
+
+  downloadRawProductBarcode() {
+    axios({
+      url: API_BASE_URL + API_URL_RAWPRODUCT + "barcode",
+      method: "GET",
+      responseType: "blob", // important
+    }).then((response) => {
+      alert("ss");
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "file.pdf"); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+    });
+  }
 }
 
 export default new RawProductService();

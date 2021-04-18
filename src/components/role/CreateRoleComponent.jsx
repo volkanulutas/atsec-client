@@ -9,6 +9,7 @@ class CreateRoleComponent extends Component {
         super(props)
         this.state = {
             id: this.props.match.params.id,
+            isEditable: this.props.match.params.state === "view" ? false : true,
             name: '',
             definition: '', 
             permissions: [],
@@ -132,7 +133,8 @@ class CreateRoleComponent extends Component {
                                 className={this.hasError("name") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.name} onChange={this.changeNameHandler} />
+                                value={this.state.name} onChange={this.changeNameHandler} 
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("name") ? "inline-errormsg" : "hidden"}>
                                     İsmi girmelisiniz.
                                 </div>
@@ -142,16 +144,16 @@ class CreateRoleComponent extends Component {
                                 <label>Açıklama:</label>
                                 <input placeholder="Açıklama" name="definition"
                                 className="form-control"
-                                value={this.state.definition} onChange={this.changeDefinitionHandler} />
+                                value={this.state.definition} onChange={this.changeDefinitionHandler} 
+                                disabled={!this.state.isEditable} />
                             </div>
 
-                            <button className="btn btn-success" onClick={this.saveRole.bind(this)}>{this.getButtonText()}</button>
+                            <button className="btn btn-success" onClick={this.saveRole.bind(this)} disabled={!this.state.isEditable}>{this.getButtonText()}</button>
                             <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>İptal</button>
                         </form>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
         );

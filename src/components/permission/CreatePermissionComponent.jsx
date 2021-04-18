@@ -9,6 +9,7 @@ class CreatePermissionComponent extends Component {
     super(props);
     this.state = {
       id: this.props.match.params.id,
+      isEditable: this.props.match.params.state === "view" ? false : true,
       name: "",
       definition: "",
       deleted: false,
@@ -146,6 +147,7 @@ class CreatePermissionComponent extends Component {
                           : "form-control"
                       }
                       value={this.state.name}
+                      disabled={!this.state.isEditable}
                       onChange={this.changeNameHandler}
                     />
                     <div
@@ -164,6 +166,7 @@ class CreatePermissionComponent extends Component {
                       name="definition"
                       className="form-control"
                       value={this.state.definition}
+                      disabled={!this.state.isEditable}
                       onChange={this.changeDefinitionHandler}
                     />
                   </div>
@@ -171,6 +174,7 @@ class CreatePermissionComponent extends Component {
                   <button
                     className="btn btn-success"
                     onClick={this.savePermission.bind(this)}
+                    disabled={!this.state.isEditable}
                   >
                     {this.getButtonText()}
                   </button>

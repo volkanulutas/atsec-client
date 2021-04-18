@@ -89,15 +89,15 @@ class ListRoleComponent extends Component {
   }
 
   addRole() {
-    this.props.history.push("/add-role/_add");
+    this.props.history.push("/add-role/add/_add");
   }
 
   updateRole(id) {
-    this.props.history.push(`/add-role/${id}`);
+    this.props.history.push(`/add-role/update/${id}`);
   }
 
   viewRole(id) {
-    this.props.history.push(`/view-role/${id}`);
+    this.props.history.push(`/add-role/view/${id}`);
   }
 
   delete = (row) => {

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import paginationFactory, {
@@ -14,13 +14,21 @@ import PerformQuarantinaModal from "../util/modal/PerformQuarantinaModal";
 import PerformAcceptModal from "../util/modal/PerformAcceptModal";
 import PerformRejectModal from "../util/modal/PerformRejectModal";
 
+// PDF Viewer
+import { Document, Page, pdfjs } from "react-pdf";
+// import PDF from "../rawproduct/file.pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
 const { SearchBar } = Search;
 
 class ListRawProductComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      numPages: null,
+      pageNumber: 1,
       products: [],
+      pdfFile: null,
 
       selectedRowId: "",
       columns: [
@@ -110,6 +118,13 @@ class ListRawProductComponent extends Component {
     this.addRawProduct = this.addRawProduct.bind(this);
     this.updateRawProduct = this.updateRawProduct.bind(this);
     this.viewRawProduct = this.viewRawProduct.bind(this);
+    this.testBarcode = this.testBarcode.bind(this);
+    this.viewBarcode = this.viewBarcode.bind(this);
+    this.onDocumentLoadSuccess = this.onDocumentLoadSuccess.bind(this);
+  }
+
+  onDocumentLoadSuccess({ numPages }) {
+    this.state.numPages = numPages;
   }
 
   checkstatus(row) {
@@ -147,6 +162,8 @@ class ListRawProductComponent extends Component {
   }
 
   componentDidMount() {
+    this.setState({ pdfFile: RawProductService.getRawProductBarcode() });
+
     RawProductService.getAllRawProducts()
       .then((res) => {
         console.log(res.data);
@@ -305,16 +322,22 @@ class ListRawProductComponent extends Component {
       });
   };
 
+  viewBarcode() {
+    RawProductService.downloadRawProductBarcode();
+  }
+  testBarcode() {
+    // RawProductService.getRawProductBarcode();
+  }
   addRawProduct() {
-    this.props.history.push("/add-rawproduct/_add");
+    this.props.history.push("/add-rawproduct/add/_add");
   }
 
   viewRawProduct(row) {
-    this.props.history.push(`/view-rawproduct/${row.id}`);
+    this.props.history.push(`/add-rawproduct/view/${row.id}`);
   }
 
   updateRawProduct(row) {
-    this.props.history.push(`/add-rawproduct/${row.id}`);
+    this.props.history.push(`/add-rawproduct/update/${row.id}`);
   }
 
   render() {
@@ -367,6 +390,9 @@ class ListRawProductComponent extends Component {
 
     return (
       <div className="container">
+        <Document file={this.state.pdfFile}>
+          <Page pageNumber={1} />
+        </Document>
         <div className="col-sm-12 btn btn-info">Ham Ürün Listesi</div>
         <div>
           <ToolkitProvider
@@ -386,6 +412,15 @@ class ListRawProductComponent extends Component {
                 >
                   Ham Ürün Ekle
                 </button>
+
+                <button
+                  type="button"
+                  className="btn btn-primary addButton"
+                  onClick={this.viewBarcode}
+                >
+                  Barcode test
+                </button>
+
                 <hr />
                 <BootstrapTable
                   {...props.baseProps}

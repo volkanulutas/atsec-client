@@ -24,43 +24,33 @@ import ErrorPage from "./pages/404";
 
 import ListUserComponent from "../components/user/ListUserComponent";
 import CreateUserComponent from "../components/user/CreateUserComponent";
-import ViewUserComponent from "../components/user/ViewUserComponent";
 
 import ListRoleComponent from "../components/role/ListRoleComponent";
 import CreateRoleComponent from "../components/role/CreateRoleComponent";
-import ViewRoleComponent from "../components/role/ViewRoleComponent";
 
 import ListPermissionComponent from "../components/permission/ListPermissionComponent";
 import CreatePermissionComponent from "../components/permission/CreatePermissionComponent";
-import ViewPermissionComponent from "../components/permission/ViewPermissionComponent";
 
 import ListDonorComponent from "../components/donor/ListDonorComponent";
 import CreateDonorComponent from "../components/donor/CreateDonorComponent";
-import ViewDonorComponent from "../components/donor/ViewDonorComponent";
 
 import ListCustomerComponent from "../components/customer/ListCustomerComponent";
 import CreateCustomerComponent from "../components/customer/CreateCustomerComponent";
-import ViewCustomerComponent from "../components/customer/ViewCustomerComponent";
 
 import ListProductComponent from "../components/product/ListProductComponent";
 import CreateProductComponent from "../components/product/CreateProductComponent";
-import ViewProductComponent from "../components/product/ViewProductComponent";
 
 import ListRawProductComponent from "../components/rawproduct/ListRawProductComponent";
 import CreateRawProductComponent from "../components/rawproduct/CreateRawProductComponent";
-import ViewRawProductComponent from "../components/rawproduct/ViewRawProductComponent";
 
 import ListDonorInstituteComponent from "../components/donorinstitute/ListDonorInstituteComponent";
 import CreateDonorInstituteComponent from "../components/donorinstitute/CreateDonorInstituteComponent";
-import ViewDonorInstituteComponent from "../components/donorinstitute/ViewDonorInstituteComponent";
 
 import ListTissueTypeComponent from "../components/tissuetype/ListTissueTypeComponent";
 import CreateTissueTypeComponent from "../components/tissuetype/CreateTissueTypeComponent";
-import ViewTissueTypeComponent from "../components/tissuetype/ViewTissueTypeComponent";
 
 import ListLocationComponent from "../components/location/ListLocationComponent";
 import CreateLocationComponent from "../components/location/CreateLocationComponent";
-import ViewLocationComponent from "../components/location/ViewLocationComponent";
 
 import ChangePasswordComponent from "../components/auth/ChangePassword";
 import LoginComponent from "../components/auth/LoginComponent";
@@ -88,13 +78,13 @@ const pageList = [
   },
   {
     name: "Kullanıcı Ekle/Güncelle",
-    path: "/add-user/:id",
+    path: "/add-user/:state/:id",
     component: CreateUserComponent,
   },
   {
     name: "Kullanıcı Detayı",
-    path: "/view-user/:id",
-    component: ViewUserComponent,
+    path: "/add-user/:state/:id",
+    component: CreateUserComponent,
   },
   {
     name: "Roller",
@@ -103,13 +93,13 @@ const pageList = [
   },
   {
     name: "Rol Ekle/Güncelle",
-    path: "/add-role/:id",
+    path: "/add-role/:state/:id",
     component: CreateRoleComponent,
   },
   {
     name: "Rol Detayı",
-    path: "/view-role/:id",
-    component: ViewRoleComponent,
+    path: "/add-role/:state/:id",
+    component: CreateRoleComponent,
   },
   {
     name: "Yetkiler",
@@ -118,13 +108,13 @@ const pageList = [
   },
   {
     name: "Yetki Ekle/Güncelle",
-    path: "/add-permission/:id",
+    path: "/add-permission/:state/:id",
     component: CreatePermissionComponent,
   },
   {
     name: "Yetki Detayı",
-    path: "/view-permission/:id",
-    component: ViewPermissionComponent,
+    path: "/add-permission/:state/:id",
+    component: CreatePermissionComponent,
   },
   {
     name: "Donor Listesi",
@@ -133,13 +123,13 @@ const pageList = [
   },
   {
     name: "Donor Ekle/Güncelle",
-    path: "/add-donor/:id",
+    path: "/add-donor/:state/:id",
     component: CreateDonorComponent,
   },
   {
     name: "Donor Detayı",
-    path: "/view-donor/:id",
-    component: ViewDonorComponent,
+    path: "/add-donor/:state/:id",
+    component: CreateDonorComponent,
   },
   {
     name: "Müşteri Listesi",
@@ -148,13 +138,13 @@ const pageList = [
   },
   {
     name: "Müşteri Ekle/Güncelle",
-    path: "/add-customer/:id",
+    path: "/add-customer/:state/:id",
     component: CreateCustomerComponent,
   },
   {
     name: "Müşteri Detayı",
-    path: "/view-customer/:id",
-    component: ViewCustomerComponent,
+    path: "/add-customer/:state/:id",
+    component: CreateCustomerComponent,
   },
   {
     name: "Ham Ürün Listesi",
@@ -163,13 +153,13 @@ const pageList = [
   },
   {
     name: "Ham Ürün Ekle/Güncelle",
-    path: "/add-rawproduct/:id",
+    path: "/add-rawproduct/:state/:id",
     component: CreateRawProductComponent,
   },
   {
     name: "Ham Ürün Görüntüle",
-    path: "/view-rawproduct/:id",
-    component: ViewRawProductComponent,
+    path: "/add-rawproduct/:state/:id",
+    component: CreateRawProductComponent,
   },
   {
     name: "Doku Tipi Listesi",
@@ -178,13 +168,13 @@ const pageList = [
   },
   {
     name: "Doku Tipi Ekle/Güncelle",
-    path: "/add-tissuetype/:id",
+    path: "/add-tissuetype/:state/:id",
     component: CreateTissueTypeComponent,
   },
   {
     name: "Doku Tipi Detayı",
-    path: "/view-tissuetype/:id",
-    component: ViewTissueTypeComponent,
+    path: "/add-tissuetype/:state/:id",
+    component: CreateTissueTypeComponent,
   },
   {
     name: "Donör Kurum Listesi",
@@ -198,8 +188,8 @@ const pageList = [
   },
   {
     name: "Kurum Donör Detayı",
-    path: "/view-donorinstitute/:id",
-    component: ViewDonorInstituteComponent,
+    path: "/add-donorinstitute/:state/:id",
+    component: CreateDonorInstituteComponent,
   },
   {
     name: "Ürün Listesi",
@@ -208,13 +198,13 @@ const pageList = [
   },
   {
     name: "Ürün Ekle/Güncelle",
-    path: "/add-product/:id",
+    path: "/add-product/:state/:id",
     component: CreateProductComponent,
   },
   {
     name: "Ürün Görüntüle",
-    path: "/view-product/:id",
-    component: ViewProductComponent,
+    path: "/add-product/:state/:id",
+    component: CreateProductComponent,
   },
   {
     name: "Lokasyon Listesi",
@@ -223,13 +213,13 @@ const pageList = [
   },
   {
     name: "Lokasyon Ekle/Güncelle",
-    path: "/add-location/:id",
+    path: "/add-location/:state/:id",
     component: CreateLocationComponent,
   },
   {
     name: "Lokasyon Detayı",
-    path: "/view-location/:id",
-    component: ViewLocationComponent,
+    path: "/add-location/:state/:id",
+    component: CreateLocationComponent,
   },
   {
     name: "Ham Ürün Red Arşivi",

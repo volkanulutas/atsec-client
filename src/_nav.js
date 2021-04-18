@@ -1,9 +1,9 @@
 export default {
   top: [
     {
-      name: "Anasayfa",
-      url: "/home",
-      icon: "Home",
+      name: "Kullanıcılar",
+      url: "/users/",
+      icon: "User",
     },
     {
       name: "Kullanıcı Yönetimi",

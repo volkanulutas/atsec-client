@@ -62,7 +62,7 @@ class PerformQuarantinaRawProduct extends Component {
     event.preventDefault();
 
     var errors = [];
-    if (this.state.location.name === undefined) {
+    if (this.state.location[0].name === undefined) {
       errors.push("location");
     }
 
@@ -224,7 +224,7 @@ class PerformQuarantinaRawProduct extends Component {
                         multiple={multiple}
                         id="select-location-quarantina"
                         onChange={(selected) => {
-                          this.state({ location: selected });
+                          this.setState({ location: selected });
                         }}
                         labelKey="name"
                         options={this.state.product_LocationList}

@@ -97,15 +97,15 @@ class ListUserComponent extends Component {
   }
 
   add() {
-    this.props.history.push("/add-user/_add");
+    this.props.history.push("/add-user/add/_add");
   }
 
   view(id) {
-    this.props.history.push(`/view-user/${id}`);
+    this.props.history.push(`/add-user/view/${id}`);
   }
 
   update(id) {
-    this.props.history.push(`/add-user/${id}`);
+    this.props.history.push(`/add-user/update/${id}`);
   }
 
   delete = (row) => {

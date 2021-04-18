@@ -7,6 +7,7 @@ class CreateLocationComponent extends Component {
     super(props);
     this.state = {
       id: this.props.match === undefined ? "_add" : this.props.match.params.id,
+      isEditable: this.props.match.params.state === "view" ? false : true,
       name: "",
       definition: "",
       deleted: false,

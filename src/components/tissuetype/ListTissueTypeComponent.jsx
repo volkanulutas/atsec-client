@@ -83,15 +83,15 @@ class ListTissueTypeComponent extends Component {
   }
 
   add() {
-    this.props.history.push("/add-tissuetype/_add");
+    this.props.history.push("/add-tissuetype/add/_add");
   }
 
   view(id) {
-    this.props.history.push(`/view-tissuetype/${id}`);
+    this.props.history.push(`/add-tissuetype/view/${id}`);
   }
 
   update(id) {
-    this.props.history.push(`/add-tissue/${id}`);
+    this.props.history.push(`/add-tissue/update/${id}`);
   }
 
   delete = (row) => {

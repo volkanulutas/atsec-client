@@ -10,6 +10,7 @@ class CreateUserComponent extends Component {
         super(props)
         this.state = {
             id: this.props.match.params.id,
+            isEditable: this.props.match.params.state === "view" ? false : true,
             name: '',
             surname:'',
             username: '',
@@ -212,7 +213,8 @@ class CreateUserComponent extends Component {
                                 className={this.hasError("name") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.name} onChange={this.changeNameHandler}/>
+                                value={this.state.name} onChange={this.changeNameHandler}
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("name") ? "inline-errormsg" : "hidden"}>
                                        Adı girmelisiniz.
                                 </div>
@@ -223,7 +225,8 @@ class CreateUserComponent extends Component {
                                 className={this.hasError("surname") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.surname} onChange={this.changeSurnameHandler} />
+                                value={this.state.surname} onChange={this.changeSurnameHandler} 
+                                disabled={!this.state.isEditable}/>
                                 <div className={this.hasError("surname") ? "inline-errormsg" : "hidden"}>
                                        Adı girmelisiniz.
                                 </div>
@@ -235,7 +238,8 @@ class CreateUserComponent extends Component {
                                 className={this.hasError("password") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.password} onChange={this.changePassword1Handler} />
+                                value={this.state.password} onChange={this.changePassword1Handler} 
+                                disabled={!this.state.isEditable}/>
                                 <div className={this.hasError("password") ? "inline-errormsg" : "hidden"}>
                                     Şifreyi girmelisiniz.
                                 </div>
@@ -246,14 +250,15 @@ class CreateUserComponent extends Component {
                                 className={this.hasError("password2") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
-                                value={this.state.password2} onChange={this.changePassword2Handler} />
+                                value={this.state.password2} onChange={this.changePassword2Handler} 
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("password2") ? "inline-errormsg" : "hidden"}>
                                     Şifreyi girmelisiniz.
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label>Rol:</label>
-                                <select className="form-control"  value={this.state.role} onChange={this.changeRoleHandler}>
+                                <select className="form-control"  value={this.state.role} onChange={this.changeRoleHandler} disabled={!this.state.isEditable}>
                                 {this.state.allRoles.map((option) => (
                                     <option value={option.id}> {option.id} - {option.name}</option>
                                 ))}
@@ -261,10 +266,11 @@ class CreateUserComponent extends Component {
                             </div>
                             <div className="form-group">
                                 <label>Aktiflik:</label>
-                                <input type="checkbox" name="enabled" checked={this.state.enabled} onChange={this.changeEnabledHandler} style={{marginLeft:"10px"}}/>
+                                <input type="checkbox" name="enabled" checked={this.state.enabled} onChange={this.changeEnabledHandler} style={{marginLeft:"10px"}}
+                                disabled={!this.state.isEditable} />
                             </div>
                             
-                            <button className="btn btn-success" onClick={this.saveUser.bind(this)}>{this.getButtonText()}</button>
+                            <button className="btn btn-success" onClick={this.saveUser.bind(this)} disabled={!this.state.isEditable} >{this.getButtonText()}</button>
                             <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>İptal</button>
                         </form>
                         </div>

@@ -86,15 +86,15 @@ class ListPermissionComponent extends Component {
   }
 
   add() {
-    this.props.history.push("/add-permission/_add");
+    this.props.history.push("/add-permission/add/_add");
   }
 
   view(id) {
-    this.props.history.push(`/view-permission/${id}`);
+    this.props.history.push(`/add-permission/view/${id}`);
   }
 
   update(id) {
-    this.props.history.push(`/add-permission/${id}`);
+    this.props.history.push(`/add-permission/update/${id}`);
   }
 
   delete = (row) => {

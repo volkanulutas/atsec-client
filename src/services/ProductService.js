@@ -22,6 +22,10 @@ class ProductService {
   deleteProduct(id) {
     return axios.delete(API_BASE_URL + API_URL_PRODUCT + id);
   }
+
+  getPreprocessingTypeList() {
+    return axios.get(API_BASE_URL + API_URL_PRODUCT + "preprocessingtypelist");
+  }
 }
 
 export default new ProductService();

@@ -17,6 +17,7 @@ class CreateRawProductComponent extends Component {
 
     this.state = {
       id: this.props.match.params.id,
+      isEditable: this.props.match.params.state === "view" ? false : true,
       multiple: false,
 
       selectedTransferFiles: undefined,
@@ -200,7 +201,7 @@ class CreateRawProductComponent extends Component {
     if (!this.state.selectTransferFile) {
       errors.push("transferFile");
     }
-    if (!this.state.selectTransporterFile) {
+    if (this.state.transferFilesInfos.length === 0) {
       errors.push("transfporterFile");
     }
     if (this.state.donorInstitute[0] === undefined) {
@@ -285,7 +286,7 @@ class CreateRawProductComponent extends Component {
     )
       .then((response) => {
         this.setState({
-          messageTransfer: response.data.message,
+          messageTransfer: response.data.responseMessage,
         });
         return RawProductService.getFiles("RAW_TRANSFER_FILES");
       })
@@ -328,7 +329,7 @@ class CreateRawProductComponent extends Component {
     )
       .then((response) => {
         this.setState({
-          messageTransportation: response.data.message,
+          messageTransportation: response.data.responseMessage,
         });
         return RawProductService.getFiles("RAW_TRANSPORTATION_FILES");
       })
@@ -365,7 +366,7 @@ class CreateRawProductComponent extends Component {
     })
       .then((response) => {
         this.setState({
-          messageExtra: response.data.message,
+          messageExtra: response.data.responseMessage,
         });
         return RawProductService.getFiles("RAW_EXTRA_FILES");
       })
@@ -495,6 +496,7 @@ class CreateRawProductComponent extends Component {
                         options={this.state.product_DonorInstituteList}
                         placeholder="Gönderen Kurumu Seç..."
                         selected={this.state.donorInstitute}
+                        disabled={!this.state.isEditable}
                       />
                       <div
                         className={
@@ -509,6 +511,7 @@ class CreateRawProductComponent extends Component {
                         style={{ marginRight: "5px" }}
                         initialModalState={false}
                         callback={this.delete}
+                        disabled={!this.state.isEditable}
                       />
                     </div>
                   </div>
@@ -526,6 +529,7 @@ class CreateRawProductComponent extends Component {
                       }
                       value={this.state.issueTissueDate}
                       onChange={this.changeIssueTissueDateHandler}
+                      disabled={!this.state.isEditable}
                     />
                     <div
                       className={
@@ -551,6 +555,7 @@ class CreateRawProductComponent extends Component {
                       }
                       value={this.state.arrivalDate}
                       onChange={this.changeArrivalDateHandler}
+                      disabled={!this.state.isEditable}
                     />
                     <div
                       className={
@@ -580,6 +585,7 @@ class CreateRawProductComponent extends Component {
                         options={this.state.product_TissueTypeList}
                         placeholder="Doku Tipini Seçiniz..."
                         selected={this.state.tissueType}
+                        disabled={!this.state.isEditable}
                       />
                       <div
                         className={
@@ -617,6 +623,7 @@ class CreateRawProductComponent extends Component {
                         options={this.state.product_LocationList}
                         placeholder="Karantina Lokasyonunu Seç..."
                         selected={this.state.location}
+                        disabled={!this.state.isEditable}
                       />
                       <div
                         className={
@@ -629,6 +636,7 @@ class CreateRawProductComponent extends Component {
                       </div>
                       <button
                         className="btn btn-success width-select2" /* TODO: onClick={this.}*/
+                        disabled={!this.state.isEditable}
                       >
                         +
                       </button>
@@ -643,6 +651,7 @@ class CreateRawProductComponent extends Component {
                       className="form-control"
                       value={this.state.information}
                       onChange={this.changeInformationHandler}
+                      disabled={!this.state.isEditable}
                     />
                   </div>
 
@@ -662,6 +671,7 @@ class CreateRawProductComponent extends Component {
                       options={this.state.product_StatusNameList}
                       placeholder="Durumu Seç..."
                       selected={this.state.statusName}
+                      disabled={!this.state.isEditable}
                     />
                   </div>
 
@@ -858,6 +868,7 @@ class CreateRawProductComponent extends Component {
                   <button
                     className="btn btn-success"
                     onClick={this.saveProduct.bind(this)}
+                    disabled={!this.state.isEditable}
                   >
                     {this.getButtonText()}
                   </button>

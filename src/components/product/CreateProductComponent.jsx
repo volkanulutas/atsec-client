@@ -1,288 +1,313 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { Typeahead } from "react-bootstrap-typeahead";
 
-import ProductService from '../../services/ProductService';
-import DonorService from '../../services/DonorService';
-import CustomerService from '../../services/CustomerService';
+import ProductService from "../../services/ProductService";
+import CustomerService from "../../services/CustomerService";
+import AddModal from "../util/modal/AddModal";
 
 class CreateProductComponent extends Component {
-    constructor(props)
-    {
-        super(props)
-        this.state = {
-            id: this.props.match.params.id,
-            name: '',
-            definition: '',
-            status: '',
-            type: '',
-            expirationDate: '', 
-            splitLength: '',
-            information: '',
-            secCode: '',
-            donorId: '',
-            customerId: '',
-            deleted: false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: this.props.match.params.id,
+      isEditable: this.props.match.params.state === "view" ? false : true,
+      multiple: false,
 
-            productDonorList: [],
-            productCustomerList: [],
-            productStatusList: [ "Karantina", "Stok", "Numune", "Zaiyat", "Geri Çağrılmış"],
-            productTypeList: ["NONE"],
-        }
-        this.saveProduct = this.saveProduct.bind(this);
-        this.changeNameHandler = this.changeNameHandler.bind(this);
-        this.changeDefinitionHandler = this.changeDefinitionHandler.bind(this);
-        this.changeStatusHandler = this.changeStatusHandler.bind(this);
-        this.changeTypeHandler = this.changeTypeHandler.bind(this);
-        this.changeExpirationDateHandler = this.changeExpirationDateHandler.bind(this);
-        this.changeSplitLengthHandler = this.changeSplitLengthHandler.bind(this);
-        this.changeInformationHandler = this.changeInformationHandler.bind(this);
-        this.changeSecCodeHandler = this.changeSecCodeHandler.bind(this);
-        this.changeDonorIdHandler = this.changeDonorIdHandler.bind(this);
-        this.changeCustomerIdHandler = this.changeCustomerIdHandler.bind(this);
-    } 
+      donor: {},
+      customer: [], // Typeahead needs array.
+      status: "",
+      type: "",
+      secCode: "",
+      preProcessingType: [],
+      definition: "",
+      information: "",
+      deleted: false,
 
-    componentDidMount(){
-        DonorService.getAllDonors().then(res=> {
-           this.setState({productDonorList: res.data});
-        }).catch(ex => {
-            console.error(ex);
+      errors: [],
+      product_CustomerList: [],
+    };
+    this.saveProduct = this.saveProduct.bind(this);
+    this.changeCustomerHandler = this.changeCustomerHandler.bind(this);
+    this.changeStatusHandler = this.changeStatusHandler.bind(this);
+    this.changeTypeHandler = this.changeTypeHandler.bind(this);
+    this.changePreProcessingTypeHandler = this.changePreProcessingTypeHandler.bind(
+      this
+    );
+    this.changeDefinitionHandler = this.changeDefinitionHandler.bind(this);
+    this.changeInformationHandler = this.changeInformationHandler.bind(this);
+  }
+
+  componentDidMount() {
+    CustomerService.getAllCustomers()
+      .then((res) => {
+        this.setState({ product_CustomerList: res.data });
+      })
+      .catch((ex) => {
+        console.error(ex);
+      });
+
+    if (this.state.id === "_add") {
+      return;
+    } else {
+      ProductService.getProductById(this.state.id)
+        .then((res) => {
+          let product = res.data;
+
+          let customerTemp = [product.customer];
+          this.setState({
+            donor: product.donor,
+            customer: customerTemp,
+            definition: product.definition,
+            status: product.status,
+            type: product.type,
+            information: product.information,
+            secCode: product.secCode,
+            preProcessingType: product.preProcessingType,
+          });
+          alert("product: " + JSON.stringify(product));
+        })
+        .catch((ex) => {
+          console.error(ex);
         });
+    }
+  }
 
-        CustomerService.getAllCustomers().then(res=> {
-            this.setState({productCustomerList: res.data});
-         }).catch(ex => {
-            console.error(ex);
-         });
+  changePreProcessingTypeHandler = (event) => {};
 
-        if(this.state.id === "_add"){
-            return;
-        }else{
-            ProductService.getProductById(this.state.id)
-            .then(res => {
-                let product = res.data;
-                this.setState({
-                    name: product.name,
-                    definition: product.definition,
-                    status: product.status,
-                    type: product.type,
-                    expirationDate: this.convertExpDate(product.expirationDate),
-                    splitLength: product.splitLength,
-                    information: product.information,
-                    secCode: product.secCode,
-                    customerId: product.customerId,
-                    donorId: product.donorId,
-                });
-                console.log('product: ' + JSON.stringify(product));
-            }).catch(ex=> {
-                console.error(ex);
-            });
-        }  
+  changeDefinitionHandler = (event) => {
+    this.setState({ definition: event.target.value });
+  };
+
+  changeStatusHandler = (event) => {
+    this.setState({ status: event.target.value });
+  };
+
+  changeTypeHandler = (event) => {
+    this.setState({ type: event.target.value });
+  };
+
+  changeInformationHandler = (event) => {
+    this.setState({ information: event.target.value });
+  };
+
+  changeSecCodeHandler = (event) => {
+    this.setState({ secCode: event.target.value });
+  };
+
+  changeDonorHandler = (event) => {
+    this.setState({ donor: event.target.value });
+  };
+
+  changeCustomerHandler = (event) => {
+    this.setState({ customer: event.target.value });
+  };
+
+  hasError(key) {
+    return this.state.errors.indexOf(key) !== -1;
+  }
+
+  saveProduct = (event) => {
+    event.preventDefault();
+    var errors = [];
+
+    if (this.state.customer[0] === undefined) {
+      errors.push("customer");
     }
 
-    changeNameHandler = (event) => {
-        this.setState({name:event.target.value});
+    this.setState({ errors: errors });
+    if (errors.length > 0) {
+      return false;
     }
 
-    changeDefinitionHandler = (event) => {
-        this.setState({definition:event.target.value});
+    let idParam = undefined;
+    let customerParam = this.state.product_CustomerList[0];
+
+    if (this.state.id !== "_add") {
+      idParam = this.state.id;
     }
 
-    changeStatusHandler = (event) => {
-        this.setState({status:event.target.value});
+    let product = {
+      id: idParam,
+      definition: this.state.definition,
+      status: this.state.status,
+      type: this.state.type,
+      information: this.state.information,
+      secCode: this.state.secCode,
+      donor: this.state.donor,
+      customer: this.state.customer[0],
+      deleted: this.state.deleted,
+    };
+    console.log("product: " + JSON.stringify(product));
+
+    if (this.state.id === "_add") {
+      ProductService.createProduct(product)
+        .then((res) => {
+          this.props.history.push("/products");
+        })
+        .catch((ex) => {
+          console.error(ex);
+        });
+    } else {
+      ProductService.updateProduct(this.state.id, product)
+        .then((res) => {
+          this.props.history.push("/products");
+        })
+        .catch((ex) => {
+          console.error(ex);
+        });
     }
+  };
 
-    changeTypeHandler = (event) => {
-        this.setState({type:event.target.value});
+  cancel = (event) => {
+    this.props.history.push("/products");
+  };
+
+  getTitle() {
+    if (this.state.id === "_add") {
+      return <h3 className="text-center">Ürün Ekle</h3>;
+    } else {
+      return <h3 className="text-center">Ürün Güncelle</h3>;
     }
+  }
 
-    changeExpirationDateHandler = (event) => {
-        let date = new Date (event.target.value).getTime();
-        this.setState({expirationDate:date});
+  getButtonText() {
+    if (this.state.id === "_add") {
+      return "Kaydet";
+    } else {
+      return "Güncelle";
     }
+  }
 
-    changeSplitLengthHandler = (event) => {
-        this.setState({splitLength:event.target.value});
-    }
+  render() {
+    const { multiple } = this.state;
+    return (
+      <div>
+        <div className="container">
+          <div className="row">
+            <div className="card col-md-6 offset-md-3 offset-md-3">
+              {this.getTitle()}
+              <div className="card-body">
+                <form>
+                  <div className="form-group">
+                    <label>Donor Id:</label>
+                    <input
+                      placeholder="Donor Id:"
+                      name="donor.code"
+                      className="form-control"
+                      value={this.state.donor.code}
+                      onChange={this.changeDonorHandler}
+                      disabled
+                    />
+                  </div>
 
-    changeInformationHandler = (event) => {
-        this.setState({information:event.target.value});
-    }
+                  <div className="form-group">
+                    <label>
+                      Müşteri Id:{" "}
+                      {this.state.customer[0] === undefined
+                        ? "Seçilmedi"
+                        : this.state.customer[0].identityNumber +
+                          " - " +
+                          this.state.customer[0].name}
+                    </label>
 
-    changeSecCodeHandler = (event) => {
-        this.setState({secCode:event.target.value});
-    }
-
-    changeDonorIdHandler = (event) => {
-        this.setState({donorId:event.target.value});
-    }
-
-    changeCustomerIdHandler = (event) => {
-        this.setState({customerId:event.target.value});
-    }
-
-    saveProduct= (event) => {
-        event.preventDefault();
-        let idParam = undefined;
-        let statusParam = this.state.productStatusList[0];
-        let typeParam = this.state.productTypeList[0];
-        let donorParam = this.state.productDonorList[0].id;
-        let customerParam = this.state.productCustomerList[0].id;
-
-        if(this.state.id !== "_add"){
-            idParam = this.state.id;
-        }
-        if(this.state.status !== ""){
-            statusParam = this.state.status;
-        }
-        if(this.state.type !== ""){
-            typeParam = this.state.type;
-        }
-        if(this.state.donorId !== ""){
-            donorParam = this.state.donorId;
-        }
-        if(this.state.customerId !== ""){
-            customerParam = this.state.customerId;
-        }
-
-        let product = {id: idParam, name: this.state.name, definition: this.state.definition,
-        status:  statusParam, type: typeParam, expirationDate: this.state.expirationDate, splitLength: this.state.splitLength,
-        information: this.state.information, secCode: this.state.secCode,  donorId: donorParam,  customerId: customerParam, deleted: this.state.deleted };
-        console.log('product: ' + JSON.stringify(product));
-        if(this.state.id === "_add"){
-            ProductService.createProduct(product).then(res => {
-                    this.props.history.push('/products'); 
-                }).catch(ex=> {
-                console.error(ex);
-            });
-        }else{ 
-            ProductService.updateProduct(this.state.id, product).then(res => { 
-                    this.props.history.push('/products');
-                }).catch(ex=> {
-                    console.error(ex);
-            });
-        }   
-    }
-
-    cancel = (event) => {
-        this.props.history.push('/products');
-    }
-
-    getTitle(){
-        if(this.state.id === "_add")
-        {
-            return <h3 className="text-center">Ürün Ekle</h3>;
-        }
-        else{
-            return <h3 className="text-center">Ürün Güncelle</h3>
-        }
-    }
-
-    getButtonText() {
-        if(this.state.id === "_add")
-        {
-            return "Kaydet";
-        }
-        else{
-            return "Güncelle";
-        }
-    }
-
-    convertExpDate(dateLong){
-        if(dateLong !== undefined){
-            let date = new Date(dateLong);
-            let year = date.getFullYear();
-            let month = date.getMonth();
-            let day = date.getUTCDate();
-            return year + "-"+month+"-"+day;
-        }
-        return undefined;
-    }
-
-    render() {
-        return (
-            <div>
-            <div className="container">
-                <div className="row">
-                    <div className="card col-md-6 offset-md-3 offset-md-3"> 
-                        {this.getTitle()}
-                        <div className="card-body"> 
-                        <form>
-                            <div className="form-group">
-                                <label>Adı:</label>
-                                <input placeholder="Adı" name="name" className="form-control"
-                                value={this.state.name} onChange={this.changeNameHandler} />
-                            </div>
-                   
-                            <div className="form-group">
-                                <label>Açıklama:</label>
-                                <input placeholder="Açıklama" name="definition" className="form-control"
-                                value={this.state.definition} onChange={this.changeDefinitionHandler} />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Durumu: {this.state.status}</label>
-                                <select className="form-control"  value={this.state.status} onChange={this.changeStatusHandler}>
-                                {this.state.productStatusList.map((option) => (
-                                    <option value={option}>{option}</option>
-                                ))}
-                                </select>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Tipi: {this.state.type}</label>
-                                <select className="form-control"  value={this.state.type} onChange={this.changeTypeHandler}>
-                                {this.state.productTypeList.map((option) => (
-                                    <option value={option}>{option}</option>
-                                ))}
-                                </select>
-                            </div>
-
-                            <div className="form-group">
-                                <label>SKT:</label>
-                                <input type="date" id="expirationDate" name="expirationDate" 
-                                 value={this.state.expirationDate} onChange={this.changeExpirationDateHandler} />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Parça No:</label>
-                                <input placeholder="1" name="splitLength" className="form-control"
-                                value={this.state.splitLength} onChange={this.changeSplitLengthHandler} />
-                            </div>
-                            
-                            <div className="form-group">
-                                <label>Ek Bilgi:</label>
-                                <input placeholder="Ek Bilgi" name="information" className="form-control"
-                                value={this.state.information} onChange={this.changeInformationHandler} />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Donor:</label>
-                                <select className="form-control"  value={this.state.donorId} onChange={this.changeDonorIdHandler}>
-                                {this.state.productDonorList.map((option) => (
-                                    <option value={option.id}>{option.id} - {option.name} {option.surname}</option>
-                                ))}
-                                </select>
-                            </div>
-                            
-                            <div className="form-group">
-                                <label>Müşteri:</label>
-                                <select className="form-control"  value={this.state.customerId} onChange={this.changeCustomerIdHandler}>
-                                {this.state.productCustomerList.map((option) => (
-                                    <option value={option.id}>{option.id} - {option.name}</option>
-                                ))}
-                                </select>
-                            </div>
-                            
-                            <button className="btn btn-success" onClick={this.saveProduct.bind(this)}>{this.getButtonText()}</button>
-                            <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>İptal</button>
-                        </form>
-                        </div>
+                    <div>
+                      <Typeahead
+                        multiple={multiple}
+                        id="select-customer.identityNumber"
+                        onChange={(selected) => {
+                          this.setState({ customer: selected });
+                        }}
+                        labelKey="identityNumber"
+                        options={this.state.product_CustomerList}
+                        placeholder="Müşteri ID Seç..."
+                        selected={this.state.customer}
+                        disabled={!this.state.isEditable}
+                      />
+                      <div
+                        className={
+                          this.hasError("customer")
+                            ? "inline-errormsg"
+                            : "hidden"
+                        }
+                      >
+                        Müşteri ID girmelisiniz.
+                      </div>
+                      <AddModal
+                        style={{ marginRight: "5px" }}
+                        initialModalState={false}
+                        callback={this.delete}
+                        disabled={!this.state.isEditable}
+                      />
                     </div>
-                </div>
+                  </div>
 
+                  <div className="form-group">
+                    <label>Açıklama:</label>
+                    <input
+                      placeholder="Açıklama:"
+                      name="definition"
+                      className="form-control"
+                      value={this.state.definition}
+                      onChange={this.changeDefinitionHandler}
+                      disabled={!this.state.isEditable}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Türü:</label>
+                    <input
+                      placeholder="Türü:"
+                      name="type"
+                      className="form-control"
+                      value={this.state.type}
+                      disabled
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Durumu:</label>
+                    <input
+                      placeholder="Durumu:"
+                      name="status"
+                      className="form-control"
+                      value={this.state.status}
+                      disabled
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>SEC Kodu:</label>
+                    <input
+                      placeholder="SEC Kodu:"
+                      name="secCode"
+                      className="form-control"
+                      value={this.state.secCode}
+                      disabled
+                    />
+                  </div>
+
+                  <button
+                    className="btn btn-success"
+                    onClick={this.saveProduct.bind(this)}
+                    disabled={!this.state.isEditable}
+                  >
+                    {this.getButtonText()}
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={this.cancel.bind(this)}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    İptal
+                  </button>
+                </form>
+              </div>
             </div>
+          </div>
         </div>
-        );
-    }
+      </div>
+    );
+  }
 }
 
 export default CreateProductComponent;

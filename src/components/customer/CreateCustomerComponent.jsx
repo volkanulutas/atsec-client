@@ -8,6 +8,7 @@ class CreateCustomerComponent extends Component {
         super(props)
         this.state = {
             id: this.props.match.params.id,
+            isEditable: this.props.match.params.state === "view" ? false : true,
             identityNumber: '',
             customerType: '',
             definition: '',
@@ -102,7 +103,6 @@ class CreateCustomerComponent extends Component {
            return false;
        }
         
-
         let idParam = undefined;
         let customerTypeParam = this.state.customerTypeList[0];
         if(this.state.customerType !== ""){
@@ -167,23 +167,27 @@ class CreateCustomerComponent extends Component {
                             <div className="form-group">
                                 <label>Müşteri ID:</label>
                                 <input placeholder="Müşteri ID" name="identityNumber" className="form-control"
-                                value={this.state.identityNumber} onChange={this.changeIdentityNumberHandler} />
+                                value={this.state.identityNumber} onChange={this.changeIdentityNumberHandler}
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
                                     Müşteri ID girmelisiniz.
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label>Müşteri Tipi: {this.state.customerType}</label>
-                                <select className="form-control" value={this.state.customerType} onChange={this.changeCustomerTypeHandler}>
+                                <select className="form-control" value={this.state.customerType} onChange={this.changeCustomerTypeHandler} 
+                                  disabled={!this.state.isEditable}>
                                 {this.state.customerTypeList.map((option) => (
                                     <option value={option}>{option}</option>
                                 ))}
+                                
                                 </select>
                             </div>
                             <div className="form-group">
                                 <label>Açıklama:</label>
                                 <input placeholder="Açıklama" name="definition" className="form-control"
-                                value={this.state.definition} onChange={this.changeDefinitionHandler} />
+                                value={this.state.definition} onChange={this.changeDefinitionHandler}
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
                                     Açıklamayı girmelisiniz.
                                 </div>
@@ -192,7 +196,8 @@ class CreateCustomerComponent extends Component {
                             <div className="form-group">
                                 <label>İsim:</label>
                                 <input placeholder="Ela" name="name" className="form-control"
-                                value={this.state.name} onChange={this.changeNameHandler} />
+                                value={this.state.name} onChange={this.changeNameHandler}
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
                                     İsmi girmelisiniz.
                                 </div>
@@ -201,7 +206,8 @@ class CreateCustomerComponent extends Component {
                             <div className="form-group">
                                 <label>Adres:</label>
                                 <input placeholder="Adres" name="address" className="form-control"
-                                value={this.state.address} onChange={this.changeAddressHandler} />
+                                value={this.state.address} onChange={this.changeAddressHandler}
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
                                     Adresi girmelisiniz.
                                 </div>
@@ -210,13 +216,14 @@ class CreateCustomerComponent extends Component {
                             <div className="form-group">
                                 <label>Telefon:</label>
                                 <input placeholder="(90)5321234567" name="telephone" className="form-control"
-                                value={this.state.telephone} onChange={this.changeTelephoneHandler} />
+                                value={this.state.telephone} onChange={this.changeTelephoneHandler}
+                                disabled={!this.state.isEditable} />
                                 <div className={this.hasError("telephone") ? "inline-errormsg" : "hidden"}>
                                     Telefon numarası uygun formatta değil veya girilmemiş.
                                 </div>
                             </div>
 
-                            <button className="btn btn-success" onClick={this.saveCustomer.bind(this)}>{this.getButtonText()}</button>
+                            <button className="btn btn-success" onClick={this.saveCustomer.bind(this)} disabled={!this.state.isEditable}>{this.getButtonText()}</button>
                             <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>İptal</button>
                         </form>
                         </div>

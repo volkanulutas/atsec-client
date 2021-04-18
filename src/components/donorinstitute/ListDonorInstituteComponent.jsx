@@ -90,15 +90,15 @@ class ListDonorInstituteComponent extends Component {
   }
 
   add() {
-    this.props.history.push("/add-donorinstitute/_add");
+    this.props.history.push("/add-donorinstitute/add/_add");
   }
 
   update(id) {
-    this.props.history.push(`/add-donorinstitute/${id}`);
+    this.props.history.push(`/add-donorinstitute/update/${id}`);
   }
 
   view(id) {
-    this.props.history.push(`/view-donorinstitute/${id}`);
+    this.props.history.push(`/add-donorinstitute/view/${id}`);
   }
 
   delete = (row) => {

@@ -64,7 +64,7 @@ class CreateProductComponent extends Component {
             secCode: product.secCode,
             preProcessingType: product.preProcessingType,
           });
-          alert("product: " + JSON.stringify(product));
+          console.log("product: " + JSON.stringify(product));
         })
         .catch((ex) => {
           console.error(ex);

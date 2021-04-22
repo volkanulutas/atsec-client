@@ -95,7 +95,6 @@ class LoginComponent extends Component {
         window.location.reload();
       })
       .catch((ex) => {
-        alert("ss");
         errors.push("loginError");
         this.setState({ errors: errors });
       });

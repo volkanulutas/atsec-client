@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { API_BASE_URL, API_URL_LOCATION } from "../constants";
+import authHeader from "./AuthHeader"
 
 class LocationService {
   getAllLocations() {

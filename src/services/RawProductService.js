@@ -1,32 +1,34 @@
 import axios from "axios";
 
 import { API_BASE_URL, API_URL_RAWPRODUCT } from "../constants";
+import authHeader from "./AuthHeader"
 
 class RawProductService {
   getAllRawProducts() {
-    return axios.get(API_BASE_URL + API_URL_RAWPRODUCT);
+    return axios.get(API_BASE_URL + API_URL_RAWPRODUCT, {headers: authHeader()});
   }
 
   getRejectArchivesRawProducts() {
-    return axios.get(API_BASE_URL + API_URL_RAWPRODUCT + "rejectarchives");
+    return axios.get(API_BASE_URL + API_URL_RAWPRODUCT + "rejectarchives", {headers: authHeader()});
   }
 
   getRawProductById(id) {
-    return axios.get(API_BASE_URL + API_URL_RAWPRODUCT + id);
+    return axios.get(API_BASE_URL + API_URL_RAWPRODUCT + id, {headers: authHeader()});
   }
 
   createRawProduct(product) {
-    return axios.post(API_BASE_URL + API_URL_RAWPRODUCT, product);
+    return axios.post(API_BASE_URL + API_URL_RAWPRODUCT, product, {headers: authHeader()});
   }
 
   updateRawProduct(id, product) {
-    return axios.put(API_BASE_URL + API_URL_RAWPRODUCT + id, product);
+    return axios.put(API_BASE_URL + API_URL_RAWPRODUCT + id, product), {headers: authHeader()};
   }
 
   deleteRawProduct(id) {
-    return axios.delete(API_BASE_URL + API_URL_RAWPRODUCT + id);
+    return axios.delete(API_BASE_URL + API_URL_RAWPRODUCT + id, {headers: authHeader()});
   }
-
+  
+  // TODO: file yapısına authHeader nasıl eklenmelidir.
   upload(file, fileType, onUploadProgress) {
     let formData = new FormData();
     formData.append("file", file);
@@ -52,7 +54,6 @@ class RawProductService {
       method: "GET",
       responseType: "blob", // important
     }).then((response) => {
-      alert("ss");
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;

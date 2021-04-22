@@ -162,7 +162,8 @@ class ListRawProductComponent extends Component {
   }
 
   componentDidMount() {
-    this.setState({ pdfFile: RawProductService.getRawProductBarcode() });
+    // TODO:
+    //  this.setState({ pdfFile: RawProductService.getRawProductBarcode() });
 
     RawProductService.getAllRawProducts()
       .then((res) => {

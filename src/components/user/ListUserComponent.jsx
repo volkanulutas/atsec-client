@@ -109,7 +109,6 @@ class ListUserComponent extends Component {
   }
 
   delete = (row) => {
-    alert("alert");
     UserService.deleteUser(row.id)
       .then((res) => {
         UserService.getAllUsers()

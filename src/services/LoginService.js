@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { API_BASE_URL, CONFIG } from "../constants";
+import authHeader from "./AuthHeader"
 
 class LoginService {
   login(username, password) {

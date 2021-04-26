@@ -15,7 +15,11 @@ export default class SidebarNav extends Component {
 
   render() {
     const navItems = items => {
-      return items.map((item, index) => itemType(item, index));
+      if(items != null){
+        return items.map((item, index) => itemType(item, index));
+      } else {
+        console.error("sidebar null");
+      }
     };
 
     const itemType = (item, index) => {

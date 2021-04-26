@@ -5,23 +5,23 @@ import authHeader from "./AuthHeader"
 
 class DonorService {
   getAllDonors() {
-    return axios.get(API_BASE_URL + API_URL_DONOR);
+    return axios.get(API_BASE_URL + API_URL_DONOR, {headers: authHeader()});
   }
 
   getDonorById(id) {
-    return axios.get(API_BASE_URL + API_URL_DONOR + id);
+    return axios.get(API_BASE_URL + API_URL_DONOR + id, {headers: authHeader()});
   }
 
   createDonor(donor) {
-    return axios.post(API_BASE_URL + API_URL_DONOR, donor);
+    return axios.post(API_BASE_URL + API_URL_DONOR, donor, {headers: authHeader()});
   }
 
   updateDonor(id, donor) {
-    return axios.put(API_BASE_URL + API_URL_DONOR + id, donor);
+    return axios.put(API_BASE_URL + API_URL_DONOR + id, donor, {headers: authHeader()});
   }
 
   deleteDonor(id) {
-    return axios.delete(API_BASE_URL + API_URL_DONOR + id);
+    return axios.delete(API_BASE_URL + API_URL_DONOR + id, {headers: authHeader()});
   }
 }
 

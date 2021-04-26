@@ -14,6 +14,7 @@ import ProductPreprocessingModal from "./modal/ProductPreprocessingModal";
 import ProductFreezingModalAfterCourse from "./modal/ProductFreezingModalAfterCourse";
 import ProductFreezingModalAfterDelipidation from "./modal/ProductFreezingModalAfterDelipidation";
 import ProductFreezingModal from "./modal/ProductFreezingModal";
+import AuthService from "../../services/AuthService";
 
 const { SearchBar } = Search;
 
@@ -123,6 +124,9 @@ class ListProductComponent extends Component {
   }
 
   componentDidMount() {
+    // TODO: 
+    // uthService.checkSession();
+
     ProductService.getAllProducts()
       .then((res) => {
         console.log(res.data);

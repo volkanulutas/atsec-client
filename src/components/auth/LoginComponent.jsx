@@ -91,8 +91,11 @@ class LoginComponent extends Component {
     };
     AuthService.login(loginRequest)
       .then((res) => {
-        this.props.history.push("/home");
-        window.location.reload();
+        if (res.data.token) {
+          localStorage.setItem("user", JSON.stringify(res.data));
+          this.props.history.push("/home");
+          window.location.reload();
+        }
       })
       .catch((ex) => {
         errors.push("loginError");

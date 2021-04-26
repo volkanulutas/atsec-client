@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import ProductService from "../../../services/ProductService";
 import LocationService from "../../../services/LocationService";

@@ -21,7 +21,7 @@ class ProductService {
   }
 
   deleteProduct(id) {
-    return axios.delete(API_BASE_URL + API_URL_PRODUCT + id), {headers: authHeader()};
+    return axios.delete(API_BASE_URL + API_URL_PRODUCT + id, {headers: authHeader()});
   }
 
   getPreprocessingTypeList() {

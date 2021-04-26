@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { Typeahead } from "react-bootstrap-typeahead";
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import RoleService from '../../services/RoleService';
-
+import PermissionService from '../../services/PermissionService';
 
 class CreateRoleComponent extends Component {
     constructor(props)
@@ -10,11 +12,15 @@ class CreateRoleComponent extends Component {
         this.state = {
             id: this.props.match.params.id,
             isEditable: this.props.match.params.state === "view" ? false : true,
+            multiple: true,
             name: '',
             definition: '', 
-            permissions: [],
+            
+            permissions: [], // Typeahead needs array.
             deleted: false,
             errors: [],
+
+            role_PermissionList :[],
         }
         this.saveRole = this.saveRole.bind(this);
         this.changeNameHandler = this.changeNameHandler.bind(this);
@@ -23,6 +29,14 @@ class CreateRoleComponent extends Component {
     } 
 
     componentDidMount(){
+        PermissionService.getAllPermissions()
+        .then((res) => {
+            this.setState({ role_PermissionList: res.data });
+        })
+        .catch((ex) => {
+            console.error(ex);
+        });
+
         if(this.state.id === "_add"){
             return;
         }else{
@@ -36,7 +50,7 @@ class CreateRoleComponent extends Component {
                     definition: role.definition,
                     permissions: role.permissions,
                 });
-                console.log('role: ' + JSON.stringify(role));
+                // console.log('role: ' + JSON.stringify(role));
             }).catch(ex => {
                 console.error(ex);
             });
@@ -119,6 +133,7 @@ class CreateRoleComponent extends Component {
     }
 
     render() {
+        const { multiple } = this.state;
         return (
             <div>
             <div className="container">
@@ -147,7 +162,22 @@ class CreateRoleComponent extends Component {
                                 value={this.state.definition} onChange={this.changeDefinitionHandler} 
                                 disabled={!this.state.isEditable} />
                             </div>
-
+                            <div className="form-group">
+                            <label>İsim:</label>
+                            <Typeahead
+                                multiple={multiple}
+                                id="select-permission"
+                                onChange={(selected) => {
+                                this.setState({ permissions: selected });
+                                }}
+                                labelKey="name"
+                                options={this.state.role_PermissionList}
+                                placeholder="Yetkileri seç..."
+                                selected={this.state.permissions}
+                                disabled={!this.state.isEditable}
+                             />
+                            </div>
+                     
                             <button className="btn btn-success" onClick={this.saveRole.bind(this)} disabled={!this.state.isEditable}>{this.getButtonText()}</button>
                             <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>İptal</button>
                         </form>

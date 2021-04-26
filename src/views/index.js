@@ -58,8 +58,12 @@ import LoginComponent from "../components/auth/LoginComponent";
 import ListRejectArchiveComponent from "../components/rawproduct/rejectarchive/ListRejectArchiveComponent";
 import ViewRejectArchiveComponent from "../components/rawproduct/rejectarchive/ViewRejectArchiveComponent";
 
-// See React Router documentation for details: https://reacttraining.com/react-router/web/api/Route
-const pageList = [
+import AuthService from "../services/AuthService";
+
+
+const pageList = [];
+
+const allPageList = [
   {
     name: "Anasayfa",
     path: "/home",
@@ -74,6 +78,7 @@ const pageList = [
   {
     name: "Kullanıcılar",
     path: "/users/",
+    id: "USER_PAGE_PERMISSION", 
     component: ListUserComponent,
   },
   {
@@ -89,6 +94,7 @@ const pageList = [
   {
     name: "Roller",
     path: `/roles/`,
+    id: "ROLE_PAGE_PERMISSION", 
     component: ListRoleComponent,
   },
   {
@@ -104,13 +110,17 @@ const pageList = [
   {
     name: "Yetkiler",
     path: "/permissions/",
+    id: "PERMISSION_PAGE_PERMISSION", 
     component: ListPermissionComponent,
   },
+  /*
+  // TODO: Yetki eklemeye izin verilmemeli
   {
     name: "Yetki Ekle/Güncelle",
     path: "/add-permission/:state/:id",
     component: CreatePermissionComponent,
   },
+  */
   {
     name: "Yetki Detayı",
     path: "/add-permission/:state/:id",
@@ -119,6 +129,7 @@ const pageList = [
   {
     name: "Donor Listesi",
     path: "/donors/",
+    id: "DONOR_PAGE_PERMISSION", 
     component: ListDonorComponent,
   },
   {
@@ -134,6 +145,7 @@ const pageList = [
   {
     name: "Müşteri Listesi",
     path: "/customers/",
+    id: "CUSTOMER_PAGE_PERMISSION", 
     component: ListCustomerComponent,
   },
   {
@@ -149,6 +161,7 @@ const pageList = [
   {
     name: "Ham Ürün Listesi",
     path: "/rawproducts/",
+    id: "RAWPRODUCT_PAGE_PERMISSION", 
     component: ListRawProductComponent,
   },
   {
@@ -164,6 +177,7 @@ const pageList = [
   {
     name: "Doku Tipi Listesi",
     path: "/tissuetypes/",
+    id: "TISSUETYPE_PAGE_PERMISSION", 
     component: ListTissueTypeComponent,
   },
   {
@@ -179,6 +193,7 @@ const pageList = [
   {
     name: "Donör Kurum Listesi",
     path: "/donorinstitutes/",
+    id: "DONORINSTITUDE_PAGE_PERMISSION", 
     component: ListDonorInstituteComponent,
   },
   {
@@ -194,6 +209,7 @@ const pageList = [
   {
     name: "Ürün Listesi",
     path: "/products/",
+    id: "PRODUCT_PAGE_PERMISSION", 
     component: ListProductComponent,
   },
   {
@@ -209,6 +225,7 @@ const pageList = [
   {
     name: "Lokasyon Listesi",
     path: "/locations/",
+    id: "LOCAITON_PAGE_PERMISSION",
     component: ListLocationComponent,
   },
   {
@@ -224,6 +241,7 @@ const pageList = [
   {
     name: "Ham Ürün Red Arşivi",
     path: "/rejectarchives/",
+    id: "RAWPRODUCTREJECT_PAGE_PERMISSION", 
     component: ListRejectArchiveComponent,
   },
   {
@@ -343,4 +361,4 @@ const pageList = [
   },
 ];
 
-export default pageList;
+export default allPageList;

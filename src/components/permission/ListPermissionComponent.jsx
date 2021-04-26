@@ -175,13 +175,7 @@ class ListPermissionComponent extends Component {
             {(props) => (
               <div>
                 <SearchBar {...props.searchProps} placeholder="Arama" />
-                <button
-                  type="button"
-                  className="btn btn-primary addButton"
-                  onClick={this.add}
-                >
-                  Yetki Ekle
-                </button>
+
                 <hr />
                 <BootstrapTable
                   {...props.baseProps}

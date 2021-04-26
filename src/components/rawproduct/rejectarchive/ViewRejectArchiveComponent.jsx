@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import RawProductService from "../../../services/RawProductService";
 import LocationService from "../../../services/LocationService";

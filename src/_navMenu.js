@@ -12,7 +12,7 @@ const allMenuList = {
       permission: "RAWPRODUCT_MENU_PERMISSION",
     },
     {
-      name: "Ürün Yönetimi",
+      name: "Üretim Yönetimi",
       icon: "Layers",
       permission: "PRODUCT_MENU_PERMISSION",
     }

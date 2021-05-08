@@ -110,11 +110,12 @@ class CreateUserComponent extends Component {
                 console.error(ex);
             });  
         }else{
-            UserService.updateUser(this.state.id, user).then(res => {
+            /*UserService.updateUser(this.state.id, user).then(res => {
                  this.props.history.push('/users');
             }).catch(ex=> {
                 console.error(ex);
-            });
+            });*/
+            UserService.updateUser(this.state.id, user);
         }   
     }
     cancel = (event) => {

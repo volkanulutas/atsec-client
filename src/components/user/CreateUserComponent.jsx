@@ -9,8 +9,8 @@ class CreateUserComponent extends Component {
     {
         super(props)
         this.state = {
-            id: this.props.match.params.id,
-            isEditable: this.props.match.params.state === "view" ? false : true,
+            id: this.props.match === undefined ? "_add" : this.props.match.params.id,
+            isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
             name: '',
             surname:'',
             username: '',
@@ -22,6 +22,9 @@ class CreateUserComponent extends Component {
             allRoles: [],
             success: false,
             errors: [],
+            // modal property
+            callbackModalYes: props.callbackModalYes,
+            callbackModalNo: props.callbackModalNo,
         };
         this.changeNameHandler = this.changeNameHandler.bind(this);
         this.changeSurnameHandler = this.changeSurnameHandler.bind(this);
@@ -117,9 +120,19 @@ class CreateUserComponent extends Component {
             });*/
             UserService.updateUser(this.state.id, user);
         }   
+
+        // If opened as modal
+        if(this.state.callbackModalYes){
+            this.state.callbackModalYes();
+        }
     }
     cancel = (event) => {
-        this.props.history.push('/users');
+        // If opened as modal
+        if(this.state.callbackModalNo){
+            this.state.callbackModalNo();
+        } else {
+            this.props.history.push('/users');
+        } 
     }
 
     changeNameHandler = (event) => {

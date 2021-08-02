@@ -52,7 +52,7 @@ class Dashboard extends Component {
                   aria-hidden={true}
                 />
                 <div className="m-l">
-                  <h2 className="h4">Ürün Yönetimi</h2>
+                  <h2 className="h4">Üretim Yönetimi</h2>
                   <p className="text-muted">
                     Ürünün süreçlerinin baştan uca yönetimi, müşteri ve donor ile ilişkilendirilmesi, muhabase yazılımlarıyla entegrasyon.
                   </p>

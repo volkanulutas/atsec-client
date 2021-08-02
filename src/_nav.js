@@ -38,6 +38,12 @@ const allNavList = {
           icon: "Home",
         },
         {
+          name: "Ham Ürünler2",
+          url: "/rawproducts2/",
+          permission: "RAWPRODUCT_PAGE_PERMISSION2",
+          icon: "Home",
+        },
+        {
           name: "Ham Ürün Red Arşivi",
           url: "/rejectarchives/",
           permission: "RAWPRODUCTREJECT_PAGE_PERMISSION",  
@@ -49,28 +55,10 @@ const allNavList = {
           permission: "DONOR_PAGE_PERMISSION",
           icon: "Home",
         },
-        {
-          name: "Donör Kurumları",
-          url: "/donorinstitutes/",
-          permission: "DONORINSTITUTE_PAGE_PERMISSION",
-          icon: "Home",
-        },
-        {
-          name: "Karantina Lokasyon",
-          url: "/locations/",
-          permission: "LOCATION_PAGE_PERMISSION",
-          icon: "Home",
-        },
-        {
-          name: "Doku Tipi",
-          url: "/tissuetypes/",
-          permission: "TISSUETYPE_PAGE_PERMISSION", 
-          icon: "Home",
-        },
       ],
     },
     {
-      name: "Ürün Yönetimi",
+      name: "Üretim Yönetimi",
       icon: "Layers",
       permission: "PRODUCT_MENU_PERMISSION",
       children: [

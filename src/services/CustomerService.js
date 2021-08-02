@@ -11,7 +11,7 @@ class CustomerService {
     }
 
     getCustomerById(id) {
-        return axios.get(API_BASE_URL + API_URL_CUSTOMER + id), {headers: authHeader()};
+        return axios.get(API_BASE_URL + API_URL_CUSTOMER + id, {headers: authHeader()});
     }
 
     createCustomer(customer){

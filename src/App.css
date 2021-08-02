@@ -18,10 +18,15 @@
   width: 20%;
 }
 
+.vlu-left-margin {
+  margin-left: 10px;
+}
+
 label {
   margin-top: 15px;
   margin-bottom: 5px;
 }
+
 button {
   margin-top: 30px;
 }
@@ -31,7 +36,7 @@ button {
 }
 
 .bg {
-  background: url("/images/login/bio3.svg") no-repeat center center;
+
   background-size: 500px 500px;
   height: 100vh;
 }

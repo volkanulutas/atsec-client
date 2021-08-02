@@ -10,8 +10,8 @@ class CreateProductComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.match.params.id,
-      isEditable: this.props.match.params.state === "view" ? false : true,
+      id: this.props.match === undefined ? "_add" : this.props.match.params.id,
+      isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
       multiple: false,
 
       donor: {},
@@ -26,6 +26,9 @@ class CreateProductComponent extends Component {
 
       errors: [],
       product_CustomerList: [],
+      // modal property
+      callbackModalYes: props.callbackModalYes,
+      callbackModalNo: props.callbackModalNo,
     };
     this.saveProduct = this.saveProduct.bind(this);
     this.changeCustomerHandler = this.changeCustomerHandler.bind(this);
@@ -157,10 +160,20 @@ class CreateProductComponent extends Component {
           console.error(ex);
         });
     }
+    
+    // If opened as modal
+    if(this.state.callbackModalYes){
+          this.state.callbackModalYes();
+    }
   };
 
   cancel = (event) => {
-    this.props.history.push("/products");
+    // If opened as modal
+    if(this.state.callbackModalNo){
+        this.state.callbackModalNo();
+    } else {
+        this.props.history.push('/products');
+    } 
   };
 
   getTitle() {

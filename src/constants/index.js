@@ -15,6 +15,12 @@ export const API_URL_TISSUE_TYPE = '/tissuetype/';
 export const API_URL_LOCATION = '/location/';
 export const API_URL_VERSION = '/version/';
 
+export const ADDPDF_CONFIRMATION = "ADDPDF_CONFIRMATION";
+export const ADDPDF_TRANSFER = "ADDPDF_TRANSFER";
+export const ADDPDF_TRANSPORTATION = "ADDPDF_TRANSPORTATION";
+export const ADDPDF_EXTRA = "ADDPDF_EXTRA";
+export const CURRENT_RAW_PRODUCT_ID = "CURRENT_RAW_PRODUCT_ID";
+
 export const  CONFIG = {
     headers: {
        Authorization: "Bearer " + localStorage.getItem(ACCESS_TOKEN)

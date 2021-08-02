@@ -3,15 +3,19 @@ import React, { Component } from "react";
 import LocationService from "../../services/LocationService";
 
 class CreateLocationComponent extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
       id: this.props.match === undefined ? "_add" : this.props.match.params.id,
-      isEditable: this.props.match.params.state === "view" ? false : true,
+      isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
       name: "",
       definition: "",
       deleted: false,
       errors: [],
+      // modal property
+      callbackModalYes: props.callbackModalYes,
+      callbackModalNo: props.callbackModalNo,
     };
     this.saveLocation = this.saveLocation.bind(this);
     this.changeNameHandler = this.changeNameHandler.bind(this);
@@ -22,8 +26,7 @@ class CreateLocationComponent extends Component {
     if (this.state.id === "_add") {
       return;
     } else {
-      LocationService.getLocationById(this.state.id)
-        .then((res) => {
+     LocationService.getLocationById(this.state.id).then((res) => {
           let location = res.data;
           this.setState({
             name: location.name,
@@ -86,11 +89,23 @@ class CreateLocationComponent extends Component {
           console.error(ex);
         });
     }
+
+    // If opened as modal
+    if(this.state.callbackModalYes){
+      this.state.callbackModalYes();
+    }
   };
 
   cancel = (event) => {
     event.preventDefault();
-    this.props.history.push("/locations");
+
+    // If opened as modal
+    if(this.state.callbackModalNo){
+      this.state.callbackModalNo();
+    }
+    else{
+      this.props.history.push("/locations");
+    }
   };
 
   getTitle() {

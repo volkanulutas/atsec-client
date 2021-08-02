@@ -7,8 +7,8 @@ class CreateDonorComponent extends Component {
     {
         super(props)
         this.state = {
-            id: this.props.match.params.id,
-            isEditable: this.props.match.params.state === "view" ? false : true,
+            id: this.props.match === undefined ? "_add" : this.props.match.params.id,
+            isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
             code: '',
             citizenshipNumber: '',
             name: '',
@@ -18,6 +18,9 @@ class CreateDonorComponent extends Component {
             bloodTestPdfFile: '',
             deleted: false,
             errors: [],
+            // modal property
+            callbackModalYes: props.callbackModalYes,
+            callbackModalNo: props.callbackModalNo,
         }
         this.saveDonor = this.saveDonor.bind(this);
         this.changeCitizenshipNumberHandler = this.changeCitizenshipNumberHandler.bind(this);
@@ -101,7 +104,8 @@ class CreateDonorComponent extends Component {
         if(this.state.id !== "_add"){
             idParam = this.state.id;
         }
-        let donor = {id: idParam, code: this.state.code, citizenshipNumber: this.state.citizenshipNumber,  name: this.state.name, surname: this.state.surname, address: this.state.address, telephone: this.state.telephone, deleted: this.state.deleted };
+        let donor = {id: idParam, code: this.state.code, citizenshipNumber: this.state.citizenshipNumber,  name: this.state.name, 
+            surname: this.state.surname, address: this.state.address, telephone: this.state.telephone, deleted: this.state.deleted };
         console.log('donor: ' + JSON.stringify(donor));
         if(this.state.id === "_add"){ // create user
             DonorService.createDonor(donor).then(res => { 
@@ -117,11 +121,21 @@ class CreateDonorComponent extends Component {
             }).catch(ex => {
                 console.error(ex); 
             });
-        }   
+        } 
+        
+        // If opened as modal
+        if(this.state.callbackModalYes){
+            this.state.callbackModalYes();
+        }
     }
 
     cancel = (event) => {
-        this.props.history.push('/donors');
+        // If opened as modal
+        if(this.state.callbackModalNo){
+            this.state.callbackModalNo();
+        } else {
+            this.props.history.push('/donors');
+        }        
     }
 
     getTitle(){

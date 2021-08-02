@@ -21,7 +21,7 @@ class RawProductService {
   }
 
   updateRawProduct(id, product) {
-    return axios.put(API_BASE_URL + API_URL_RAWPRODUCT + id, product), {headers: authHeader()};
+    return axios.put(API_BASE_URL + API_URL_RAWPRODUCT + id, product, {headers: authHeader()});
   }
 
   deleteRawProduct(id) {
@@ -29,10 +29,12 @@ class RawProductService {
   }
   
   // TODO: file yapısına authHeader nasıl eklenmelidir.
-  upload(file, fileType, onUploadProgress) {
+  upload(file, fileType, rawProductId, onUploadProgress) {
+    
     let formData = new FormData();
     formData.append("file", file);
     formData.append("fileType", fileType);
+    formData.append("rawProductId", rawProductId);
 
     return axios.post(API_BASE_URL + API_URL_RAWPRODUCT + "upload", formData, {
       headers: {
@@ -42,10 +44,8 @@ class RawProductService {
     });
   }
 
-  getFiles(fileType) {
-    return axios.get(
-      API_BASE_URL + API_URL_RAWPRODUCT + "getFiles/" + fileType
-    );
+  getFiles(rawProductId) {
+    return axios.get(API_BASE_URL + API_URL_RAWPRODUCT + "getFilesByRawProduct/" + rawProductId);
   }
 
   downloadRawProductBarcode() {

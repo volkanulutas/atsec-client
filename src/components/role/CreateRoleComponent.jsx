@@ -10,8 +10,8 @@ class CreateRoleComponent extends Component {
     {
         super(props)
         this.state = {
-            id: this.props.match.params.id,
-            isEditable: this.props.match.params.state === "view" ? false : true,
+            id: this.props.match === undefined ? "_add" : this.props.match.params.id,
+            isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
             multiple: true,
             name: '',
             definition: '', 
@@ -21,6 +21,9 @@ class CreateRoleComponent extends Component {
             errors: [],
 
             role_PermissionList :[],
+            // modal property
+            callbackModalYes: props.callbackModalYes,
+            callbackModalNo: props.callbackModalNo,
         }
         this.saveRole = this.saveRole.bind(this);
         this.changeNameHandler = this.changeNameHandler.bind(this);
@@ -101,7 +104,12 @@ class CreateRoleComponent extends Component {
                 }).catch(ex => {
                     console.error(ex);
             });
-        }   
+        } 
+        
+        // If opened as modal
+        if(this.state.callbackModalYes){
+            this.state.callbackModalYes();
+        }  
     }
 
     getTitle(){
@@ -117,7 +125,12 @@ class CreateRoleComponent extends Component {
     }
 
     cancel = (event) => {
-        this.props.history.push('/roles');
+        // If opened as modal
+        if(this.state.callbackModalNo){
+            this.state.callbackModalNo();
+        } else {
+            this.props.history.push('/roles');
+        } 
     }
 
     getButtonText(){

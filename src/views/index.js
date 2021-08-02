@@ -43,6 +43,9 @@ import CreateProductComponent from "../components/product/CreateProductComponent
 import ListRawProductComponent from "../components/rawproduct/ListRawProductComponent";
 import CreateRawProductComponent from "../components/rawproduct/CreateRawProductComponent";
 
+
+import MasterRawProduct from "../components/keyproduct/MasterRawProduct";
+
 import ListDonorInstituteComponent from "../components/donorinstitute/ListDonorInstituteComponent";
 import CreateDonorInstituteComponent from "../components/donorinstitute/CreateDonorInstituteComponent";
 
@@ -158,20 +161,29 @@ const allPageList = [
     path: "/add-customer/:state/:id",
     component: CreateCustomerComponent,
   },
+
+
+
   {
     name: "Ham Ürün Listesi",
     path: "/rawproducts/",
-    id: "RAWPRODUCT_PAGE_PERMISSION", 
+    id: "RAWPRODUCT_PAGE_PERMISSION2", 
     component: ListRawProductComponent,
   },
   {
-    name: "Ham Ürün Ekle/Güncelle",
+    name: "Ham Ürün Listesi 2",
     path: "/add-rawproduct/:state/:id",
+    id: "RAWPRODUCT_PAGE_PERMISSION2", 
+    component: MasterRawProduct,
+  },
+  {
+    name: "Ham Ürün Ekle/Güncelle",
+    path: "/add-rawproduct2/:state/:id",
     component: CreateRawProductComponent,
   },
   {
     name: "Ham Ürün Görüntüle",
-    path: "/add-rawproduct/:state/:id",
+    path: "/add-rawproduct2/:state/:id",
     component: CreateRawProductComponent,
   },
   {

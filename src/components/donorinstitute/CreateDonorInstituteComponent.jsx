@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import DonorInstituteService from '../../services/DonorInstituteService';
 
+import DonorInstituteService from '../../services/DonorInstituteService';
 
 class CreateDonorInstituteComponent extends Component {
     constructor(props)
@@ -9,12 +9,15 @@ class CreateDonorInstituteComponent extends Component {
         super(props)
         this.state = {
             id: this.props.match === undefined ? "_add" : this.props.match.params.id,
-            isEditable: this.props.match.params.state === "view" ? false : true,
+            isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
             code: '',
             name: '', 
             rawProducts: [],
             deleted: false,
             errors: [],
+            // modal property
+            callbackModalYes: props.callbackModalYes,
+            callbackModalNo: props.callbackModalNo,
         }
         this.saveDonorInstitute = this.saveDonorInstitute.bind(this);
         this.changeNameHandler = this.changeNameHandler.bind(this);
@@ -62,7 +65,6 @@ class CreateDonorInstituteComponent extends Component {
             errors.push("name");
         }
 
-
        this.setState({errors: errors});
        if(errors.length > 0){
            return false;
@@ -90,6 +92,11 @@ class CreateDonorInstituteComponent extends Component {
                     console.error(ex);
             });
         }   
+        
+        // If opened as modal
+        if(this.state.callbackModalYes){
+            this.state.callbackModalYes();
+        }
     }
 
     getTitle(){
@@ -102,7 +109,12 @@ class CreateDonorInstituteComponent extends Component {
     }
 
     cancel = (event) => {
-        this.props.history.push('/donorinstitutes');
+        // If opened as modal
+        if(this.state.callbackModalNo){
+            this.state.callbackModalNo();
+        } else {
+            this.props.history.push('/donorinstitutes');
+        }   
     }
 
     getButtonText() {
@@ -153,7 +165,7 @@ class CreateDonorInstituteComponent extends Component {
                                 </div>
                             </div>
 
-                            <button className="btn btn-success" onClick={this.saveDonorInstitute.bind(this)}>{this.getButtonText()} disabled={!this.state.isEditable}</button>
+                            <button className="btn btn-success" onClick={this.saveDonorInstitute.bind(this)} disabled={!this.state.isEditable}>{this.getButtonText()} </button>
                             <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>İptal</button>
                         </form>
                         </div>

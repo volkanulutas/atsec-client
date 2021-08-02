@@ -8,12 +8,16 @@ import "./vibe/scss/styles.scss";
 
 function App() {
   return (
+
+
     <BrowserRouter>
       <Switch>
         <Route path="/login" component={LoginComponent} exact />
         <Route component={DashboardLayout} exact />
       </Switch>
     </BrowserRouter>
+    
+  
   );
 }
 

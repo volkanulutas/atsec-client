@@ -243,11 +243,11 @@ class ViewRejectArchiveComponent extends Component {
                           : "hidden"
                       }
                     >
-                      Doku Çıkarım Tarihini girmelisiniz.
+                      Doku Çıkarım Zamanını girmelisiniz.
                     </div>
                   </div>
                   <div className="form-group">
-                    <label>Merkeze Geliş Tarihi:</label>
+                    <label>Merkeze Geliş Zamanı (Tarih ve Saat):</label>
                     <input
                       type="datetime-local"
                       id="arrivalDate"
@@ -268,7 +268,7 @@ class ViewRejectArchiveComponent extends Component {
                           : "hidden"
                       }
                     >
-                      Merkeze Geliş Tarihini girmelisiniz.
+                      Merkeze Geliş Zamanını girmelisiniz.
                     </div>
                   </div>
                   <div className="form-group">

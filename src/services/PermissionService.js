@@ -9,7 +9,7 @@ class PermissionService {
   }
 
   getPermissionById(id) {
-    return axios.get(API_BASE_URL + API_URL_PERMISSION + id), {headers: authHeader()};
+    return axios.get(API_BASE_URL + API_URL_PERMISSION + id, {headers: authHeader()});
   }
 
   createPermission(permission) {

@@ -7,8 +7,8 @@ class CreateCustomerComponent extends Component {
     {
         super(props)
         this.state = {
-            id: this.props.match.params.id,
-            isEditable: this.props.match.params.state === "view" ? false : true,
+            id: this.props.match === undefined ? "_add" : this.props.match.params.id,
+            isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
             identityNumber: '',
             customerType: '',
             definition: '',
@@ -19,6 +19,9 @@ class CreateCustomerComponent extends Component {
             errors: [],
 
             customerTypeList: ["Hastane", "Firma", "Bireysel", "Yurt Dışı Acenta"],
+            // modal property
+            callbackModalYes: props.callbackModalYes,
+            callbackModalNo: props.callbackModalNo,
         }
         this.saveCustomer = this.saveCustomer.bind(this);
         this.changeIdentityNumberHandler = this.changeIdentityNumberHandler.bind(this);
@@ -128,11 +131,20 @@ class CreateCustomerComponent extends Component {
                 }).catch(ex => {
                     console.error(ex);
             });
-        }   
+        }  
+        // If opened as modal
+        if(this.state.callbackModalYes){
+            this.state.callbackModalYes();
+        }
     }
 
     cancel = (event) => {
-        this.props.history.push('/customers');
+        // If opened as modal
+        if(this.state.callbackModalNo){
+            this.state.callbackModalNo();
+        } else {
+            this.props.history.push('/customers');
+        }  
     }
 
     getTitle(){

@@ -7,12 +7,15 @@ class CreateTissueTypeComponent extends Component {
     {
         super(props)
         this.state = {
-            id: this.props.match.params.id,
-            isEditable: this.props.match.params.state === "view" ? false : true,
+            id: this.props.match === undefined ? "_add" : this.props.match.params.id,
+            isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
             name: '',
             definition: '',
             deleted: false,
             errors: [],
+            // modal property
+            callbackModalYes: props.callbackModalYes,
+            callbackModalNo: props.callbackModalNo,
         }
         this.saveTissueType = this.saveTissueType.bind(this);
         this.changeNameHandler = this.changeNameHandler.bind(this);
@@ -77,10 +80,20 @@ class CreateTissueTypeComponent extends Component {
                     console.error(ex);
                 });
         }   
+
+        // If opened as modal
+        if(this.state.callbackModalYes){
+            this.state.callbackModalYes();
+        }
     }
 
     cancel = (event) => {
-        this.props.history.push('/tissuetypes');
+        // If opened as modal
+        if(this.state.callbackModalNo){
+            this.state.callbackModalNo();
+        } else {
+            this.props.history.push('/tissuetypes');
+        } 
     }
 
     getTitle(){

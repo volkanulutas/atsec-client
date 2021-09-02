@@ -6,7 +6,7 @@ import ProductService from "../../../services/ProductService";
 class ProductPreprocessingState extends Component {
   constructor(props) {
     super(props);
-
+ 
     this.state = {
       multiple: false,
       data: props.data,
@@ -28,6 +28,9 @@ class ProductPreprocessingState extends Component {
   }
 
   componentDidMount() {
+    // getPreprocessingTypeList
+
+
     ProductService.getPreprocessingTypeList()
       .then((res) => {
         this.setState({ product_PreprocessingList: res.data });

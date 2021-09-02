@@ -29,7 +29,7 @@ class ProductFreezingModalAfterCourse extends React.Component {
     return (
       <div>
         <Button color="primary" onClick={this.toggle}>
-          Dondurucuya Koy
+          Dondurucuya Koy 1
         </Button>
         <Modal
           isOpen={this.state.modal}

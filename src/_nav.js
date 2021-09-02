@@ -69,6 +69,12 @@ const allNavList = {
           icon: "Home",
         },
         {
+          name: "Paketlenmiş Ürünler",
+          url: "/packingproducts/",
+          permission: "PACKINGPRODUCT_PAGE_PERMISSION",
+          icon: "Home",
+        },
+        {
           name: "Müşteriler",
           url: "/customers/",
           permission: "CUSTOMER_PAGE_PERMISSION",   

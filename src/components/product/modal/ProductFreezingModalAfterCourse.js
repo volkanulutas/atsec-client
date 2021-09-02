@@ -3,7 +3,7 @@ import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 
 import ProductFreezingState from "../state/ProductFreezingState";
 
-class ProductFreezingModal extends React.Component {
+class ProductFreezingModalAfterCourse extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -54,4 +54,4 @@ class ProductFreezingModal extends React.Component {
   }
 }
 
-export default ProductFreezingModal;
+export default ProductFreezingModalAfterCourse;

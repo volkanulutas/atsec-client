@@ -38,6 +38,9 @@ import ListCustomerComponent from "../components/customer/ListCustomerComponent"
 import CreateCustomerComponent from "../components/customer/CreateCustomerComponent";
 
 import ListProductComponent from "../components/product/ListProductComponent";
+import ListPackingProductComponent from "../components/packingproduct/ListPackingProductComponent";
+
+
 import CreateProductComponent from "../components/product/CreateProductComponent";
 
 import ListRawProductComponent from "../components/rawproduct/ListRawProductComponent";
@@ -223,6 +226,12 @@ const allPageList = [
     path: "/products/",
     id: "PRODUCT_PAGE_PERMISSION", 
     component: ListProductComponent,
+  },
+  {
+    name: "Paketlenmiş Ürün Listesi",
+    path: "/packingproducts/",
+    id: "PACKINGPRODUCT_PAGE_PERMISSION", 
+    component: ListPackingProductComponent,
   },
   {
     name: "Ürün Ekle/Güncelle",

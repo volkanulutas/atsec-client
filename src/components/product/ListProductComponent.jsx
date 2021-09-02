@@ -10,11 +10,17 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 
 import ProductService from "../../services/ProductService";
 import DeleteModal from "../util/modal/DeleteModal";
+
+import ProductCoarseModal from "./modal/ProductCoarseModal";
 import ProductPreprocessingModal from "./modal/ProductPreprocessingModal";
 import ProductFreezingModalAfterCourse from "./modal/ProductFreezingModalAfterCourse";
 import ProductFreezingModalAfterDelipidation from "./modal/ProductFreezingModalAfterDelipidation";
 import ProductFreezingModal from "./modal/ProductFreezingModal";
 import AuthService from "../../services/AuthService";
+import ProductWashingModal from "./modal/ProductWashingModal";
+import ProductAfterWashingFreezingModal from "./modal/ProductAfterWashingFreezingModal";
+import ProductAfterWashingSterilationModal from "./modal/ProductAfterWashingSterilationModal";
+
 
 const { SearchBar } = Search;
 
@@ -65,9 +71,9 @@ class ListProductComponent extends Component {
             let styleVar = "btn btn-secondary";
             if (cell === "Ön İşlem") {
               styleVar = "btn btn-danger";
-            } else if (cell === "Dondurma (Pre)") {
+            } else if (cell === "Dondurma 1") {
               styleVar = "btn btn-warning";
-            } else if (cell === "Yıkama") {
+            } else if (cell === "Delipidation") {
               styleVar = "btn btn-success";
             }
             return <div className={styleVar}>{cell}</div>;
@@ -161,7 +167,7 @@ class ListProductComponent extends Component {
       );
     } else if (row.status === "Ön İşlem - Kabul") {
       return (
-        // (Ön İşlem - Kabul) => (Dondurma (Pre))
+        // (Ön İşlem - Kabul) => (Dondurma 1)
         <div>
           <ProductFreezingModal
             style={{ marginRight: "5px" }}
@@ -180,9 +186,9 @@ class ListProductComponent extends Component {
           </button>
         </div>
       );
-    } else if (row.status === "Dondurma (Pre)") {
+    } else if (row.status === "Dondurma 1 Sonrası") {
       return (
-        // Kaba Öğütme => Dondurma (Course)
+        // Dondurma 1 => Dondurma 1 - Kabul
         <div>
           <ProductFreezingModalAfterCourse
             style={{ marginRight: "5px" }}
@@ -193,9 +199,25 @@ class ListProductComponent extends Component {
           />
         </div>
       );
-    } else if (row.statuss === "Kaba Öğütme") {
-      return <div></div>;
-    } else if (row.status === "Dondurma (Course)") {
+    } 
+    
+    
+    else if (row.status === "Öğütme (Course) Sonrası") {
+     // Course Öğütme Sonrası -> Öğütme (Course)
+      return (
+        <div>
+         <ProductCoarseModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            data={row}
+            callback_accept={this.performCoarseState_accept}
+            callback_reject={this.performCoarseState_reject}
+          />
+        </div>
+    
+      );
+    } else if (row.status === "Dondurma 2 Sonrası") {
+         // Delipidation -> Kimyasal Sterilizasyon
       return (
         <button
           type="button"
@@ -206,8 +228,18 @@ class ListProductComponent extends Component {
           İnce Öğütme (Fine)
         </button>
       );
-    } else if (row.status === "İnce Öğütme") {
+    } else if (row.status === "İnce Öğütme Sonrası") {
       return (
+        <div>
+        <ProductWashingModal
+          style={{ marginRight: "5px" }}
+          initialModalState={false}
+          data={row}
+          callback_accept={this.performWashing_accept}
+          callback_reject={this.performWashing_reject}
+        />
+      </div>
+        /*
         <ProductFreezingModalAfterDelipidation
           style={{ marginRight: "5px" }}
           initialModalState={false}
@@ -215,17 +247,91 @@ class ListProductComponent extends Component {
           callback_accept={this.performFreezingAfterDelipidation_accept}
           callback_reject={this.performCourseGrinding_reject}
         />
+        */
+      );
+    } else if(row.status === "Delipidation Sonrası"){
+        // Delipidation -> Delipidation
+      return(
+      <div>
+
+
+        <ProductAfterWashingFreezingModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            data={row}
+            callback_accept={this.performAfterWashingFreezing_accept}
+            callback_reject={this.performAfterWashingFreezing_reject}
+        />
+
+        <ProductAfterWashingSterilationModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            data={row}
+            callback_accept={this.performAfterWashingSterilation_accept}
+            callback_reject={this.performAfterWashingSterilation_reject}
+        />  
+   </div>
+);
+
+    } else if (row.status === "Dondurma 3 Sonrası"){
+      return (
+       
+        <div>
+
+        <ProductAfterWashingSterilationModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            data={row}
+            callback_accept={this.performAfterWashingSterilation_accept}
+            callback_reject={this.performAfterWashingSterilation_reject}
+        />  
+
+        </div>
       );
     }
+    else if(row.status === "Sterilizasyon"){
+      return (
+        <div>
+
+        </div>
+      );
+    } 
+  }
+
+  performCoarseState_accept(row, data) {
+    ProductService.getProductById(row.id)
+      .then((res) => {
+        let product = res.data;
+        product.location = data;
+        product.status = "Dondurma 2 Sonrası";
+
+        ProductService.updateProduct(row.id, product)
+          .then((res) => {
+            window.location.reload(false);
+          })
+          .catch((ex) => {
+            console.error(ex);
+          });
+      })
+      .catch((ex) => {
+        console.error(ex);
+      });
+
+  }
+
+  performCoarseState_reject(row, data) {
+
+
   }
 
   performFreezingState_accept(row, data) {
+    // öğütme -> Delipidation
     // location change, state change
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
         product.location = data;
-        product.status = "Dondurma (Pre)";
+        product.status = "Dondurma 1 Sonrası";
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -239,12 +345,32 @@ class ListProductComponent extends Component {
         console.error(ex);
       });
   }
+  performCoarse(row) {
+    ProductService.getProductById(row.id)
+      .then((res) => {
+        let product = res.data;
+
+        product.status = "Dondurma (Course)";
+
+        ProductService.updateProduct(row.id, product)
+          .then((res) => {
+            window.location.reload(false);
+          })
+          .catch((ex) => {
+            console.error(ex);
+          });
+      })
+      .catch((ex) => {
+        console.error(ex);
+      });
+  }
+
   performFineGrilling(row) {
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
 
-        product.status = "İnce Öğütme";
+        product.status = "İnce Öğütme Sonrası";
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -279,18 +405,95 @@ class ListProductComponent extends Component {
       });
   }
 
+  performAfterWashingSterilation_accept(row){
+    ProductService.getProductById(row.id)
+      .then((res) => {
+        let product = res.data;
+
+        product.status = "Paketleme";
+
+        ProductService.updateProduct(row.id, product)
+          .then((res) => {
+            window.location.reload(false);
+          })
+          .catch((ex) => {
+            console.error(ex);
+          });
+      })
+      .catch((ex) => {
+        console.error(ex);
+      });
+  }
+
+  performAfterWashingSterilation_reject(row){
+    
+  }
+
+  performAfterWashingFreezing_accept(row){
+        // Dondurucuya Koy (After Delipidation) -> Sterilizasyon
+
+        ProductService.getProductById(row.id)
+        .then((res) => {
+          let product = res.data;
+  
+          product.status = "Dondurma 3 Sonrası";
+  
+          ProductService.updateProduct(row.id, product)
+            .then((res) => {
+              window.location.reload(false);
+            })
+            .catch((ex) => {
+              console.error(ex);
+            });
+        })
+        .catch((ex) => {
+          console.error(ex);
+        });
+  }
+
+  performAfterWashingFreezing_reject(row){}
+
   performFreezingAfterDelipidation_reject(row) {}
 
   performCourseGrinding_reject(row) {}
 
-  performCourseGrinding_accept(row) {
-    // course grinding -> Dondurma (Course)
+  
+
+  performWashing_accept(row) {
+
+
+    // Delipidation -> Delipidation (Yıkama)
 
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
 
-        product.status = "Dondurma (Course)";
+        product.status = "Delipidation Sonrası";
+
+        ProductService.updateProduct(row.id, product)
+          .then((res) => {
+            window.location.reload(false);
+          })
+          .catch((ex) => {
+            console.error(ex);
+          });
+      })
+      .catch((ex) => {
+        console.error(ex);
+      });
+  }
+
+  performWashing_reject(row) {
+  }
+
+  performCourseGrinding_accept(row) {
+
+
+    ProductService.getProductById(row.id)
+      .then((res) => {
+        let product = res.data;
+
+        product.status = "Öğütme (Course) Sonrası";
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -314,7 +517,7 @@ class ListProductComponent extends Component {
 
         product.status = "Ön İşlem - Kabul";
 
-        var preProcessingList = ["Kesme", "Yıkama", "Kartilaj Alma"];
+        var preProcessingList = ["Kesme", "Delipidation", "Kartilaj Alma"];
         product.performPreProcessingType = preProcessingList;
 
         ProductService.updateProduct(row.id, product)

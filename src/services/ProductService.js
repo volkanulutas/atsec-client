@@ -4,6 +4,11 @@ import { API_BASE_URL, API_URL_PRODUCT } from "../constants";
 import authHeader from "./AuthHeader"
 
 class ProductService {
+
+  getAllPackingProducts() {
+    return axios.get(API_BASE_URL + API_URL_PRODUCT + "packing", {headers: authHeader()});
+  }
+
   getAllProducts() {
     return axios.get(API_BASE_URL + API_URL_PRODUCT, {headers: authHeader()});
   }
@@ -27,6 +32,11 @@ class ProductService {
   getPreprocessingTypeList() {
     return axios.get(API_BASE_URL + API_URL_PRODUCT + "preprocessingtypelist", {headers: authHeader()});
   }
+
+  getWashingTypeList() {
+    return axios.get(API_BASE_URL + API_URL_PRODUCT + "washingtypelist", {headers: authHeader()}); 
+  }
+  
 }
 
 export default new ProductService();

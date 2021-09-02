@@ -17,7 +17,7 @@ class UserService {
   }
 
   updateUser(id, user) {
-    return axios.put(API_BASE_URL + API_URL_USER + id, user), {headers: authHeader()};
+    return axios.put(API_BASE_URL + API_URL_USER + id, user, {headers: authHeader()});
   }
 
   deleteUser(id) {

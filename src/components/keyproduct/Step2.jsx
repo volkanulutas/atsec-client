@@ -37,6 +37,15 @@ const Step2 = props => {
             >
               Durumu girmelisiniz.
             </div>
+            <div
+              className={
+                props.hasError("statusNotCompatible")
+                  ? "inline-errormsg"
+                  : "hidden"
+              }
+            >
+              Durum yalnızca Kabul olabilir.
+            </div>
           </div>
 
           

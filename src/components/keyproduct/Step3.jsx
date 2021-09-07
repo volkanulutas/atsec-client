@@ -57,9 +57,11 @@ const Step3 = props => {
         let reader = new FileReader();
             reader.readAsDataURL(selectedFile);
             reader.onloadend = (e) =>{
-              setPdfFile_Confirmation(e.target.result);
+          
+              alert(selectedFile);
+              setPdfFile_Confirmation(selectedFile);
               setPdfFileError_Confirmation('');
-              props.addPdf_Confirmation(e.target.result);
+              props.addPdf_Confirmation(selectedFile);
             }
       }
       else{
@@ -80,10 +82,10 @@ const Step3 = props => {
         let reader = new FileReader();
             reader.readAsDataURL(selectedFile);
             reader.onloadend = (e) =>{
-              setPdfFile_Transfer(e.target.result);
+              setPdfFile_Transfer(selectedFile);
               setPdfFileError_Transfer('');
 
-              props.addPdf_Transfer(e.target.result);
+              props.addPdf_Transfer(selectedFile);
             }
       }
       else{
@@ -104,10 +106,10 @@ const Step3 = props => {
         let reader = new FileReader();
             reader.readAsDataURL(selectedFile);
             reader.onloadend = (e) =>{
-              setPdfFile_Transportation(e.target.result);
+              setPdfFile_Transportation(selectedFile);
               setPdfFileError_Transportation('');
 
-              props.addPdf_Transportation(e.target.result);
+              props.addPdf_Transportation(selectedFile);
             }
       }
       else{
@@ -128,10 +130,10 @@ const Step3 = props => {
         let reader = new FileReader();
             reader.readAsDataURL(selectedFile);
             reader.onloadend = (e) =>{
-              setPdfFile_Extra(e.target.result);
+              setPdfFile_Extra(selectedFile);
               setPdfFileError_Extra('');
 
-              props.addPdf_Extra(e.target.result);
+              props.addPdf_Extra(selectedFile);
             }
       }
       else{

@@ -300,8 +300,11 @@ class MasterRawProduct extends Component {
 
     // error handling
     if(currentStep === 1) {
+      
+      
       var errors = [];
-      /* if(this.state.donor === undefined || this.state.donor === "") {
+      /*
+      if(this.state.donor === undefined || this.state.donor === "") {
         errors.push("donor");
       }
       if (this.state.donorInstitute[0] === undefined) {
@@ -316,12 +319,12 @@ class MasterRawProduct extends Component {
       if (this.state.tissueType[0] === undefined) {
         errors.push("tissueType");
       }
+      */
   
       this.setState({ errors: errors });
       if (errors.length > 0) {
         return false;
       }
-      */
 
       // TODO: burada kaldım
       
@@ -371,9 +374,14 @@ class MasterRawProduct extends Component {
     }
 
     if(currentStep === 2){
+      
       var errors = [];
-     /* if(this.state.statusName[0] === undefined ) {
+       /*
+      if(this.state.statusName[0] === undefined ) {
         errors.push("status");
+      }
+      if(this.state.statusName[0] !== "Karantina" && this.state.statusName[0] !== undefined) {
+        errors.push("statusNotCompatible");  
       }
       if (this.state.arrivalDate === "") {
         errors.push("arrivalDate");

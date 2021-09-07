@@ -36,6 +36,8 @@ class RawProductService {
     formData.append("fileType", fileType);
     formData.append("rawProductId", rawProductId);
 
+    alert(API_BASE_URL + API_URL_RAWPRODUCT + "upload" + " " + fileType + " " + rawProductId + " " + file);
+
     return axios.post(API_BASE_URL + API_URL_RAWPRODUCT + "upload", formData, {
       headers: {
         "Content-Type": "multipart/form-data",

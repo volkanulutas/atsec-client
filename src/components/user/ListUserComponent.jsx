@@ -10,6 +10,7 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 
 import UserService from "../../services/UserService";
 import DeleteModal from "../util/modal/DeleteModal";
+import PermissionManager from "../manager/PermisssionManager";
 
 const { SearchBar } = Search;
 
@@ -18,6 +19,7 @@ class ListUserComponent extends Component {
     super(props);
     this.state = {
       users: [],
+      permissionDelete: true,
       columns: [
         {
           dataField: "name",
@@ -70,6 +72,7 @@ class ListUserComponent extends Component {
                   Güncelle
                 </button>
                 <DeleteModal
+                  permissionDelete={this.state.permissionDelete}
                   style={{ marginRight: "5px" }}
                   initialModalState={false}
                   data={row}
@@ -87,6 +90,9 @@ class ListUserComponent extends Component {
   }
 
   componentDidMount() {
+    let userListDeletePer = PermissionManager.checkPermission("USER_PAGE_PERMISSION", "list-user-delete");
+    this.setState({ permissionDelete: userListDeletePer });
+   
     UserService.getAllUsers()
       .then((res) => {
         this.setState({ users: res.data });

@@ -8,6 +8,7 @@ class DeleteModal extends React.Component {
       modal: props.initialModalState,
       data: props.data,
       callback: props.callback,
+      permissionDelete: props.permissionDelete,
       fade: true,
     };
     this.toggle = this.toggle.bind(this);
@@ -32,7 +33,7 @@ class DeleteModal extends React.Component {
   render() {
     return (
       <div>
-        <Button color="danger" onClick={this.toggle}>
+        <Button color="danger" onClick={this.toggle} disabled={!this.state.permissionDelete}>
           Sil
         </Button>
         <Modal

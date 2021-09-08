@@ -133,7 +133,7 @@ class ListProductComponent extends Component {
     // TODO: 
     // uthService.checkSession();
 
-    ProductService.getAllProducts()
+    ProductService.getAllPreprocessingProducts()
       .then((res) => {
         console.log(res.data);
         this.setState({ products: res.data });
@@ -550,7 +550,7 @@ class ListProductComponent extends Component {
   deleteProduct(id) {
     ProductService.deleteProduct(id)
       .then((res) => {
-        ProductService.getAllProducts().then((res) => {
+        ProductService.getAllPreprocessingProducts().then((res) => {
           this.setState({ products: res.data });
         });
       })

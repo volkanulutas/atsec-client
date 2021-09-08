@@ -149,6 +149,12 @@ const allPageList = [
     component: CreateDonorComponent,
   },
   {
+    name: "Paketlenmiş Ürün Listesi",
+    path: "/packingproducts/",
+    id: "PACKINGPRODUCT_PAGE_PERMISSION", 
+    component: ListPackingProductComponent,
+  },
+  {
     name: "Müşteri Listesi",
     path: "/customers/",
     id: "CUSTOMER_PAGE_PERMISSION", 
@@ -164,9 +170,6 @@ const allPageList = [
     path: "/add-customer/:state/:id",
     component: CreateCustomerComponent,
   },
-
-
-
   {
     name: "Ham Ürün Listesi",
     path: "/rawproducts/",
@@ -227,12 +230,7 @@ const allPageList = [
     id: "PRODUCT_PAGE_PERMISSION", 
     component: ListProductComponent,
   },
-  {
-    name: "Paketlenmiş Ürün Listesi",
-    path: "/packingproducts/",
-    id: "PACKINGPRODUCT_PAGE_PERMISSION", 
-    component: ListPackingProductComponent,
-  },
+
   {
     name: "Ürün Ekle/Güncelle",
     path: "/add-product/:state/:id",

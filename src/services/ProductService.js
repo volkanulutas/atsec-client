@@ -9,6 +9,10 @@ class ProductService {
     return axios.get(API_BASE_URL + API_URL_PRODUCT + "packing", {headers: authHeader()});
   }
 
+  getAllPreprocessingProducts() {
+    return axios.get(API_BASE_URL + API_URL_PRODUCT + "preprocessing", {headers: authHeader()});
+  }
+
   getAllProducts() {
     return axios.get(API_BASE_URL + API_URL_PRODUCT, {headers: authHeader()});
   }

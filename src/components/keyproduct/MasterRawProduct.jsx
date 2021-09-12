@@ -341,8 +341,6 @@ class MasterRawProduct extends Component {
       };
 
       if (this.state.id === null) {
-        console.log("product: " + JSON.stringify(product));
-        
         RawProductService.createRawProduct(product)
           .then((res) => {
             let product = res.data;
@@ -352,7 +350,7 @@ class MasterRawProduct extends Component {
 
             this.props.addCurrentRawProductId(product.id);
             let st = store.getState();  
-            console.log("store");
+            console.log("store" + st);
           })
           .catch((ex) => {
             console.error(ex);

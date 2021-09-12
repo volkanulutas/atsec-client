@@ -112,7 +112,7 @@ export default class DashboardLayout extends Component {
   findMenu = (menuNavParam, requestedName) => {
     for(var i = 0; i < menuNavParam.top.length; i++){
       if(menuNavParam.top[i] === null) {
-        alert("requestedName: " + requestedName );
+        
       }
      // alert("requestedName: " + requestedName  + " menuNavParam.top[i].permission " +  menuNavParam.top[i].permission);
       if(requestedName === menuNavParam.top[i].permission){

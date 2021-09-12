@@ -1,4 +1,5 @@
-import { ADDPDF_CONFIRMATION, ADDPDF_EXTRA, ADDPDF_TRANSFER, ADDPDF_TRANSPORTATION, CURRENT_RAW_PRODUCT_ID } from '../constants';
+import { ADDPDF_CONFIRMATION, ADDPDF_EXTRA, ADDPDF_TRANSFER, ADDPDF_TRANSPORTATION, CURRENT_RAW_PRODUCT_ID,
+     BARCODE_PDF_VIEW} from '../constants';
 
 const initialState = {
     pdfFile_Confirmation: null,
@@ -6,6 +7,7 @@ const initialState = {
     pdfFile_Transportation: null,
     pdfFile_Extra: null, 
     currentRawProductId: -1, 
+    barcodePdfView: null,
 };
 
 const pdfFile = (action) => {
@@ -40,7 +42,11 @@ const reducer = (state = initialState, action) => {
         case CURRENT_RAW_PRODUCT_ID:
             newState.currentRawProductId = action;
             console.log('yeni raw product eklendi', action);
-            return newState;    
+            return newState;
+        case BARCODE_PDF_VIEW:
+            newState.barcodePdfView = pdfFile(action);
+            console.log('yeni barcode pdf eklendi', action);
+            return newState;     
         default:
         return newState;
     }

@@ -20,6 +20,8 @@ export const ADDPDF_TRANSFER = "ADDPDF_TRANSFER";
 export const ADDPDF_TRANSPORTATION = "ADDPDF_TRANSPORTATION";
 export const ADDPDF_EXTRA = "ADDPDF_EXTRA";
 export const CURRENT_RAW_PRODUCT_ID = "CURRENT_RAW_PRODUCT_ID";
+export const BARCODE_PDF_VIEW = "BARCODE_PDF_VIEW";
+
 
 export const  CONFIG = {
     headers: {

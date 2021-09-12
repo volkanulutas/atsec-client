@@ -57,11 +57,10 @@ const Step3 = props => {
         let reader = new FileReader();
             reader.readAsDataURL(selectedFile);
             reader.onloadend = (e) =>{
-          
-              alert(selectedFile);
-              setPdfFile_Confirmation(selectedFile);
+              setPdfFile_Confirmation(e.target.result);
               setPdfFileError_Confirmation('');
-              props.addPdf_Confirmation(selectedFile);
+         
+              props.addPdf_Confirmation(e.target.result);
             }
       }
       else{
@@ -82,10 +81,10 @@ const Step3 = props => {
         let reader = new FileReader();
             reader.readAsDataURL(selectedFile);
             reader.onloadend = (e) =>{
-              setPdfFile_Transfer(selectedFile);
+              setPdfFile_Transfer(e.target.result);
               setPdfFileError_Transfer('');
 
-              props.addPdf_Transfer(selectedFile);
+              props.addPdf_Transfer(e.target.result);
             }
       }
       else{
@@ -106,10 +105,10 @@ const Step3 = props => {
         let reader = new FileReader();
             reader.readAsDataURL(selectedFile);
             reader.onloadend = (e) =>{
-              setPdfFile_Transportation(selectedFile);
+              setPdfFile_Transportation(e.target.result);
               setPdfFileError_Transportation('');
 
-              props.addPdf_Transportation(selectedFile);
+              props.addPdf_Transportation(e.target.result);
             }
       }
       else{
@@ -130,10 +129,10 @@ const Step3 = props => {
         let reader = new FileReader();
             reader.readAsDataURL(selectedFile);
             reader.onloadend = (e) =>{
-              setPdfFile_Extra(selectedFile);
+              setPdfFile_Extra(e.target.result);
               setPdfFileError_Extra('');
 
-              props.addPdf_Extra(selectedFile);
+              props.addPdf_Extra(e.target.result);
             }
       }
       else{
@@ -151,24 +150,21 @@ const Step3 = props => {
   const handlePdfFileSubmit_Confirmation=(e)=>{
     e.preventDefault();
 
-    if(pdfFile_Confirmation!==null){
-      setViewPdf_Confirmation(pdfFile_Confirmation);
-
-      let st = store.getState();  
-      let currentRawProductId = st.currentRawProductId;
-
+  
+    let st = store.getState();  
+    let currentRawProductId = st.currentRawProductId;
+    alert("current: " + currentRawProductId);
     RawProductService.upload(
       pdfFile_Confirmation,
       "RAW_CONFIRMATION_FILES",
       currentRawProductId.value,
       (event) => {
+        alert("event: " + JSON.stringify(event));
+        setViewPdf_Confirmation(pdfFile_Confirmation);
         setProgressConfirmation(Math.round((100 * event.loaded) / event.total));
       }
     );
-    }
-    else{
-      setViewPdf_Confirmation(null);
-    }
+
   }
 
 
@@ -255,9 +251,10 @@ const Step3 = props => {
           class="vlu-left-margin"
           initialModalState={false}
           component={"ViewPdfComponent"}
-          callback={props.viewExtraForm}
+          callback={props.viewPdf_Confirmation}
           isEditable ={props.isEditable}
-          viewPdf={ADDPDF_CONFIRMATION}
+          viewPdf={viewPdf_Confirmation}
+          viewPdfType={ADDPDF_CONFIRMATION}
         />
       </form>
 
@@ -276,9 +273,10 @@ const Step3 = props => {
           class="vlu-left-margin"
           initialModalState={false}
           component={"ViewPdfComponent"}
-          callback={props.viewExtraForm}
+          callback={props.viewPdf_Transfer}
           isEditable ={props.isEditable}
-          viewPdf={ADDPDF_TRANSFER}
+          viewPdf={viewPdf_Transfer}
+          viewPdfType={ADDPDF_TRANSFER}
         />
       </form>
 
@@ -297,9 +295,10 @@ const Step3 = props => {
           class="vlu-left-margin"
           initialModalState={false}
           component={"ViewPdfComponent"}
-          callback={props.viewExtraForm}
+          callback={props.viewPdf_Transportation}
           isEditable ={props.isEditable}
-          viewPdf={ADDPDF_TRANSPORTATION}
+          viewPdf={viewPdf_Transportation}
+          viewPdfType={ADDPDF_TRANSPORTATION}
         />
       </form>
 
@@ -320,7 +319,8 @@ const Step3 = props => {
           component={"ViewPdfComponent"}
           callback={props.viewExtraForm}
           isEditable ={props.isEditable}
-          viewPdf={ADDPDF_EXTRA}
+          viewPdf={viewPdf_Extra}
+          viewPdfType={ADDPDF_EXTRA}
         />
       </form>
     </FormGroup>

@@ -1,8 +1,17 @@
-import { ADDPDF_CONFIRMATION, ADDPDF_EXTRA, ADDPDF_TRANSFER, ADDPDF_TRANSPORTATION, CURRENT_RAW_PRODUCT_ID } from '../constants';
+import { ADDPDF_CONFIRMATION, ADDPDF_EXTRA, ADDPDF_TRANSFER, ADDPDF_TRANSPORTATION, BARCODE_PDF_VIEW, CURRENT_RAW_PRODUCT_ID } from '../constants';
 
 export const addPdf_Confirmation = (value) => {
   const action = {
     type: ADDPDF_CONFIRMATION,
+    value,
+  }
+  console.log('action dan gelen ', action);
+  return action;
+}
+
+export const addPdf_BarcodePdfView = (value) => {
+  const action = {
+    type: BARCODE_PDF_VIEW,
     value,
   }
   console.log('action dan gelen ', action);

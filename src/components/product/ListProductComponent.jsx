@@ -11,6 +11,9 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import ProductService from "../../services/ProductService";
 import DeleteModal from "../util/modal/DeleteModal";
 
+import {connect} from 'react-redux';
+import { addPdf_BarcodePdfView } from '../../actions';
+
 import ProductCoarseModal from "./modal/ProductCoarseModal";
 import ProductPreprocessingModal from "./modal/ProductPreprocessingModal";
 import ProductFreezingModalAfterCourse from "./modal/ProductFreezingModalAfterCourse";
@@ -21,6 +24,7 @@ import ProductWashingModal from "./modal/ProductWashingModal";
 import ProductAfterWashingFreezingModal from "./modal/ProductAfterWashingFreezingModal";
 import ProductAfterWashingSterilationModal from "./modal/ProductAfterWashingSterilationModal";
 
+import ProductBarcodeModal from "../product/modal/ProductBarcodeModal";
 
 const { SearchBar } = Search;
 
@@ -28,6 +32,7 @@ class ListProductComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      barcodePdfView: null,
       numPages: null,
       pageNumber: 1,
       products: [],
@@ -146,7 +151,7 @@ class ListProductComponent extends Component {
   checkstatus(row) {
     if (row.status === "Ön İşlem") {
       return (
-        // (Ön İşlem) => (Ön İşlem - Kabul)
+        // (Ön İşlem) => (Ön İşlem - Kabul) Etiket Oluştur
         <div>
           <ProductPreprocessingModal
             style={{ marginRight: "5px" }}
@@ -155,14 +160,12 @@ class ListProductComponent extends Component {
             callback_accept={this.performPreProcessingState_accept}
             callback_reject={this.performPreProcessingState_reject}
           />
-          <button
-            type="button"
-            style={{ marginRight: "5px" }}
-            // onClick={() => this.viewProduct(row)}
-            className="btn btn-success"
-          >
-            Etiket Oluştur
-          </button>
+          <ProductBarcodeModal
+          productId={row.id}
+          class="vlu-left-margin"
+          initialModalState={false}
+          isEditable={true}
+        />
         </div>
       );
     } else if (row.status === "Ön İşlem - Kabul") {
@@ -648,5 +651,12 @@ class ListProductComponent extends Component {
     );
   }
 }
+function mapStateToProps(state){
+  return {
+    barcodePdfView: state.barcodePdfView,
+  }
+}
 
-export default ListProductComponent;
+export default connect(mapStateToProps, 
+  {addPdf_BarcodePdfView})
+  (ListProductComponent);

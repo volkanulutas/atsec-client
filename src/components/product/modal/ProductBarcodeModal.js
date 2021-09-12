@@ -1,9 +1,10 @@
 import React from "react";
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 
-import ViewPdfComponent from "../../keyproduct/ViewPdfComponent";
+import ViewBarcodePdfComponent from "../ViewBarcodePdfComponent";
+import ProductService from "../../../services/ProductService";
 
-class ViewModal extends React.Component {
+class ProductBarcodeModal extends React.Component {
   constructor(props) {
     super(props);
   
@@ -14,15 +15,16 @@ class ViewModal extends React.Component {
       fade: true,
       isEditable: props.isEditable,
       component: props.component,
-      viewPdf: props.viewPdf,
-      viewPdfType: props.viewPdfType,
+      productId: props.productId,
+      barcodePdfView: null,
+      
     };
     this.toggle = this.toggle.bind(this);
     this.yes = this.yes.bind(this);
     this.no = this.no.bind(this);
   }
 
-  componentDidMount() { 
+  componentDidMount() {
   }
 
   toggle() {
@@ -37,13 +39,6 @@ class ViewModal extends React.Component {
     if(this.state.callback) {
       this.state.callback(this.state.data);
     }
-    /*
-    this.setState({
-      modal: !this.state.modal,
-      fade: !this.state.fade,
-    });
-    this.state.callback(this.state.data);
-    */
   }
 
   no(){
@@ -51,22 +46,18 @@ class ViewModal extends React.Component {
   }
 
   findComponent(){
-    if("ViewPdfComponent" === this.state.component){
-
-      return <ViewPdfComponent 
+      return <ViewBarcodePdfComponent 
       callbackModalYes={this.yes}
       callbackModalNo={this.no}
-      viewPdf={this.state.viewPdf}
-      viewPdfType={this.state.viewPdfType}
-      />;
-    }
+      productId = {this.state.productId}
+     />;
   }
 
   render() {
     return (
       <div>
         <Button color="success" className="vlu-left-margin" onClick={this.toggle} disabled={!this.state.isEditable}>
-          Ön İzle
+          Etiket Oluştur22
         </Button>
         <Modal
           isOpen={this.state.modal}
@@ -84,4 +75,4 @@ class ViewModal extends React.Component {
   }
 }
 
-export default ViewModal;
+export default ProductBarcodeModal;

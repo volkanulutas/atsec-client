@@ -16,7 +16,7 @@ class ProductBarcodeModal extends React.Component {
       isEditable: props.isEditable,
       component: props.component,
       productId: props.productId,
-      barcodePdfView: null,
+      pdfFile: null,
       
     };
     this.toggle = this.toggle.bind(this);
@@ -24,17 +24,17 @@ class ProductBarcodeModal extends React.Component {
     this.no = this.no.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount(){
   }
 
-  toggle() {
+  toggle() {    
     this.setState({
       modal: !this.state.modal,
       fade: !this.state.fade,
     });
   }
 
-  yes() {
+  yes() { 
     this.toggle();
     if(this.state.callback) {
       this.state.callback(this.state.data);
@@ -49,7 +49,7 @@ class ProductBarcodeModal extends React.Component {
       return <ViewBarcodePdfComponent 
       callbackModalYes={this.yes}
       callbackModalNo={this.no}
-      productId = {this.state.productId}
+      pdfFile = {this.state.pdfFile}
      />;
   }
 

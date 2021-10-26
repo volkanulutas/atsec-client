@@ -153,13 +153,11 @@ const Step3 = props => {
   
     let st = store.getState();  
     let currentRawProductId = st.currentRawProductId;
-    alert("current: " + currentRawProductId);
     RawProductService.upload(
       pdfFile_Confirmation,
       "RAW_CONFIRMATION_FILES",
       currentRawProductId.value,
       (event) => {
-        alert("event: " + JSON.stringify(event));
         setViewPdf_Confirmation(pdfFile_Confirmation);
         setProgressConfirmation(Math.round((100 * event.loaded) / event.total));
       }

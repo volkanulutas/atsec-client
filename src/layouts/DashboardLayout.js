@@ -111,10 +111,6 @@ export default class DashboardLayout extends Component {
 
   findMenu = (menuNavParam, requestedName) => {
     for(var i = 0; i < menuNavParam.top.length; i++){
-      if(menuNavParam.top[i] === null) {
-        
-      }
-     // alert("requestedName: " + requestedName  + " menuNavParam.top[i].permission " +  menuNavParam.top[i].permission);
       if(requestedName === menuNavParam.top[i].permission){
         return menuNavParam.top[i];
       }
@@ -143,7 +139,7 @@ export default class DashboardLayout extends Component {
   filterNav = () => {
     let navList = {};
     navList.bottom = nav.bottom;
-    navList.top = [];
+    navList.top =nav.top;
 
     let user = AuthService.getCurrentUser();
     if(user != null) {
@@ -151,21 +147,26 @@ export default class DashboardLayout extends Component {
       if(permissions != null) {
         for (var i = 0; i < permissions.length; i++) {
           let permission = permissions[i];
-          let pagePermissionName  = permission.name;
-          let menuPermissionName = permission.menu;
-          let menuItem = null;
-          if(this.findMenu(navList, menuPermissionName) == null) {
+          if(!permission.menu.includes("PAGE")) {
+            let pagePermissionName  = permission.name;
+            let menuPermissionName = permission.menu;
+            let menuItem = null;
+            if(this.findMenu(navList, menuPermissionName) == null) {
               menuItem = this.findMenu(menuNav, menuPermissionName);
               navList.top.push(menuItem);
           }
           if(this.findPage(navList, pagePermissionName) == null) {
-              let pageItem = this.findPage(nav, pagePermissionName);
-              menuItem = this.findMenu(navList, menuPermissionName);
-              if(menuItem.children === null || menuItem.children === undefined){
-                menuItem.children = new Array();
-              }
-              menuItem.children.push(pageItem);  
+            let pageItem = this.findPage(nav, pagePermissionName);
+            menuItem = this.findMenu(navList, menuPermissionName);
+            if(menuItem.children === null || menuItem.children === undefined){
+              menuItem.children = new Array();
             }
+            menuItem.children.push(pageItem);  
+          }
+          }
+      
+       
+
           }
         }
       }

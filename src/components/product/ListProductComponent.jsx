@@ -25,6 +25,7 @@ import ProductAfterWashingFreezingModal from "./modal/ProductAfterWashingFreezin
 import ProductAfterWashingSterilationModal from "./modal/ProductAfterWashingSterilationModal";
 
 import ProductBarcodeModal from "../product/modal/ProductBarcodeModal";
+import store from "../../store";
 
 const { SearchBar } = Search;
 
@@ -150,13 +151,26 @@ class ListProductComponent extends Component {
 
   checkstatus(row) {
     if (row.status === "Ön İşlem") {
+
+    ProductService.createBarcode(row.id)
+    .then((res) => {
+      let file = res.data;
+      this.props.addPdf_BarcodePdfView(file);
+    })
+    .catch((ex) => {
+      console.error(ex);
+    });
+
+     
       return (
+
+     
         // (Ön İşlem) => (Ön İşlem - Kabul) Etiket Oluştur
         <div>
           <ProductPreprocessingModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
-            data={row}
+            productId={row.id}
             callback_accept={this.performPreProcessingState_accept}
             callback_reject={this.performPreProcessingState_reject}
           />
@@ -164,6 +178,7 @@ class ListProductComponent extends Component {
           productId={row.id}
           class="vlu-left-margin"
           initialModalState={false}
+          productId={row.id}
           isEditable={true}
         />
         </div>

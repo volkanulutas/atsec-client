@@ -90,9 +90,11 @@ class ListUserComponent extends Component {
   }
 
   componentDidMount() {
+    // TODO: VEM
+    /*
     let userListDeletePer = PermissionManager.checkPermission("USER_PAGE_PERMISSION", "list-user-delete");
     this.setState({ permissionDelete: userListDeletePer });
-   
+    */
     UserService.getAllUsers()
       .then((res) => {
         this.setState({ users: res.data });
@@ -100,6 +102,7 @@ class ListUserComponent extends Component {
       .catch((ex) => {
         console.error(ex);
       });
+     
   }
 
   add() {

@@ -21,7 +21,6 @@ const ViewPdfComponent = props => {
 
   useEffect(() => {
     let st = store.getState();
-    alert("viewPdf: " + JSON.stringify(st));
     setPdfFile(st.pdfFile_Confirmation.value);
 
   });

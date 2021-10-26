@@ -10,62 +10,24 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { Worker } from '@react-pdf-viewer/core'; // install this library
 import { FormGroup } from "reactstrap";
 import store from '../../store';
+import authHeader from "../../services/AuthHeader";
+import axios from "axios";
 
 import ProductService from "../../services/ProductService";
 
-
 const ViewBarcodePdfComponent = props => {
-  const [pdfFile, setPdfFile]=useState(props.barcodePdfView);
+  const [pdfFile, setPdfFile]=useState(props.pdfFile);
   
   // Create new plugin instance
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
-  function stateChange(newState) {
-    setTimeout(function () {
-        if (newState == -1) {
-            alert('VIDEO HAS STOPPED');
-        }
-    }, 5000);
-}
-
   useEffect(() => {
-    let product = null
-    ProductService.getProductById(props.productId)
-    .then((res) => {
-
-      product = res.data;
-
-      ProductService.createBarcode(product)
-      .then((res) => {
-        let file = res.data;
-       // alert("t: " + JSON.stringify(file));
-        this.setState({pdfFile: file});
-      })
-      .catch((ex) => {
-        console.error(ex);
-      }).finally(() => {
-        //alert("finally");
-      });
-
-    })
-    .catch((ex) => {
-      console.error(ex);
-    });
-
-    stateChange(-1);
-   
-
-   /*
     let st = store.getState();
-    
-    alert("barcode: " + JSON.stringify(st));
    
     setPdfFile(st.barcodePdfView.value);
-    */
+
   });
 
-  // for submit event
-  // const [viewPdf, setViewPdf]=useState(null);
 
   return (
     <>

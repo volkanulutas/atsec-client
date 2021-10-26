@@ -25,8 +25,8 @@ class ProductService {
     return axios.post(API_BASE_URL + API_URL_PRODUCT, product, {headers: authHeader()});
   }
 
-  createBarcode(product) {
-    return axios.post(API_BASE_URL + API_URL_PRODUCT + "createbarcode", product, {headers: authHeader()});
+  createBarcode(id) {
+    return axios.get(API_BASE_URL + API_URL_PRODUCT + "createbarcode/" + id, {headers: authHeader()});
   }
 
   updateProduct(id, product) {

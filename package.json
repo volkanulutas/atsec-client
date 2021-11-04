@@ -37,6 +37,7 @@
     "react-select": "^4.0.2",
     "react-select-search": "^2.2.4",
     "react-step-progress-bar": "^1.0.3",
+    "react-stomp": "^5.1.0",
     "react-transition-group": "^4.4.1",
     "reactstrap": "^8.7.1",
     "redux": "^4.1.0",

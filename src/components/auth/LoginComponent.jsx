@@ -13,7 +13,6 @@ class LoginComponent extends Component {
       password: "",
       showForgetPassword: false,
       isLoginSuccessfull: false,
-
       version: "",
       errors: [],
     };
@@ -31,6 +30,8 @@ class LoginComponent extends Component {
         this.setState({ version: res.data });
       })
       .catch((ex) => {
+        let res = "Sunucuya Bağlanılamıyor.";
+        this.setState({ version: res});
         console.error(ex);
       });
   }

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Typeahead } from "react-bootstrap-typeahead";
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import DonorService from '../../services/DonorService';
 
@@ -14,10 +16,25 @@ class CreateDonorComponent extends Component {
             name: '',
             surname: '',
             telephone: '',
-            address: '', 
-            bloodTestPdfFile: '',
+            address: '',
+            addressCity: [],
+            addressDistrict: [], 
+            tissueNumber: "",
+            tissueType: "",
+            bloodType: [],
+            birthdate: "",
+            sex: [],
+           
+           
             deleted: false,
+            multiple: false,
             errors: [],
+
+            donor_Districts: [],
+            donor_CityList: [],
+            donor_DistrictList: [],
+            donor_SexList: [],
+            donor_BloodTypeList: [],
             // modal property
             callbackModalYes: props.callbackModalYes,
             callbackModalNo: props.callbackModalNo,
@@ -29,6 +46,11 @@ class CreateDonorComponent extends Component {
         this.changeSurnameHandler = this.changeSurnameHandler.bind(this);
         this.changeTelephoneHandler = this.changeTelephoneHandler.bind(this);
         this.changeAddressHandler = this.changeAddressHandler.bind(this);
+        this.changeTissueTypeHandler = this.changeTissueTypeHandler.bind(this);
+        this.changeTissueNumberHandler = this.changeTissueNumberHandler.bind(this);
+        this.changeBirthdateHandler = this.changeBirthdateHandler.bind(this);
+        this.changeBloodTypeHandler = this.changeBloodTypeHandler.bind(this);
+        this.changeSexHandler = this.changeSexHandler.bind(this);
     } 
 
     changeCodeHandler = (event) => {
@@ -55,7 +77,88 @@ class CreateDonorComponent extends Component {
         this.setState({address:event.target.value});
     }
 
+    changeTissueTypeHandler = (event) => {
+        this.setState({tissueType:event.target.value});
+    }
+
+    changeTissueNumberHandler = (event) => {
+        this.setState({tissueNumber:event.target.value});
+    }
+
+    changeBirthdateHandler = (event) => {
+        this.setState({birthdate:event.target.value});
+    }
+
+    changeBloodTypeHandler = (event) => {
+        this.setState({bloodType:event.target.value});
+    }
+
+    changeSexHandler = (event) => {
+        this.setState({sex:event.target.value});
+    }
+
+    checkTelephoneNumber = (value) => {
+        // (90) 532 342 33 27
+        var isValid = /^[(]?[0-9]{2}[)][0-9]{10}$/im.test(value);
+        return isValid;
+    }
+
+    checkTcNumber = (value) => {
+        value = value.toString();
+        var isEleven = /^[0-9]{11}$/.test(value);
+        var totalX = 0;
+        for (var i = 0; i < 10; i++) {
+          totalX += Number(value.substr(i, 1));
+        }
+        var isRuleX = totalX % 10 == value.substr(10,1);
+        var totalY1 = 0;
+        var totalY2 = 0;
+        for (var i = 0; i < 10; i+=2) {
+          totalY1 += Number(value.substr(i, 1));
+        }
+        for (var i = 1; i < 10; i+=2) {
+          totalY2 += Number(value.substr(i, 1));
+        }
+        var isRuleY = ((totalY1 * 7) - totalY2) % 10 == value.substr(9,0);
+        return isEleven && isRuleX && isRuleY;
+    }
+
+    getDistrict=(selected) => {
+        DonorService.getDistrict(selected)
+        .then(res => {
+            this.setState({donor_DistrictList: res.data});
+        })
+        .catch(ex => {
+            console.log(ex); 
+        });
+    }
+
     componentDidMount(){
+
+        DonorService.getCities()
+        .then(res => {
+            this.setState({donor_CityList: res.data});
+        })
+        .catch(ex => {
+            console.log(ex);
+        });
+
+        DonorService.getBloodTypeList()
+        .then(res => {
+            this.setState({donor_BloodTypeList: res.data});
+        })
+        .catch(ex => {
+            console.log(ex);
+        });
+
+        DonorService.getSexList()
+        .then(res => {
+            this.setState({donor_SexList: res.data});
+        })
+        .catch(ex => {
+            console.log(ex);
+        });
+
         if(this.state.id === "_add"){
             return;
         }else{
@@ -68,7 +171,13 @@ class CreateDonorComponent extends Component {
                     surname: donor.surname,
                     telephone: donor.telephone,
                     address: donor.address, 
-                    bloodTestPdfFile: donor.bloodTestPdfFile,
+                    addressCity: [donor.addressCity],
+                    addressDistrict : [donor.addressDistrict],
+                    tissueNumber: donor.tissueNumber,
+                    tissueType: donor.tissueType,
+                    bloodType:[donor.bloodType],
+                    sex: [donor.sex],
+                    birthdate: donor.birthdate,
                 });
                 console.log('donor: ' + JSON.stringify(donor));
             }).catch(ex => {
@@ -86,33 +195,57 @@ class CreateDonorComponent extends Component {
         if(this.state.surname === ""){
             errors.push("surname");
         }
-        if(this.state.citizenshipNumber === ""){
+        if(this.state.citizenshipNumber === ""
+         || !this.checkTcNumber(this.state.citizenshipNumber)){
             errors.push("citizenshipNumber");
         }
-        if(this.state.telephone === ""){
+        if(this.state.telephone === ""
+        || !this.checkTelephoneNumber(this.state.telephone)){
             errors.push("telephone");
         }
         if(this.state.address === ""){
             errors.push("address");
         }
+        if(this.state.addressCity[0] === undefined){
+            errors.push("addressCity");
+        }
+        if(this.state.addressDistrict[0] === undefined){
+            errors.push("addressDistrict");
+        }
+        if(this.state.bloodType[0] === undefined){
+            errors.push("bloodType");
+        }
+        if(this.state.sex[0] === undefined){
+            errors.push("sex");
+        }
+        if(this.state.tissueType === ""){
+            errors.push("tissueType");
+        }
+        if(this.state.tissueNumber === ""){
+            errors.push("tissueNumber");
+        }
        this.setState({errors: errors});
        if(errors.length > 0){
            return false;
        }
+       
 
         let idParam = undefined;
         if(this.state.id !== "_add"){
             idParam = this.state.id;
         }
         let donor = {id: idParam, code: this.state.code, citizenshipNumber: this.state.citizenshipNumber,  name: this.state.name, 
-            surname: this.state.surname, address: this.state.address, telephone: this.state.telephone, deleted: this.state.deleted };
-        console.log('donor: ' + JSON.stringify(donor));
+            surname: this.state.surname, address: this.state.address, addressCity: this.state.addressCity[0], 
+            addressDistrict: this.state.addressDistrict[0], telephone: this.state.telephone,
+            sex: this.state.sex[0], birthdate: this.state.birthdate, bloodType: this.state.bloodType[0],
+            tissueType: this.state.tissueType, tissueNumber:this.state.tissueNumber, deleted: this.state.deleted };
+            console.log('donor: ' + JSON.stringify(donor));
         if(this.state.id === "_add"){ // create user
             DonorService.createDonor(donor).then(res => { 
                 console.log(res); 
                 this.props.history.push('/donors'); 
                 }).catch(ex => {
-                    console.error(ex);
+                    alert(ex);
                 });
         }else{     // TODO: alert basarili
             DonorService.updateDonor(this.state.id, donor).then(res => { 
@@ -161,6 +294,9 @@ class CreateDonorComponent extends Component {
     }
 
     render() {
+        const {
+            multiple
+          } = this.state;
         return (
             <div>
             <div className="container">
@@ -206,6 +342,104 @@ class CreateDonorComponent extends Component {
                                 </div>
                             </div>
                             <div className="form-group">
+                                <label>Doku Adedi:</label>
+                                <input placeholder="2" name="tissueNumber" 
+                                className={this.hasError("tissueNumber") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
+                                value={this.state.tissueNumber} onChange={this.changeTissueNumberHandler}
+                                disabled={!this.state.isEditable} />
+                                <div className={this.hasError("tissueNumber") ? "inline-errormsg" : "hidden"}>
+                                   Doku adedi girilmemiş.
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label>Doku Türü:</label>
+                                <input type="tel" placeholder="2" name="tissueType" 
+                                className={this.hasError("tissueType") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
+                                value={this.state.tissueType} onChange={this.changeTissueTypeHandler}
+                                disabled={!this.state.isEditable} />
+                                <div className={this.hasError("tissueType") ? "inline-errormsg" : "hidden"}>
+                                   Doku türü girilmemiş.
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label>Doğum Tarihi:</label>
+                                <input type="date" placeholder="" name="birthdate" 
+                                className={this.hasError("birthdate") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
+                                value={this.state.birthdate} onChange={this.changeBirthdateHandler}
+                                disabled={!this.state.isEditable} />
+                                <div className={this.hasError("birthdate") ? "inline-errormsg" : "hidden"}>
+                                   Doğum tarihi girilmemiş
+                                </div>
+                            </div>
+                            <div className="form-group">
+                            <label>
+                            Kan Grubu:{" "}
+                            {this.state.bloodType[0] === undefined
+                                ? "Seçilmedi"
+                                : this.state.bloodType[0].name}
+                            </label>
+                            <div>
+                            <Typeahead
+                                multiple={multiple}
+                                id="select-bloodType"
+                                onChange={(selected) => {
+                                this.setState({ bloodType: selected });
+                                }}
+                                labelKey="name"
+                                options={this.state.donor_BloodTypeList}
+                                placeholder="Kan Grubunu Seç..."
+                                selected={this.state.bloodType}
+                                disabled={!this.state.isEditable}
+                            />
+                            <div
+                                className={
+                                this.hasError("bloodType")
+                                    ? "inline-errormsg"
+                                    : "hidden"
+                                }
+                            >
+                                Kan Grubunu girmelisiniz.
+                            </div>
+                            </div>
+                            </div>
+                            <div className="form-group">
+                                <label>
+                                Cinsiyet{" "}
+                                {this.state.sex[0] === undefined
+                                    ? "Seçilmedi"
+                                    : this.state.sex[0].name}
+                                </label>
+                                <div>
+                                <Typeahead
+                                    multiple={multiple}
+                                    id="select-sex"
+                                    onChange={(selected) => {
+                                    this.setState({ sex: selected });
+                                    }}
+                                    labelKey="name"
+                                    options={this.state.donor_SexList}
+                                    placeholder="Cinsityeti Seç..."
+                                    selected={this.state.sex}
+                                    disabled={!this.state.isEditable}
+                                />
+                                <div
+                                    className={
+                                    this.hasError("sex")
+                                        ? "inline-errormsg"
+                                        : "hidden"
+                                    }
+                                >
+                                    Cinsiyeti girmelisiniz.
+                                </div>
+                                </div>
+                            </div>
+                            <div className="form-group">
                                 <label>Telefon:</label>
                                 <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="(90)5321234567" name="telephone" 
                                 className={this.hasError("name") 
@@ -227,6 +461,71 @@ class CreateDonorComponent extends Component {
                                 disabled={!this.state.isEditable} />
                                 <div className={this.hasError("address") ? "inline-errormsg" : "hidden"}>
                                        Adres girmelisiniz.
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label>
+                                Şehir Seçiniz:{" "}
+                                {this.state.addressCity[0] === undefined
+                                    ? "Seçilmedi"
+                                    : this.state.addressCity[0].name}
+                                </label>
+                                <div>
+                                <Typeahead
+
+                                  
+                                    multiple={multiple}
+                                    id="select-addressCity"
+                                    onChange={(selected) => {
+                                    this.getDistrict(selected);
+                                    this.setState({ addressCity: selected });
+                                    }}
+                                    labelKey="name"
+                                    options={this.state.donor_CityList}
+                                    placeholder="Şehir Seçininz..."
+                                    selected={this.state.addressCity}
+                                    disabled={!this.state.isEditable}
+                                />
+                                <div
+                                    className={
+                                    this.hasError("addressCity")
+                                        ? "inline-errormsg"
+                                        : "hidden"
+                                    }
+                                >
+                                    Şehir seçmelisiniz.
+                                </div>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label>
+                                İlçe{" "}
+                                {this.state.addressDistrict[0] === undefined
+                                    ? "Seçilmedi"
+                                    : this.state.addressDistrict[0].name}
+                                </label>
+                                <div>
+                                <Typeahead
+                                    multiple={multiple}
+                                    id="select-addressDistrict"
+                                    onChange={(selected) => {
+                                    this.setState({ addressDistrict: selected });
+                                    }}
+                                    labelKey="name"
+                                    options={this.state.donor_DistrictList}
+                                    placeholder="İlçe Seçiniz..."
+                                    selected={this.state.addressDistrict}
+                                    disabled={!this.state.isEditable}
+                                />
+                                <div
+                                    className={
+                                    this.hasError("addressDistrict")
+                                        ? "inline-errormsg"
+                                        : "hidden"
+                                    }
+                                >
+                                    İlçe girmelisiniz.
+                                </div>
                                 </div>
                             </div>
                             <button className="btn btn-success" onClick={this.saveDonor.bind(this)} disabled={!this.state.isEditable}>{this.getButtonText()}</button>

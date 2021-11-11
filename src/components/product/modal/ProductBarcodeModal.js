@@ -15,8 +15,7 @@ class ProductBarcodeModal extends React.Component {
       fade: true,
       isEditable: props.isEditable,
       component: props.component,
-      productId: props.productId,
-      pdfFile: null,
+      product: props.product,
       
     };
     this.toggle = this.toggle.bind(this);
@@ -25,6 +24,7 @@ class ProductBarcodeModal extends React.Component {
   }
 
   componentDidMount(){
+    this.state.pdfFile = this.state.product.files[0].data; // TODO: 0 silinmelidir.
   }
 
   toggle() {    

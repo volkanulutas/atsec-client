@@ -22,10 +22,7 @@ const ViewBarcodePdfComponent = props => {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   useEffect(() => {
-    let st = store.getState();
-   
-    setPdfFile(st.barcodePdfView.value);
-
+    console.log("PDF FİLE: " + props.pdfFile)
   });
 
 

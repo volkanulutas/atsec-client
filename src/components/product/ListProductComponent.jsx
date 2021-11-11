@@ -137,7 +137,7 @@ class ListProductComponent extends Component {
 
   componentDidMount() {
     // TODO: 
-    // uthService.checkSession();
+    // authService.checkSession();
 
     ProductService.getAllPreprocessingProducts()
       .then((res) => {
@@ -178,7 +178,7 @@ class ListProductComponent extends Component {
           productId={row.id}
           class="vlu-left-margin"
           initialModalState={false}
-          productId={row.id}
+          product={row}
           isEditable={true}
         />
         </div>
@@ -629,7 +629,7 @@ class ListProductComponent extends Component {
     };
     return (
       <div className="container">
-        <div className="col-sm-12 btn btn-info">Ürün Listesi</div>
+        <div className="col-sm-12 btn btn-info">Ürün Listesi - Ön İşlem</div>
         <div>
           <ToolkitProvider
             keyField="id"

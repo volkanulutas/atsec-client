@@ -38,12 +38,6 @@ const allNavList = {
           icon: "Home",
         },
         {
-          name: "Ham Ürünler2",
-          url: "/rawproducts2/",
-          permission: "RAWPRODUCT_PAGE_PERMISSION2",
-          icon: "Home",
-        },
-        {
           name: "Ham Ürün Red Arşivi",
           url: "/rejectarchives/",
           permission: "RAWPRODUCTREJECT_PAGE_PERMISSION",  

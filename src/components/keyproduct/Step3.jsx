@@ -7,8 +7,8 @@ import { FormGroup } from "reactstrap";
 import ViewModel from '../util/modal/ViewModel';
 import {connect} from 'react-redux';
 
-import { addPdf_Confirmation, addPdf_Transfer, addPdf_Transportation, addPdf_Extra} from '../../actions';
-import { ADDPDF_CONFIRMATION, ADDPDF_TRANSFER, ADDPDF_TRANSPORTATION, ADDPDF_EXTRA } from '../../constants';
+import { addPdf_Confirmation, addPdf_Transfer, addPdf_Extra} from '../../actions';
+import { ADDPDF_CONFIRMATION, ADDPDF_TRANSFER, ADDPDF_EXTRA } from '../../constants';
 import store from '../../store';
 
 import RawProductService from '../../services/RawProductService';
@@ -21,22 +21,17 @@ const Step3 = props => {
   const [pdfFile_Transfer, setPdfFile_Transfer]=useState(null);
   const [pdfFileError_Transfer, setPdfFileError_Transfer]=useState('');
 
-  const [pdfFile_Transportation, setPdfFile_Transportation]=useState(null);
-  const [pdfFileError_Transportation, setPdfFileError_Transportation]=useState('');
-
   const [pdfFile_Extra, setPdfFile_Extra]=useState(null);
   const [pdfFileError_Extra, setPdfFileError_Extra]=useState('');
 
 
   const [progressConfirmation, setProgressConfirmation,]=useState(null);
   const [progressTransfer, setProgressTransfer]=useState(null);
-  const [progressTransportation, setProgressTransportation,]=useState(null);
   const [progressExtra, setProgressExtra]=useState(null);
 
   // for submit event
   const [viewPdf_Confirmation, setViewPdf_Confirmation]=useState(null);
   const [viewPdf_Transfer, setViewPdf_Transfer]=useState(null);
-  const [viewPdf_Transportation, setViewPdf_Transportation]=useState(null);
   const [viewPdf_Extra, setViewPdf_Extra]=useState(null);
 
   useEffect(() => {
@@ -98,30 +93,6 @@ const Step3 = props => {
     }
   }
 
-  const handlePdfFileChange_Transportation=(e)=>{
-    let selectedFile=e.target.files[0];
-    if(selectedFile){
-      if(selectedFile&&fileType.includes(selectedFile.type)){
-        let reader = new FileReader();
-            reader.readAsDataURL(selectedFile);
-            reader.onloadend = (e) =>{
-              setPdfFile_Transportation(e.target.result);
-              setPdfFileError_Transportation('');
-
-              props.addPdf_Transportation(e.target.result);
-            }
-      }
-      else{
-        setPdfFile_Transportation(null);
-        props.addPdf_Transportation(null);
-        setPdfFileError_Transportation('Lütfen PDF dosyasını seçiniz.');
-      }
-    }
-    else{
-      console.log('Dosya Seç:');
-    }
-  }
-
   const handlePdfFileChange_Extra=(e)=>{
     let selectedFile=e.target.files[0];
     if(selectedFile){
@@ -139,6 +110,33 @@ const Step3 = props => {
         setPdfFile_Extra(null);
         props.addPdf_Extra(null);
         setPdfFileError_Extra('Lütfen PDF dosyasını seçiniz.');
+      }
+    }
+    else{
+      console.log('Dosya Seç:');
+    }
+  }
+
+  
+
+
+  const handlePdfFileSubmit_Transfer=(e)=>{
+    let selectedFile=e.target.files[0];
+    if(selectedFile){
+      if(selectedFile&&fileType.includes(selectedFile.type)){
+        let reader = new FileReader();
+            reader.readAsDataURL(selectedFile);
+            reader.onloadend = (e) =>{
+              setPdfFile_Transfer(e.target.result);
+              setPdfFileError_Transfer('');
+
+              props.addPdf_Transfer(e.target.result);
+            }
+      }
+      else{
+        setPdfFile_Transfer(null);
+        props.addPdf_Transfer(null);
+        setPdfFileError_Transfer('Lütfen PDF dosyasını seçiniz.');
       }
     }
     else{
@@ -164,52 +162,6 @@ const Step3 = props => {
     );
 
   }
-
-
-  // form submit
-  const handlePdfFileSubmit_Transportation=(e)=>{
-    e.preventDefault();
-    if(pdfFile_Transportation!==null){
-      setViewPdf_Transportation(pdfFile_Transportation);
-
-    let st = store.getState();  
-    let currentRawProductId = st.currentRawProductId;
-      
-    RawProductService.upload(
-      pdfFile_Transportation,
-      "RAW_TRANSFER_FILES",
-      currentRawProductId,
-      (event) => {
-        setProgressTransfer(Math.round((100 * event.loaded) / event.total));
-      }
-    );
-    }
-    else{
-      setViewPdf_Transportation(null);
-    }
-  }
-
-    // form submit
-    const handlePdfFileSubmit_Transfer=(e)=>{
-      e.preventDefault();
-      if(pdfFile_Transfer!==null){
-        setViewPdf_Transfer(pdfFileError_Transfer);
-        let st = store.getState();  
-        let currentRawProductId = st.currentRawProductId;
-        
-      RawProductService.upload(
-          pdfFile_Transportation,
-          "RAW_TRANSPORTATION_FILES",
-          currentRawProductId,
-          (event) => {
-            setProgressTransportation( Math.round((100 * event.loaded) / event.total));
-          }
-        );
-      }
-      else{
-        setViewPdf_Transfer(null);
-      }
-    }
     // form submit
     const handlePdfFileSubmit_Extra=(e)=>{
       e.preventDefault();
@@ -279,28 +231,6 @@ const Step3 = props => {
       </form>
 
       <form className='form-group' >
-        <label>Taşıma Formu:</label>
-        <input type="file" className='form-control'
-          required onChange={handlePdfFileChange_Transportation}
-        />
-        {pdfFileError_Transportation&&<div className='error-msg'>{pdfFileError_Transportation}</div>}
-        <br></br>
-        <button onClick={handlePdfFileSubmit_Transportation} className='btn btn-success btn-lg'>
-          Yükle
-        </button>
-
-        <ViewModel
-          class="vlu-left-margin"
-          initialModalState={false}
-          component={"ViewPdfComponent"}
-          callback={props.viewPdf_Transportation}
-          isEditable ={props.isEditable}
-          viewPdf={viewPdf_Transportation}
-          viewPdfType={ADDPDF_TRANSPORTATION}
-        />
-      </form>
-
-      <form className='form-group' >
         <label>Ekstra Form:</label>
         <input type="file" className='form-control'
           required onChange={handlePdfFileChange_Extra}
@@ -321,6 +251,45 @@ const Step3 = props => {
           viewPdfType={ADDPDF_EXTRA}
         />
       </form>
+
+      <div className="form-group">
+        <label>İmza Sahibi</label>
+         <input placeholder="" name="signer" 
+          className={props.hasError("signer") 
+          ? "form-control is-invalid" 
+          : "form-control"}
+          value={props.doctorName} onChange={props.changeSignerHandler}
+          disabled={!props.isEditable} />
+          <div className={props.hasError("signer") ? "inline-errormsg" : "hidden"}>
+           İmza Sahibini girmelisiniz.
+      </div>
+      </div>
+
+      <div className="form-group">
+            <label>İmza Tarihi ve Saatin</label>
+            <input
+              type="datetime-local"
+              id="signDate"
+              name="signDate"
+              className={
+                props.hasError("signDate")
+                  ? "form-control is-invalid"
+                  : "form-control"
+              }
+              value={props.signDate}
+              onChange={props.changeSignDateHandler}
+              disabled={!props.isEditable}
+            />
+            <div
+              className={
+                props.hasError("signDate")
+                  ? "inline-errormsg"
+                  : "hidden"
+              }
+            >
+              İmza Tarihini girmelisiniz.
+            </div>
+          </div>
     </FormGroup>
     </>
   )
@@ -331,11 +300,10 @@ function mapStateToProps(state){
   return {
     pdfFile_Confirmation: state.pdfFile_Confirmation,
     pdfFile_Transfer: state.pdfFile_Transfer,
-    pdfFile_Transportation: state.pdfFile_Transportation,
     pdfFile_Extra: state.pdfFile_Extra,
   }
 }
 
 export default connect(mapStateToProps, 
-  {addPdf_Confirmation, addPdf_Transfer, addPdf_Transportation, addPdf_Extra})
+  {addPdf_Confirmation, addPdf_Transfer, addPdf_Extra})
   (Step3);

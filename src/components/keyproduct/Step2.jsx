@@ -75,33 +75,6 @@ const Step2 = props => {
             </div>
           </div>
         
-
-          <div className="form-group">
-            <label>Doku Çıkarım Zamanı (Saat ve Tarih):</label>
-            <input
-              type="datetime-local"
-              id="issueTissueDate"
-              name="issueTissueDate"
-              className={
-                props.hasError("issueTissueDate")
-                  ? "form-control is-invalid"
-                  : "form-control"
-              }
-              value={props.issueTissueDate}
-              onChange={props.changeIssueTissueDateHandler}
-              disabled={!props.isEditable}
-            />
-            <div
-              className={
-                props.hasError("issueTissueDate")
-                  ? "inline-errormsg"
-                  : "hidden"
-              }
-            >
-              Doku Çıkarım Zamanını girmelisiniz.
-            </div>
-          </div>
-
           <div className="form-group">
             <label>Ek Bilgi:</label>
             <input

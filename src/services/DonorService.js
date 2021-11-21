@@ -13,7 +13,6 @@ class DonorService {
   }
 
   createDonor(donor) {
-    alert(API_BASE_URL + API_URL_DONOR );
     return axios.post(API_BASE_URL + API_URL_DONOR, donor, {headers: authHeader()});
   }
 

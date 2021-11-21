@@ -1,4 +1,4 @@
-import { ADDPDF_CONFIRMATION, ADDPDF_EXTRA, ADDPDF_TRANSFER, ADDPDF_TRANSPORTATION, BARCODE_PDF_VIEW, CURRENT_RAW_PRODUCT_ID } from '../constants';
+import { ADDPDF_CONFIRMATION, ADDPDF_EXTRA, ADDPDF_TRANSFER, BARCODE_PDF_VIEW, CURRENT_RAW_PRODUCT_ID } from '../constants';
 
 export const addPdf_BarcodePdfView = (value) => {
   const action = {
@@ -20,15 +20,6 @@ export const addPdf_Confirmation = (value) => {
 export const addPdf_Transfer= (value) => {
   const action = {
     type: ADDPDF_TRANSFER,
-    value,
-  }
-  console.log('action dan gelen ', action);
-  return action;
-}
-
-export const addPdf_Transportation = (value) => {
-  const action = {
-    type: ADDPDF_TRANSPORTATION,
     value,
   }
   console.log('action dan gelen ', action);

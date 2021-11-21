@@ -1,10 +1,8 @@
-import { ADDPDF_CONFIRMATION, ADDPDF_EXTRA, ADDPDF_TRANSFER, ADDPDF_TRANSPORTATION, CURRENT_RAW_PRODUCT_ID,
+import { ADDPDF_CONFIRMATION, ADDPDF_EXTRA, ADDPDF_TRANSFER, CURRENT_RAW_PRODUCT_ID,
      BARCODE_PDF_VIEW} from '../constants';
 
 const initialState = {
     pdfFile_Confirmation: null,
-    pdfFile_Transfer: null,
-    pdfFile_Transportation: null,
     pdfFile_Extra: null, 
     currentRawProductId: -1, 
     barcodePdfView: null,
@@ -30,10 +28,6 @@ const reducer = (state = initialState, action) => {
         case ADDPDF_TRANSFER:
             newState.pdfFile_Transfer = pdfFile(action);
             console.log('yeni addpdf_transfer eklendi',  pdfFile(action));
-            return newState;
-        case ADDPDF_TRANSPORTATION:
-            newState.pdfFile_Transportation = pdfFile(action);
-            console.log('yeni addpdf_transportation eklendi',  pdfFile(action));
             return newState;
         case ADDPDF_EXTRA:
             newState.pdfFile_Extra = pdfFile(action);

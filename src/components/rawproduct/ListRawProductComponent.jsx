@@ -118,8 +118,6 @@ class ListRawProductComponent extends Component {
     this.addRawProduct = this.addRawProduct.bind(this);
     this.updateRawProduct = this.updateRawProduct.bind(this);
     this.viewRawProduct = this.viewRawProduct.bind(this);
-    this.testBarcode = this.testBarcode.bind(this);
-    this.viewBarcode = this.viewBarcode.bind(this);
     this.onDocumentLoadSuccess = this.onDocumentLoadSuccess.bind(this);
   }
 
@@ -322,13 +320,6 @@ class ListRawProductComponent extends Component {
         console.error(ex);
       });
   };
-
-  viewBarcode() {
-    RawProductService.downloadRawProductBarcode();
-  }
-  testBarcode() {
-    // RawProductService.getRawProductBarcode();
-  }
   addRawProduct() {
     this.props.history.push("/add-rawproduct/add/_add");
   }
@@ -413,15 +404,6 @@ class ListRawProductComponent extends Component {
                 >
                   Ham Ürün Ekle
                 </button>
-
-                <button
-                  type="button"
-                  className="btn btn-primary addButton"
-                  onClick={this.viewBarcode}
-                >
-                  Barcode test
-                </button>
-
                 <hr />
                 <BootstrapTable
                   {...props.baseProps}

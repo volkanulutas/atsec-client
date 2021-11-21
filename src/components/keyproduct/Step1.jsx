@@ -85,6 +85,71 @@ const Step1 = props => {
       </div>
     </div>
 
+    <div className="form-group">
+        <label>Doku Tedarik Eden Doktor Bilgileri:</label>
+         <input placeholder="" name="doctorName" 
+          className={props.hasError("doctorName") 
+          ? "form-control is-invalid" 
+          : "form-control"}
+          value={props.doctorName} onChange={props.changeDoctorNameHandler}
+          disabled={!props.isEditable} />
+          <div className={props.hasError("doctorName") ? "inline-errormsg" : "hidden"}>
+           Doktor Adını girmelisiniz.
+      </div>
+      </div>
+
+      <div className="form-group">
+        <label>Karantina Koşulları</label>
+         <input placeholder="" name="quarantinaType" 
+          className={props.hasError("quarantinaType") 
+          ? "form-control is-invalid" 
+          : "form-control"}
+          value={props.quarantinaType} onChange={props.changeQuarantinaTypeHandler}
+          disabled={!props.isEditable} />
+          <div className={props.hasError("quarantinaType") ? "inline-errormsg" : "hidden"}>
+           Karantina Koşullarını Girmelisiniz.
+      </div>
+      </div>
+
+      <div className="form-group">
+        <label>Doku Alma Şekli</label>
+         <input placeholder="" name="tissueTakenType" 
+          className={props.hasError("tissueTakenType") 
+          ? "form-control is-invalid" 
+          : "form-control"}
+          value={props.tissueTakenType} onChange={props.changeTissueTakenTypeHandler}
+          disabled={!props.isEditable} />
+          <div className={props.hasError("tissueTakenType") ? "inline-errormsg" : "hidden"}>
+           Doku Alma Şeklini Girmelisiniz.
+      </div>
+      </div>
+
+
+      <div className="form-group">
+            <label>Doku Çıkarım Zamanı (Saat ve Tarih):</label>
+            <input
+              type="datetime-local"
+              id="issueTissueDate"
+              name="issueTissueDate"
+              className={
+                props.hasError("issueTissueDate")
+                  ? "form-control is-invalid"
+                  : "form-control"
+              }
+              value={props.issueTissueDate}
+              onChange={props.changeIssueTissueDateHandler}
+              disabled={!props.isEditable}
+            />
+            <div
+              className={
+                props.hasError("issueTissueDate")
+                  ? "inline-errormsg"
+                  : "hidden"
+              }
+            >
+              Doku Çıkarım Zamanını girmelisiniz.
+            </div>
+          </div>
 
 
     <div className="form-group">

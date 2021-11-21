@@ -47,6 +47,9 @@ class MasterRawProduct extends Component {
       donorInstitute: [], // Typeahead needs array.
       tissueType: [], // Typeahead needs array.
       location: [], // Typeahead needs array.
+      doctorName: "",
+      quarantinaType: "",
+      tissueTakenType: "",
       
       // Step 2
       statusName: [], // Typeahead needs array.
@@ -59,9 +62,6 @@ class MasterRawProduct extends Component {
         "Karantina",
         "Red",
         "Kabul",
-        "Atanmamış",
-        "Ön İşlem",
-        "Tıbbi Atık",
       ],
       product_LocationList: [],
       product_DonorList: [],
@@ -82,17 +82,14 @@ class MasterRawProduct extends Component {
       messageTransfer: "",
       transferFilesInfos: [],
 
-      selectedTransportationFiles: undefined,
-      currentTransportationFile: undefined,
-      progressTransportation: 0,
-      messageTransportation: "",
-      transportationFilesInfos: [],
-
       selectedExtraFiles: undefined,
       currentExtraFile: undefined,
       progressExtra: 0,
       messageExtra: "",
       extraFilesInfos: [],
+
+      signer:"",
+      signDate: "",
 
       errors: [],
     };
@@ -116,19 +113,22 @@ class MasterRawProduct extends Component {
     this.setDonorInstitute = this.setDonorInstitute.bind(this);
     this.setTissueType = this.setTissueType.bind(this);
     this.setLocation = this.setLocation.bind(this);
+    this.setDoctorName = this.setDoctorName.bind(this);
+    this.setQuarantinaType = this.setQuarantinaType.bind(this);
+    this.setTissueTakenType = this.setTissueTakenType.bind(this);
 
     this.setStatus = this.setStatus.bind(this);
 
     this.selectConfirmationFile = this.selectConfirmationFile.bind(this);
     this.selectTransferFile = this.selectTransferFile.bind(this);
-    this.selectTransportationFile = this.selectTransportationFile.bind(this);
     this.selectExtraFile = this.selectExtraFile.bind(this);
 
     this.uploadConfirmationFile = this.uploadConfirmationFile.bind(this);
     this.uploadTransferFile = this.uploadTransferFile.bind(this);
-    this.uploadTransportationFile = this.uploadTransportationFile.bind(this);
     this.uploadExtraFile = this.uploadExtraFile.bind(this);
 
+    this.changeSignerHandler = this.changeSignerHandler.bind(this);
+    this.changeSignDateHandler = this.changeSignDateHandler.bind(this);
 
     // Bind new functions for next and previous
     this._next = this._next.bind(this);
@@ -189,6 +189,11 @@ class MasterRawProduct extends Component {
           let tissueTypeTemp = [product.tissueType];
           let locationTemp = [product.location];
           let statusNameTemp = [product.statusName];
+          let doctorNameTemp = product.doctorName;
+          let quarantinaTypeTemp = product.quarantinaTypeTemp;
+          let tissueTakenTypeTemp = product.tissueTakenType;
+          let signerTemp = product.signer;
+          let signerDateTemp = product.signerDate;
 
           this.setState({
             id: idTemp,
@@ -196,8 +201,13 @@ class MasterRawProduct extends Component {
             donorInstitute: donorInstituteTemp,
             tissueType: tissueTypeTemp,
             location: locationTemp,
+            doctorName: doctorNameTemp,
+            quarantinaType: quarantinaTypeTemp,
+            tissueTakenType: tissueTakenTypeTemp,
             issueTissueDate: issueTissueDateStr,
             arrivalDate: arrivalDateStr,
+            signer: signerTemp,
+            signerDate: signerDateTemp,
             information: product.information,
             statusName: statusNameTemp,
             deleted: product.deleted,
@@ -215,6 +225,15 @@ class MasterRawProduct extends Component {
 
   changeArrivalDateHandler = (event) => {
     this.setState({ arrivalDate: event.target.value });
+  };
+
+
+  changeSignDateHandler = (event) => {
+    this.setState({ signDate: event.target.value });
+  };
+
+  changeSignerHandler = (event) => {
+    this.setState({ signer: event.target.value });
   };
 
   changeInformationHandler = (event) => {
@@ -237,6 +256,18 @@ class MasterRawProduct extends Component {
     this.setState({ location: data});
   }
 
+  setDoctorName(data) {
+    this.setState({ doctorName: data});
+  }
+
+  setQuarantinaType(data) {
+    this.setState({ quarantinaType: data});
+  }
+  
+  setTissueTakenType(data) {
+    this.setState({ tissueTakenType: data});
+  }
+
   setStatus(data) {
     this.setState({ statusName: data});
   }
@@ -253,7 +284,7 @@ class MasterRawProduct extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const { id, information, selectedConfirmationFiles, selectedTransferFiles,
-       selectedTransportationFiles, selectedExtraFiles } = this.state;
+       selectedExtraFiles } = this.state;
 
     var errors = [];
     /*if (selectedConfirmationFiles === undefined ) {
@@ -262,11 +293,14 @@ class MasterRawProduct extends Component {
     if(selectedTransferFiles === undefined) {
       errors.push("transferFile");
     }
-    if(selectedTransportationFiles === undefined ) {
-      errors.push("transportationFile");
-    }
     if(selectedExtraFiles === undefined) {
       errors.push("extraFile");
+    }
+    if (this.state.signDate === "") {
+        errors.push("arrivalDate");
+    }
+    if (this.state.signer === "") {
+        errors.push("arrivalDate");
     }
     this.setState({ errors: errors });
     if (errors.length > 0) {
@@ -316,7 +350,19 @@ class MasterRawProduct extends Component {
       if (this.state.location[0] === undefined) {
         errors.push("location");
       }
-      if (this.state.tissueType[0] === undefined) {
+      if (this.state.issueTissueDate === "") {
+        errors.push("issueTissueDate");
+      }
+      if (this.state.doctorName === undefined) {
+        errors.push("location");
+      }
+      if (this.state.tissueTakenType === undefined) {
+        errors.push("tissueTakenType");
+      }
+      if (this.state.quarantinaType === undefined) {
+        errors.push("quarantinaType");
+      }
+      if (this.state.tissue[0] === undefined) {
         errors.push("tissueType");
       }
       */
@@ -325,8 +371,6 @@ class MasterRawProduct extends Component {
       if (errors.length > 0) {
         return false;
       }
-
-      // TODO: burada kaldım
       
       if (this.state.id === "_add" ){
         this.state.id = null;
@@ -384,9 +428,6 @@ class MasterRawProduct extends Component {
       if (this.state.arrivalDate === "") {
         errors.push("arrivalDate");
       }
-      if (this.state.issueTissueDate === "") {
-        errors.push("issueTissueDate");
-      }
       this.setState({ errors: errors });
       if (errors.length > 0) {
         return false;
@@ -433,6 +474,11 @@ class MasterRawProduct extends Component {
         arrivalDate: this.convertDate(this.state.arrivalDate),
         issueTissueDate: this.convertDate(this.state.issueTissueDate),
         location: this.state.location[0],
+        doctorName: this.state.doctorName,
+        tissueTakenType: this.state.TissueTakenType ,
+        quarantinaType: this.state.quarantinaType,
+        signer: this.state.signer,
+        signDate: this.state.signDate,
         statusName: this.state.statusName[0],
         definition: this.state.definition,
         information: this.state.information,
@@ -557,9 +603,6 @@ class MasterRawProduct extends Component {
   uploadTransferFile(event) {
   }
 
-  uploadTransportationFile(event) {
-  }
-
   uploadExtraFile(event) {
   }
 
@@ -573,12 +616,6 @@ class MasterRawProduct extends Component {
   selectTransferFile(event) {
     this.setState({
       selectedTransferFiles: event.target.files,
-    });
-  }
-
-  selectTransportationFile(event) {
-    this.setState({
-      selectedTransportationFiles: event.target.files,
     });
   }
 
@@ -635,6 +672,9 @@ class MasterRawProduct extends Component {
                 setDonorInstitute = {this.setDonorInstitute}
                 setTissueType = {this.setTissueType}
                 setLocation = {this.setLocation}
+                setDoctorName = {this.setDoctorName}
+                setTissueTakenType = {this.setTissueTakenType}
+                setQuarantinaType = {this.setQuarantinaType}
 
                 id = {this.state.id}
                 isEditable = {this.state.isEditable}
@@ -707,13 +747,11 @@ class MasterRawProduct extends Component {
 
                 uploadConfirmationFile = {this.uploadConfirmationFile}
                 uploadTransferFile = {this.uploadTransferFile}
-                uploadTransportationFile = {this.uploadTransportationFile}
                 uploadExtraFile = {this.uploadExtraFile}
 
                 // methods
                 selectConfirmationFile = {this.selectConfirmationFile}
                 selectTransferFile = {this.selectTransferFile}
-                selectTransportationFile = {this.selectTransportationFile}
                 selectExtraFile = {this.state.selectExtraFile}
 
 
@@ -729,12 +767,6 @@ class MasterRawProduct extends Component {
                 progressTransfer = {this.state.progressTransfer}
                 messageTransfer = {this.state.messageTransfer}
                 transferFilesInfos = {this.state.transferFilesInfos}
-          
-                selectedTransportationFiles = {this.state.selectedTransportationFiles}
-                currentTransportationFile = {this.state.currentTransportationFile}
-                progressTransportation = {this.state.progressTransportation}
-                messageTransportation = {this.state.messageTransportation}
-                transportationFilesInfos = {this.state.transportationFilesInfos}
           
                 selectedExtraFiles = {this.state.selectedExtraFiles}
                 currentExtraFile = {this.state.currentExtraFile}

@@ -17,10 +17,12 @@ class RawProductService {
   }
 
   createRawProduct(product) {
+    alert("createRawProduct");
     return axios.post(API_BASE_URL + API_URL_RAWPRODUCT, product, {headers: authHeader()});
   }
 
   updateRawProduct(id, product) {
+    alert("updateRawProduct");
     return axios.put(API_BASE_URL + API_URL_RAWPRODUCT + id, product, {headers: authHeader()});
   }
 

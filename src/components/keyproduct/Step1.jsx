@@ -91,7 +91,7 @@ const Step1 = props => {
           className={props.hasError("doctorName") 
           ? "form-control is-invalid" 
           : "form-control"}
-          value={props.doctorName} onChange={props.changeDoctorNameHandler}
+          value={props.doctorName} onChange={props.setDoctorName}
           disabled={!props.isEditable} />
           <div className={props.hasError("doctorName") ? "inline-errormsg" : "hidden"}>
            Doktor Adını girmelisiniz.
@@ -104,7 +104,7 @@ const Step1 = props => {
           className={props.hasError("quarantinaType") 
           ? "form-control is-invalid" 
           : "form-control"}
-          value={props.quarantinaType} onChange={props.changeQuarantinaTypeHandler}
+          value={props.quarantinaType} onChange={props.setQuarantinaType}
           disabled={!props.isEditable} />
           <div className={props.hasError("quarantinaType") ? "inline-errormsg" : "hidden"}>
            Karantina Koşullarını Girmelisiniz.
@@ -125,10 +125,15 @@ const Step1 = props => {
       </div>
 
 
+
+      
+      
+
+
       <div className="form-group">
             <label>Doku Çıkarım Zamanı (Saat ve Tarih):</label>
             <input
-              type="datetime-local"
+              type="date"
               id="issueTissueDate"
               name="issueTissueDate"
               className={

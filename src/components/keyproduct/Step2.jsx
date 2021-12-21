@@ -52,11 +52,11 @@ const Step2 = props => {
           <div className="form-group">
             <label>Merkeze Geliş Zamanı (Tarih ve Saat):</label>
             <input
-              type="datetime-local"
+              type="date"
               id="arrivalDate"
               name="arrivalDate"
               className={
-                props.hasError("issueTissueDate")
+                props.hasError("arrivalDate")
                   ? "form-control is-invalid"
                   : "form-control"
               }

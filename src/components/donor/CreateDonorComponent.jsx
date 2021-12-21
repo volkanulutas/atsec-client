@@ -165,11 +165,13 @@ class CreateDonorComponent extends Component {
             DonorService.getDonorById(this.state.id)
             .then(res => {
                 let donor = res.data;
+                alert(JSON.stringify(donor))
                 this.setState({
                     code: donor.code,
                     name: donor.name,
                     surname: donor.surname,
                     telephone: donor.telephone,
+                    citizenshipNumber: donor.citizenshipNumber,
                     address: donor.address, 
                     addressCity: [donor.addressCity],
                     addressDistrict : [donor.addressDistrict],
@@ -343,7 +345,7 @@ class CreateDonorComponent extends Component {
                             </div>
                             <div className="form-group">
                                 <label>Doku Adedi:</label>
-                                <input placeholder="2" name="tissueNumber" 
+                                <input type="number" placeholder="2" name="tissueNumber" 
                                 className={this.hasError("tissueNumber") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
@@ -355,7 +357,7 @@ class CreateDonorComponent extends Component {
                             </div>
                             <div className="form-group">
                                 <label>Doku Türü:</label>
-                                <input type="tel" placeholder="2" name="tissueType" 
+                                <input type="tel" placeholder="Doku Türü" name="tissueType" 
                                 className={this.hasError("tissueType") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}

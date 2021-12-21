@@ -67,7 +67,6 @@ class CreateUserComponent extends Component {
 
     saveUser = (event) => {
         event.preventDefault();
-
         var errors = [];
         if(this.state.name === ""){
             errors.push("name");
@@ -113,12 +112,11 @@ class CreateUserComponent extends Component {
                 console.error(ex);
             });  
         }else{
-            /*UserService.updateUser(this.state.id, user).then(res => {
+            UserService.updateUser(this.state.id, user).then(res => {
                  this.props.history.push('/users');
             }).catch(ex=> {
                 console.error(ex);
-            });*/
-            UserService.updateUser(this.state.id, user);
+            })
         }   
 
         // If opened as modal

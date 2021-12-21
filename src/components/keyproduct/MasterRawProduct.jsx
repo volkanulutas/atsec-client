@@ -99,6 +99,8 @@ class MasterRawProduct extends Component {
 
     this.hasError =  this.hasError.bind(this);
 
+    this.saveRawProduct =  this.saveRawProduct.bind(this);
+    
 
     this.addCreateDonorInstituteComponent = this.addCreateDonorInstituteComponent.bind(this);
     this.addCreateDonorComponent = this.addCreateDonorComponent.bind(this);
@@ -135,6 +137,54 @@ class MasterRawProduct extends Component {
     this._prev = this._prev.bind(this);
   }
 
+  saveRawProduct(isUpdate){
+    let product = {
+      id:  this.state.id,
+      donor: this.state.donor[0],
+      donorInstitute: this.state.donorInstitute[0],
+      doctorName: this.state.doctorName,
+      quarantinaType: this.state.quarantinaType,
+      tissueTakenType: this.state.TissueTakenType,
+      issueTissueDate: this.convertDate(this.state.issueTissueDate),
+      tissueType: this.state.tissueType[0],
+      location: this.state.location[0],
+
+
+      arrivalDate: this.convertDate(this.state.arrivalDate),
+      statusName: this.state.statusName[0],
+      definition: this.state.definition,
+      information: this.state.information,
+      deleted: this.state.deleted,
+   
+      
+      signer: this.state.signer,
+      signDate: this.state.signDate,
+    };
+    alert("product: " + JSON.stringify(product));
+
+    if(isUpdate){
+      RawProductService.updateRawProduct(this.state.id, product)
+      .then((res) => {
+        alert("data" + JSON.stringify(res.data));
+        this.state.id = res.data.id;
+      })
+      .catch((ex) => {
+        alert("Hata update: "+ex);
+      }); 
+    }
+    else{
+      product.id =undefined;
+      RawProductService.createRawProduct(product)
+      .then((res) => {
+        alert("data" + JSON.stringify(res.data));
+        this.state.id = res.data.id;
+      })
+      .catch((ex) => {
+        alert("create" +ex);
+      }); 
+    }
+  }
+
   componentDidMount() {
     LocationService.getAllLocations()
       .then((res) => {
@@ -147,7 +197,6 @@ class MasterRawProduct extends Component {
     DonorService.getAllDonors()
       .then((res) => {
         this.setState({ product_DonorList: res.data });
-        console.log('customer: ' + JSON.stringify(this.state.product_DonorList));
       })
       .catch((ex) => {
         console.error(ex);
@@ -249,6 +298,7 @@ class MasterRawProduct extends Component {
   }
 
   setTissueType(data) {
+    console.log("tissueType:", data);
     this.setState({ tissueType: data});
   }
 
@@ -257,18 +307,21 @@ class MasterRawProduct extends Component {
   }
 
   setDoctorName(data) {
-    this.setState({ doctorName: data});
+    this.setState({ doctorName: data.target.value});
   }
 
   setQuarantinaType(data) {
-    this.setState({ quarantinaType: data});
+    this.setState({ quarantinaType: data.target.value});
   }
   
   setTissueTakenType(data) {
+    console.log("tissueTakenType:", data);
+
     this.setState({ tissueTakenType: data});
   }
 
   setStatus(data) {
+    console.log("statusName:", data);
     this.setState({ statusName: data});
   }
   
@@ -295,20 +348,20 @@ class MasterRawProduct extends Component {
     }
     if(selectedExtraFiles === undefined) {
       errors.push("extraFile");
-    }
+    }*/
     if (this.state.signDate === "") {
-        errors.push("arrivalDate");
+        errors.push("signDate");
     }
     if (this.state.signer === "") {
-        errors.push("arrivalDate");
+        errors.push("signer");
     }
     this.setState({ errors: errors });
     if (errors.length > 0) {
       return false;
     }
-    */
- 
-
+    // todoo update raw   
+    this.saveRawProduct(true); 
+    this.props.history.push('/rawproducts'); 
   };
 
   addCreateTissueTypeComponent(){
@@ -337,21 +390,18 @@ class MasterRawProduct extends Component {
       
       
       var errors = [];
-      /*
-      if(this.state.donor === undefined || this.state.donor === "") {
+      
+      if(this.state.donor[0] === undefined) {
         errors.push("donor");
       }
       if (this.state.donorInstitute[0] === undefined) {
         errors.push("donorInstitute");
       }
-      if (this.state.donor[0] === undefined) {
-        errors.push("donor");
-      }
       if (this.state.location[0] === undefined) {
         errors.push("location");
       }
       if (this.state.issueTissueDate === "") {
-        errors.push("issueTissueDate");
+         errors.push("issueTissueDate");
       }
       if (this.state.doctorName === undefined) {
         errors.push("location");
@@ -362,67 +412,28 @@ class MasterRawProduct extends Component {
       if (this.state.quarantinaType === undefined) {
         errors.push("quarantinaType");
       }
-      if (this.state.tissue[0] === undefined) {
+      if (this.state.tissueType[0] === undefined) {
         errors.push("tissueType");
       }
-      */
-  
+      
       this.setState({ errors: errors });
       if (errors.length > 0) {
         return false;
       }
-      
-      if (this.state.id === "_add" ){
-        this.state.id = null;
-      }
 
-      let product = {
-        id: this.state.id,
-        donor: this.state.donor[0],
-        donorInstitute: this.state.donorInstitute[0],
-        tissueType: this.state.tissueType[0],
-        location: this.state.location[0]
-      };
-
-      if (this.state.id === null) {
-        RawProductService.createRawProduct(product)
-          .then((res) => {
-            let product = res.data;
-            this.setState({
-              id: product.id,
-            });
-
-            this.props.addCurrentRawProductId(product.id);
-            let st = store.getState();  
-            console.log("store" + st);
-          })
-          .catch((ex) => {
-            console.error(ex);
-          });
-      } else {
-        RawProductService.updateRawProduct(this.state.id, product)
-          .then((res) => {
-            let product = res.data;
-            addCurrentRawProductId(product.id);
-            this.setState({
-              id: product.id,
-            });
-          })
-          .catch((ex) => {
-            console.error(ex);
-            return false;
-          });
-      }
+      // todoo update raw
+      this.saveRawProduct(false);
     }
 
     if(currentStep === 2){
       
       var errors = [];
-       /*
+       
       if(this.state.statusName[0] === undefined ) {
         errors.push("status");
       }
-      if(this.state.statusName[0] !== "Karantina" && this.state.statusName[0] !== undefined) {
+
+      if(this.state.statusName[0] !== "Kabul" ) {
         errors.push("statusNotCompatible");  
       }
       if (this.state.arrivalDate === "") {
@@ -432,66 +443,8 @@ class MasterRawProduct extends Component {
       if (errors.length > 0) {
         return false;
       }
-      */
-
-      RawProductService.getRawProductById(this.state.id)
-      .then((res) => {
-      
-        let product = res.data;
-        let issueTissueDateStr = this.convertString(product.issueTissueDate);
-        let arrivalDateStr = this.convertString(product.arrivalDate);
-        let idTemp = product.id;
-
-        let donorTemp = [product.donor];
-        let donorInstituteTemp = [product.donorInstitute];
-        let tissueTypeTemp = [product.tissueType];
-        let locationTemp = [product.location];
-        let statusNameTemp = [product.statusName];
-
-        this.setState({
-          id: idTemp,
-          donor: donorTemp,
-          donorInstitute: donorInstituteTemp,
-          tissueType: tissueTypeTemp,
-          location: locationTemp,
-          issueTissueDate: issueTissueDateStr,
-          arrivalDate: arrivalDateStr,
-          information: product.information,
-          statusName: statusNameTemp,
-          deleted: product.deleted,
-        });
-      })
-      .catch((ex) => {
-        console.error(ex);
-      });
-
-      let product = {
-        id:  this.state.id,
-        donor: this.state.donor[0],
-        donorInstitute: this.state.donorInstitute[0],
-        tissueType: this.state.tissueType[0],
-        issueTissueDate: this.state.issueTissueDate,
-        arrivalDate: this.convertDate(this.state.arrivalDate),
-        issueTissueDate: this.convertDate(this.state.issueTissueDate),
-        location: this.state.location[0],
-        doctorName: this.state.doctorName,
-        tissueTakenType: this.state.TissueTakenType ,
-        quarantinaType: this.state.quarantinaType,
-        signer: this.state.signer,
-        signDate: this.state.signDate,
-        statusName: this.state.statusName[0],
-        definition: this.state.definition,
-        information: this.state.information,
-        deleted: this.state.deleted,
-      };
-      console.log("product: " + JSON.stringify(product));
-      RawProductService.updateRawProduct(this.state.id, product)
-      .then((res) => {
-      })
-      .catch((ex) => {
-        console.error(ex);
-        return false;
-      });      
+     // todoo: updateraw 
+     this.saveRawProduct(true);  
     }
     // If the current step is 1 or 2, then add one on "next" button click
     currentStep = currentStep >= 2 ? 3 : currentStep + 1;
@@ -554,6 +507,8 @@ class MasterRawProduct extends Component {
   hasError(key) {
     return this.state.errors.indexOf(key) !== -1;
   }
+
+
 
   uploadConfirmationFile() {
     let currentConfirmationFile = this.state.selectedConfirmationFiles;
@@ -675,6 +630,7 @@ class MasterRawProduct extends Component {
                 setDoctorName = {this.setDoctorName}
                 setTissueTakenType = {this.setTissueTakenType}
                 setQuarantinaType = {this.setQuarantinaType}
+                issueTissueDate={this.state.issueTissueDate}
 
                 id = {this.state.id}
                 isEditable = {this.state.isEditable}
@@ -684,6 +640,7 @@ class MasterRawProduct extends Component {
 
                 product_DonorList={this.state.product_DonorList}
                 donor={this.state.donor}
+                changeIssueTissueDateHandler = {this.changeIssueTissueDateHandler}
 
                 product_DonorInstituteList={this.state.product_DonorInstituteList}
                 donorInstitute={this.state.donorInstitute}
@@ -718,7 +675,7 @@ class MasterRawProduct extends Component {
                 
                 changeArrivalDateHandler = {this.changeArrivalDateHandler}
                 changeInformationHandler = {this.changeInformationHandler}
-                changeIssueTissueDateHandler = {this.changeIssueTissueDateHandler}
+                
 
                 setStatus = {this.setStatus}
 
@@ -727,7 +684,7 @@ class MasterRawProduct extends Component {
                 statusName={this.state.statusName}
 
          
-                issueTissueDate={this.state.issueTissueDate}
+        
                 arrivalDate={this.state.arrivalDate}
                 information={this.state.information}
 
@@ -738,6 +695,8 @@ class MasterRawProduct extends Component {
                 currentStep={this.state.currentStep}
                 handleChange={this.handleChange}
           
+                signer={this.state.signer}
+                signDate={this.state.signDate}
 
                 id = {this.state.id}
                 isEditable = {this.state.isEditable}
@@ -748,6 +707,9 @@ class MasterRawProduct extends Component {
                 uploadConfirmationFile = {this.uploadConfirmationFile}
                 uploadTransferFile = {this.uploadTransferFile}
                 uploadExtraFile = {this.uploadExtraFile}
+
+                changeSignerHandler={this.changeSignerHandler}
+                changeSignDateHandler={this.changeSignDateHandler}
 
                 // methods
                 selectConfirmationFile = {this.selectConfirmationFile}

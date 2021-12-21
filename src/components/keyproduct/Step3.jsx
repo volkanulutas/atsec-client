@@ -258,7 +258,7 @@ const Step3 = props => {
           className={props.hasError("signer") 
           ? "form-control is-invalid" 
           : "form-control"}
-          value={props.doctorName} onChange={props.changeSignerHandler}
+          value={props.signer} onChange={props.changeSignerHandler}
           disabled={!props.isEditable} />
           <div className={props.hasError("signer") ? "inline-errormsg" : "hidden"}>
            İmza Sahibini girmelisiniz.
@@ -268,7 +268,7 @@ const Step3 = props => {
       <div className="form-group">
             <label>İmza Tarihi ve Saatin</label>
             <input
-              type="datetime-local"
+              type="date"
               id="signDate"
               name="signDate"
               className={

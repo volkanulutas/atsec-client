@@ -178,7 +178,7 @@ class CreateCustomerComponent extends Component {
                         <form>
                             <div className="form-group">
                                 <label>Müşteri ID:</label>
-                                <input placeholder="Müşteri ID" name="identityNumber" className="form-control"
+                                <input placeholder="HAC01" name="identityNumber" className="form-control"
                                 value={this.state.identityNumber} onChange={this.changeIdentityNumberHandler}
                                 disabled={!this.state.isEditable} />
                                 <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
@@ -200,7 +200,7 @@ class CreateCustomerComponent extends Component {
                                 <input placeholder="Açıklama" name="definition" className="form-control"
                                 value={this.state.definition} onChange={this.changeDefinitionHandler}
                                 disabled={!this.state.isEditable} />
-                                <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
+                                <div className={this.hasError("definition") ? "inline-errormsg" : "hidden"}>
                                     Açıklamayı girmelisiniz.
                                 </div>
                             </div>
@@ -210,7 +210,7 @@ class CreateCustomerComponent extends Component {
                                 <input placeholder="Ela" name="name" className="form-control"
                                 value={this.state.name} onChange={this.changeNameHandler}
                                 disabled={!this.state.isEditable} />
-                                <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
+                                <div className={this.hasError("name") ? "inline-errormsg" : "hidden"}>
                                     İsmi girmelisiniz.
                                 </div>
                             </div>
@@ -220,7 +220,7 @@ class CreateCustomerComponent extends Component {
                                 <input placeholder="Adres" name="address" className="form-control"
                                 value={this.state.address} onChange={this.changeAddressHandler}
                                 disabled={!this.state.isEditable} />
-                                <div className={this.hasError("identityNumber") ? "inline-errormsg" : "hidden"}>
+                                <div className={this.hasError("address") ? "inline-errormsg" : "hidden"}>
                                     Adresi girmelisiniz.
                                 </div>
                             </div>

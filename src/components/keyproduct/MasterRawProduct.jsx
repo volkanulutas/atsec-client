@@ -48,7 +48,6 @@ class MasterRawProduct extends Component {
       tissueType: [], // Typeahead needs array.
       location: [], // Typeahead needs array.
       doctorName: "",
-      quarantinaType: "",
       tissueTakenType: "",
       
       // Step 2
@@ -59,7 +58,6 @@ class MasterRawProduct extends Component {
       deleted: false,
 
       product_StatusNameList: [
-        "Karantina",
         "Red",
         "Kabul",
       ],
@@ -116,7 +114,6 @@ class MasterRawProduct extends Component {
     this.setTissueType = this.setTissueType.bind(this);
     this.setLocation = this.setLocation.bind(this);
     this.setDoctorName = this.setDoctorName.bind(this);
-    this.setQuarantinaType = this.setQuarantinaType.bind(this);
     this.setTissueTakenType = this.setTissueTakenType.bind(this);
 
     this.setStatus = this.setStatus.bind(this);
@@ -143,7 +140,6 @@ class MasterRawProduct extends Component {
       donor: this.state.donor[0],
       donorInstitute: this.state.donorInstitute[0],
       doctorName: this.state.doctorName,
-      quarantinaType: this.state.quarantinaType,
       tissueTakenType: this.state.TissueTakenType,
       issueTissueDate: this.convertDate(this.state.issueTissueDate),
       tissueType: this.state.tissueType[0],
@@ -239,7 +235,6 @@ class MasterRawProduct extends Component {
           let locationTemp = [product.location];
           let statusNameTemp = [product.statusName];
           let doctorNameTemp = product.doctorName;
-          let quarantinaTypeTemp = product.quarantinaTypeTemp;
           let tissueTakenTypeTemp = product.tissueTakenType;
           let signerTemp = product.signer;
           let signerDateTemp = product.signerDate;
@@ -251,7 +246,6 @@ class MasterRawProduct extends Component {
             tissueType: tissueTypeTemp,
             location: locationTemp,
             doctorName: doctorNameTemp,
-            quarantinaType: quarantinaTypeTemp,
             tissueTakenType: tissueTakenTypeTemp,
             issueTissueDate: issueTissueDateStr,
             arrivalDate: arrivalDateStr,
@@ -308,10 +302,6 @@ class MasterRawProduct extends Component {
 
   setDoctorName(data) {
     this.setState({ doctorName: data.target.value});
-  }
-
-  setQuarantinaType(data) {
-    this.setState({ quarantinaType: data.target.value});
   }
   
   setTissueTakenType(data) {
@@ -403,17 +393,14 @@ class MasterRawProduct extends Component {
       if (this.state.issueTissueDate === "") {
          errors.push("issueTissueDate");
       }
-      if (this.state.doctorName === undefined) {
-        errors.push("location");
-      }
-      if (this.state.tissueTakenType === undefined) {
+      if (this.state.tissueTakenType === "") {
         errors.push("tissueTakenType");
-      }
-      if (this.state.quarantinaType === undefined) {
-        errors.push("quarantinaType");
       }
       if (this.state.tissueType[0] === undefined) {
         errors.push("tissueType");
+      }
+      if(this.state.doctorName === ""){
+        errors.push("doctorName")
       }
       
       this.setState({ errors: errors });
@@ -629,7 +616,6 @@ class MasterRawProduct extends Component {
                 setLocation = {this.setLocation}
                 setDoctorName = {this.setDoctorName}
                 setTissueTakenType = {this.setTissueTakenType}
-                setQuarantinaType = {this.setQuarantinaType}
                 issueTissueDate={this.state.issueTissueDate}
 
                 id = {this.state.id}

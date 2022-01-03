@@ -99,25 +99,12 @@ const Step1 = props => {
       </div>
 
       <div className="form-group">
-        <label>Karantina Koşulları</label>
-         <input placeholder="" name="quarantinaType" 
-          className={props.hasError("quarantinaType") 
-          ? "form-control is-invalid" 
-          : "form-control"}
-          value={props.quarantinaType} onChange={props.setQuarantinaType}
-          disabled={!props.isEditable} />
-          <div className={props.hasError("quarantinaType") ? "inline-errormsg" : "hidden"}>
-           Karantina Koşullarını Girmelisiniz.
-      </div>
-      </div>
-
-      <div className="form-group">
         <label>Doku Alma Şekli</label>
          <input placeholder="" name="tissueTakenType" 
           className={props.hasError("tissueTakenType") 
           ? "form-control is-invalid" 
           : "form-control"}
-          value={props.tissueTakenType} onChange={props.changeTissueTakenTypeHandler}
+          value={props.tissueTakenType} onChange={props.setTissueTakenType}
           disabled={!props.isEditable} />
           <div className={props.hasError("tissueTakenType") ? "inline-errormsg" : "hidden"}>
            Doku Alma Şeklini Girmelisiniz.

@@ -32,6 +32,13 @@ const allNavList = {
       permission: "RAWPRODUCT_MENU_PERMISSION",
       children: [
         {
+          name: "Donör",
+          url: "/donors/",
+          permission: "DONOR_PAGE_PERMISSION",
+          icon: "Home",
+        },
+        {
+          
           name: "Ham Ürünler",
           url: "/rawproducts/",
           permission: "RAWPRODUCT_PAGE_PERMISSION",
@@ -41,12 +48,6 @@ const allNavList = {
           name: "Ham Ürün Red Arşivi",
           url: "/rejectarchives/",
           permission: "RAWPRODUCTREJECT_PAGE_PERMISSION",  
-          icon: "Home",
-        },
-        {
-          name: "Donör",
-          url: "/donors/",
-          permission: "DONOR_PAGE_PERMISSION",
           icon: "Home",
         },
       ],

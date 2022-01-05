@@ -170,7 +170,7 @@ class ListProductComponent extends Component {
           <ProductPreprocessingModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
-            productId={row.id}
+            row={row}
             callback_accept={this.performPreProcessingState_accept}
             callback_reject={this.performPreProcessingState_reject}
           />
@@ -529,6 +529,8 @@ class ListProductComponent extends Component {
   performFreezingState_reject(row, data) {}
 
   performPreProcessingState_accept(row, data) {
+
+    alert(row);
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;

@@ -10,6 +10,7 @@ class ProductPreprocessingState extends Component {
     this.state = {
       multiple: false,
       data: props.data,
+      row: props.row,
       callback_accept: props.callback_accept,
       callback_modalToggle: props.callback_modalToggle,
 
@@ -55,7 +56,7 @@ class ProductPreprocessingState extends Component {
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.selectedRadio);
+      this.state.callback_accept(this.state.row, this.state.selectedRadio);
     }
   }
 

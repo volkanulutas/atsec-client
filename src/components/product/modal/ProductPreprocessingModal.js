@@ -9,6 +9,7 @@ class ProductPreprocessingModal extends React.Component {
     this.state = {
       modal: props.initialModalState,
       data: props.data,
+      row: props.row,
       callback_accept: props.callback_accept,
       callback_reject: props.callback_reject,
       fade: true,
@@ -41,6 +42,7 @@ class ProductPreprocessingModal extends React.Component {
           <ModalBody>
             <ProductPreprocessingState
               errors={this.errors}
+              row={this.state.row}
               data={this.state.data}
               callback_modalToggle={this.toggle}
               callback_accept={this.state.callback_accept}

@@ -7,7 +7,7 @@ const AlertMessage = (props) => {
   const onDismiss = () => setVisible(false);
 
   const handleVisible = () => {
-    setVisible(true);
+    setVisible(true); 
     setTimeout(() => {
       setVisible(false);
     }, 2000);

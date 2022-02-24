@@ -7,6 +7,8 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import RoleService from "../../services/RoleService";
 import DeleteModal from "../util/modal/DeleteModal";
@@ -85,6 +87,8 @@ class ListRoleComponent extends Component {
       })
       .catch((ex) => {
         console.error(ex);
+        const notify = () => toast("Sunucu ile iletişime geçilemedi. Hata Kodu: LST-ROL-01");
+        notify();
       });
   }
 
@@ -108,11 +112,13 @@ class ListRoleComponent extends Component {
             this.setState({ roles: res.data });
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Sunucu ile iletişime geçilemedi. Hata Kodu: LST-ROL-02");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Rol silinemedi. Hata Kodu: LST-ROL-03");
+        notify();
       });
   };
 
@@ -166,6 +172,7 @@ class ListRoleComponent extends Component {
 
     return (
       <div className="container">
+          <ToastContainer />
         <div className="col-sm-12 btn btn-info">Rol Listesi</div>
         <div>
           <ToolkitProvider

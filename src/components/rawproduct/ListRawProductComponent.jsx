@@ -34,10 +34,22 @@ class ListRawProductComponent extends Component {
       columns: [
         {
           dataField: "donor.code",
-          text: "DONOR ID",
+          text: "DONÖR ID",
           align: "center",
           title: true,
           sort: true,
+        },
+        {
+          dataField: "donor.name",
+          text: "DONÖR ADI",
+          sort: true,
+          title: true,
+        },
+        {
+          dataField: "donor.surname",
+          text: "DONÖR SOYADI",
+          sort: true,
+          title: true,
         },
         {
           dataField: "tissueType.name",

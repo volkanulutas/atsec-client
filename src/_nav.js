@@ -58,7 +58,7 @@ const allNavList = {
       permission: "PRODUCT_MENU_PERMISSION",
       children: [
         {
-          name: "Ön İşlem",
+          name: "Üretim",
           url: "/products/",
           permission: "PRODUCT_PAGE_PERMISSION",
           icon: "Home",

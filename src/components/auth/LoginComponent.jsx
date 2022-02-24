@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import AuthService from "../../services/AuthService";
-
 import VersionService from "../../services/VersionService";
 
 class LoginComponent extends Component {
@@ -69,7 +70,8 @@ class LoginComponent extends Component {
         console.log(res.data);
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-LOG-01");
+        notify();
       });
   }
 
@@ -112,6 +114,7 @@ class LoginComponent extends Component {
     return (
       <div>
         <div className="container-fluid">
+         <ToastContainer />
           <div className="row ">
             <div className="col-sm-6 bg-dark text-white">
               <div className="row pt-5">

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ProductService from "../../../services/ProductService";
 
@@ -37,7 +39,8 @@ class ProductPreprocessingState extends Component {
         this.setState({ product_PreprocessingList: res.data });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-PRE-STT-01");
+        notify();
       });
   }
 
@@ -92,6 +95,7 @@ class ProductPreprocessingState extends Component {
     return (
       <div>
         <div className="container">
+         <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
               Ön İşlem...

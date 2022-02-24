@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ProductService from "../../../services/ProductService";
 import LocationService from "../../../services/LocationService";
@@ -39,7 +41,8 @@ class ProductWashingState extends Component {
       this.setState({ product_LocationList: res.data });
     })
     .catch((ex) => {
-      console.error(ex);
+      const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-PRD-WSH-02");
+      notify();
     });
 
     ProductService.getWashingTypeList()
@@ -47,7 +50,8 @@ class ProductWashingState extends Component {
         this.setState({ product_WashingList: res.data });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-PRD-WSH-01");
+        notify();
       });
   }
 
@@ -99,6 +103,7 @@ class ProductWashingState extends Component {
     return (
       <div>
       <div className="container">
+       <ToastContainer />
         <div className="row">
           <div className="card col-md-6 offset-md-3 offset-md-3">
             Delipidation...

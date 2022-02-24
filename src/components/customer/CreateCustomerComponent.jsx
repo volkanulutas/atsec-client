@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import CustomerService from '../../services/CustomerService';
 
 class CreateCustomerComponent extends Component {
@@ -99,7 +102,6 @@ class CreateCustomerComponent extends Component {
         if(this.state.telephone === ""){
             errors.push("telephone");
         }
-        /* TODO: Telephone formati */
 
        this.setState({errors: errors});
        if(errors.length > 0){
@@ -114,22 +116,27 @@ class CreateCustomerComponent extends Component {
         if(this.state.id !== "_add"){
             idParam = this.state.id;
         }
-        let customer = {id: idParam, identityNumber: this.state.identityNumber, customerType:  customerTypeParam,
+
+        let customer = {id: idParam, identityNumber: this.state.identityNumber, customerType: customerTypeParam,
         definition: this.state.definition, name: this.state.name, address: this.state.address, telephone: this.state.telephone, deleted: this.state.deleted };
-        console.log('customer: ' + JSON.stringify(customer));
+        
         if(this.state.id === "_add"){
             CustomerService.createCustomer(customer).then(res => {
-                    console.log(res); 
+                    const notify = () => toast("Müşteri başarılı bir şekilde kaydedildi.");
+                    notify();
                     this.props.history.push('/customers'); 
                 }).catch(ex=>{
-                    console.error(ex);
+                    const notify = () => toast("Müşteri kaydedilemedi. Hata Kodu: CRT-CST-01");
+                    notify();
             });
-        }else{     // TODO: alert basarili
+        }else{
             CustomerService.updateCustomer(this.state.id, customer).then(res => {
-                    console.log(res); 
+                const notify = () => toast("Müşteri güncellendi.");
+                notify();
                     this.props.history.push('/customers');
                 }).catch(ex => {
-                    console.error(ex);
+                    const notify = () => toast("Müşteri güncellenemedi. Hata Kodu: CRT-CST-02");
+                    notify();
             });
         }  
         // If opened as modal
@@ -171,6 +178,7 @@ class CreateCustomerComponent extends Component {
         return (
             <div>
             <div className="container">
+                <ToastContainer />
                 <div className="row">
                     <div className="card col-md-6 offset-md-3 offset-md-3"> 
                         {this.getTitle()}

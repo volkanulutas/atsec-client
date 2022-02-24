@@ -7,6 +7,8 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import DeleteModal from "../util/modal/DeleteModal";
 import LocationService from "../../services/LocationService";
@@ -102,11 +104,13 @@ class ListLocationComponent extends Component {
             this.setState({ locations: res.data });
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-LOC-01");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Konum silinemedi. Hata Kodu: LST-LOC-02");
+        notify();
       });
   };
 
@@ -160,6 +164,7 @@ class ListLocationComponent extends Component {
 
     return (
       <div className="container">
+          <ToastContainer />
         <div className="col-sm-12 btn btn-info">Lokasyon Listesi</div>
         <div>
           <ToolkitProvider

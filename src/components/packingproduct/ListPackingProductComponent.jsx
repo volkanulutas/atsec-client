@@ -7,6 +7,8 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ProductService from "../../services/ProductService";
 import DeleteModal from "../util/modal/DeleteModal";
@@ -122,7 +124,8 @@ class ListPackingProductComponent extends Component {
         this.setState({ products: res.data });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-PAC-01");
+        notify();
       });
   }
 
@@ -178,6 +181,7 @@ class ListPackingProductComponent extends Component {
     };
     return (
       <div className="container">
+          <ToastContainer />
         <div className="col-sm-12 btn btn-info">Ürün Listesi</div>
         <div>
           <ToolkitProvider

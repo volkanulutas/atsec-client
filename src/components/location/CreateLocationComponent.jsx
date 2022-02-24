@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import LocationService from "../../services/LocationService";
 
 class CreateLocationComponent extends Component {
@@ -69,24 +72,27 @@ class CreateLocationComponent extends Component {
       definition: this.state.definition,
       deleted: this.state.deleted,
     };
-    console.log("location: " + JSON.stringify(location));
     if (this.state.id === "_add") {
       LocationService.createLocation(location)
         .then((res) => {
-          console.log(res);
+          const notify = () => toast("Konum başarıyla kaydedildi.");
+          notify();
           this.props.history.push("/locations");
         })
         .catch((ex) => {
-          console.error(ex);
+          const notify = () => toast("Konum kaydedilemedi. Hata Kodu: CRT-LOC-01");
+          notify();
         });
     } else {
       LocationService.updateLocation(this.state.id, location)
         .then((res) => {
-          console.log(res);
+          const notify = () => toast("Konum başarıyla güncellendi.");
+          notify();
           this.props.history.push("/locations");
         })
         .catch((ex) => {
-          console.error(ex);
+          const notify = () => toast("Konum güncellenemedi. Hata Kodu: CRT-LOC-02");
+          notify();
         });
     }
 
@@ -132,6 +138,7 @@ class CreateLocationComponent extends Component {
     return (
       <div>
         <div className="container">
+         <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
               {this.getTitle()}

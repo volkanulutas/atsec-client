@@ -1,8 +1,8 @@
 import React, { Component } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import PermissionService from "../../services/PermissionService";
-
-import AlertMessage from "../../components/util/AlertMessage";
 
 class CreatePermissionComponent extends Component {
   constructor(props) {
@@ -78,24 +78,28 @@ class CreatePermissionComponent extends Component {
       definition: this.state.definition,
       deleted: this.state.deleted,
     };
-    console.log("permission: " + JSON.stringify(permission));
+
     if (this.state.id === "_add") {
       PermissionService.createPermission(permission)
         .then((res) => {
-          console.log(res);
+          const notify = () => toast("Yetki başarılı bir şekilde kaydedildi.");
+          notify();
           this.props.history.push("/permissions");
         })
         .catch((ex) => {
-          console.error(ex);
+          const notify = () => toast("Yetki güncellenemedi. Hata Kodu: CRT-PRM-01");
+          notify();
         });
     } else {
       PermissionService.updatePermission(this.state.id, permission)
         .then((res) => {
-          console.log(res);
           this.props.history.push("/permissions");
+          const notify = () => toast("Yetki başarılı bir şekilde güncellendi.");
+          notify();
         })
         .catch((ex) => {
-          console.error(ex);
+          const notify = () => toast("Yetki başarılı bir şekilde güncellendi. Hata Kodu: CRT-PRM-02");
+          notify();
         });
     }
     
@@ -138,12 +142,7 @@ class CreatePermissionComponent extends Component {
     return (
       <div>
         <div className="container">
-          <AlertMessage
-            show={this.state.showMessage}
-            color={"success"}
-            message={"Hello"}
-          />
-
+         <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
               {this.getTitle()}

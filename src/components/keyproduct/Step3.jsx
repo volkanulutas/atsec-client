@@ -266,7 +266,7 @@ const Step3 = props => {
       </div>
 
       <div className="form-group">
-            <label>İmza Tarihi ve Saatin</label>
+            <label>İmza Tarihi ve Saati:</label>
             <input
               type="date"
               id="signDate"

@@ -3,6 +3,8 @@ import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
 
 import { Typeahead } from "react-bootstrap-typeahead";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class ProductAfterWashingSterilationState extends Component {
   constructor(props) {
@@ -144,6 +146,7 @@ class ProductAfterWashingSterilationState extends Component {
     return (
       <div>
         <div className="container">
+          <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
               Kimyasal Sterilazsyon

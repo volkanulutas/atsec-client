@@ -7,6 +7,8 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import UserService from "../../services/UserService";
 import DeleteModal from "../util/modal/DeleteModal";
@@ -72,7 +74,7 @@ class ListUserComponent extends Component {
                   Güncelle
                 </button>
                 <DeleteModal
-                  permissionDelete={this.state.permissionDelete}
+                  /*permissionDelete={this.state.permissionDelete}*/
                   style={{ marginRight: "5px" }}
                   initialModalState={false}
                   data={row}
@@ -100,9 +102,9 @@ class ListUserComponent extends Component {
         this.setState({ users: res.data });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile iletişime geçilemedi. Hata Kodu: LST-USR-01");
+        notify();
       });
-     
   }
 
   add() {
@@ -125,11 +127,13 @@ class ListUserComponent extends Component {
             this.setState({ users: res.data });
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Sunucu ile iletişime geçilemedi. Hata Kodu: LST-USR-01");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Kullanıcı silinemedi. Hata Kodu: LST-USR-02");
+        notify();
       });
   };
 
@@ -183,6 +187,7 @@ class ListUserComponent extends Component {
 
     return (
       <div className="container">
+            <ToastContainer />
         <div className="col-sm-12 btn btn-info">Kullanıcı Listesi</div>
         <div>
           <ToolkitProvider

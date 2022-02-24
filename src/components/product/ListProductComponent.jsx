@@ -7,6 +7,8 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ProductService from "../../services/ProductService";
 import DeleteModal from "../util/modal/DeleteModal";
@@ -161,12 +163,10 @@ class ListProductComponent extends Component {
       console.error(ex);
     });
 
-     
       return (
-
-     
         // (Ön İşlem) => (Ön İşlem - Kabul) Etiket Oluştur
         <div>
+          <ToastContainer />
           <ProductPreprocessingModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
@@ -328,18 +328,17 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: LST-PRD-02");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile bağlantı kurulamadı. Hata Kodu: LST-PRD-01");
+        notify();
       });
-
   }
 
   performCoarseState_reject(row, data) {
-
-
   }
 
   performFreezingState_accept(row, data) {
@@ -356,11 +355,13 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-04");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile bağlantı kurulamadı. Hata Kodu: CRT-PRD-03");
+        notify();
       });
   }
   performCoarse(row) {
@@ -375,11 +376,13 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-06");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-05");
+        notify();
       });
   }
 
@@ -395,11 +398,13 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-08");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-07");
+        notify();
       });
   }
 
@@ -415,11 +420,13 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-10");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-09");
+        notify();
       });
   }
 
@@ -444,7 +451,6 @@ class ListProductComponent extends Component {
   }
 
   performAfterWashingSterilation_reject(row){
-    
   }
 
   performAfterWashingFreezing_accept(row){
@@ -461,11 +467,13 @@ class ListProductComponent extends Component {
               window.location.reload(false);
             })
             .catch((ex) => {
-              console.error(ex);
+              const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-11");
+              notify();
             });
         })
         .catch((ex) => {
-          console.error(ex);
+          const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-12");
+          notify();
         });
   }
 
@@ -475,11 +483,7 @@ class ListProductComponent extends Component {
 
   performCourseGrinding_reject(row) {}
 
-  
-
   performWashing_accept(row) {
-
-
     // Delipidation -> Delipidation (Yıkama)
 
     ProductService.getProductById(row.id)
@@ -493,11 +497,13 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-14");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-13");
+        notify();
       });
   }
 
@@ -505,7 +511,6 @@ class ListProductComponent extends Component {
   }
 
   performCourseGrinding_accept(row) {
-
 
     ProductService.getProductById(row.id)
       .then((res) => {
@@ -518,11 +523,13 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-15");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-16");
+        notify();
       });
   }
 
@@ -545,11 +552,13 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-18");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-17");
+        notify();
       });
   }
 
@@ -575,10 +584,12 @@ class ListProductComponent extends Component {
         });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Ürün silinemedi. Hata Kodu: CRT-PRD-19");
+        notify();
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Sunucu ile bağlantı kurulamadı. Hata Kodu: CRT-PRD-20");
+        notify();
       });
   }
 
@@ -631,7 +642,7 @@ class ListProductComponent extends Component {
     };
     return (
       <div className="container">
-        <div className="col-sm-12 btn btn-info">Ürün Listesi - Ön İşlem</div>
+        <div className="col-sm-12 btn btn-info">Ürün Listesi - Üretim</div>
         <div>
           <ToolkitProvider
             keyField="id"

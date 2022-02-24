@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ProductService from "../../services/ProductService";
 import CustomerService from "../../services/CustomerService";
@@ -141,23 +143,28 @@ class CreateProductComponent extends Component {
       customer: this.state.customer[0],
       deleted: this.state.deleted,
     };
-    console.log("product: " + JSON.stringify(product));
 
     if (this.state.id === "_add") {
       ProductService.createProduct(product)
         .then((res) => {
+          const notify = () => toast("Ürün başarılı bir şekilde kaydedildi.");
+          notify();
           this.props.history.push("/products");
         })
         .catch((ex) => {
-          console.error(ex);
+          const notify = () => toast("Ürün kaydedilemedi. Hata Kodu: CRT-PRD-01");
+          notify();
         });
     } else {
       ProductService.updateProduct(this.state.id, product)
         .then((res) => {
+          const notify = () => toast("Ürün başarılı bir şekilde güncellendi.");
+          notify();
           this.props.history.push("/products");
         })
         .catch((ex) => {
-          console.error(ex);
+          const notify = () => toast("Ürün kaydedilemedi. Hata Kodu: CRT-PRD-02");
+          notify();
         });
     }
     
@@ -197,6 +204,7 @@ class CreateProductComponent extends Component {
     return (
       <div>
         <div className="container">
+          <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
               {this.getTitle()}

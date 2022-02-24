@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import AuthService from '../../services/AuthService';
 
 class ChangePasswordComponent extends Component {
@@ -34,9 +37,11 @@ class ChangePasswordComponent extends Component {
         let changePassword = {token: this.state.id, password: this.state.password};
 
         AuthService.changePassword(changePassword).then(res => {
-            console.log(res.data);
+            const notify = () => toast("Şifre  başarılı bir şekilde değiştirildi.");
+            notify();
         }).catch(ex => {
-            console.error(ex);
+            const notify = () => toast("Şifre değiştirilemedi. Hata Kodu: LST-CHN-PSW-01");
+            notify();
         });
     }
 
@@ -60,6 +65,7 @@ class ChangePasswordComponent extends Component {
         return (
             <div>
             <div className="container">
+               <ToastContainer />
                 <div className="row">
                     <div className="card col-md-6 offset-md-3 offset-md-3"> 
                         <h3 className="text-center">Şifre Değiştir</h3>

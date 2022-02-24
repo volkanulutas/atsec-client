@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import DonorInstituteService from '../../services/DonorInstituteService';
 
@@ -39,7 +41,6 @@ class CreateDonorInstituteComponent extends Component {
                 }).catch(ex => {
                     console.error(ex);
                 });
-                console.log('dI: ' + JSON.stringify(dI));
             }).catch(ex => {
                 console.error(ex);
             });
@@ -79,17 +80,21 @@ class CreateDonorInstituteComponent extends Component {
              rawProducts: this.state.rawProducts, deleted: this.state.deleted };
         if(this.state.id === "_add"){ // create user
             DonorInstituteService.createDonorInstitute(dI).then(res => { 
-                console.log(res);
+                const notify = () => toast("Donör Kurumu başarılı bir şekilde kaydedildi.");
+                notify();
                 this.props.history.push('/donorinstitutes'); 
             }).catch(ex => {
-                console.error(ex);
+                const notify = () => toast("Donör Kurumu kaydedilemedi. Hata Kodu: CNT-DON-INST-01");
+                notify();
             });
         }else{    
             DonorInstituteService.updateDonorInstitute(this.state.id, dI).then(res => {
-                    console.log(res); 
+                    const notify = () => toast("Donör Kurumu başarılı bir şekilde güncellendi.");
+                    notify();
                     this.props.history.push('/donorinstitutes');
                 }).catch(ex=> {
-                    console.error(ex);
+                    const notify = () => toast("Donör Kurumu güncellenemedi. Hata Kodu: CRT-DON-INS-02");
+                    notify();
             });
         }   
         
@@ -134,6 +139,7 @@ class CreateDonorInstituteComponent extends Component {
         return (
             <div>
             <div className="container">
+             <ToastContainer />
                 <div className="row">
                     <div className="card col-md-6 offset-md-3 offset-md-3"> 
                         {this.getTitle()}

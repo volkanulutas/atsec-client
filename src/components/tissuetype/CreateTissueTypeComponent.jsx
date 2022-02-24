@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import TissueTypeService from '../../services/TissueTypeService';
 
@@ -64,20 +66,23 @@ class CreateTissueTypeComponent extends Component {
             idTmp = this.state.id;
        }
         let tissueType = {id: idTmp, name: this.state.name,  definition: this.state.definition, deleted: this.state.deleted };
-        console.log('tissueType: ' + JSON.stringify(tissueType));
         if(this.state.id === "_add"){
             TissueTypeService.createTissueType(tissueType).then(res => { 
-                    console.log(res); 
                     this.props.history.push('/tissuetypes'); 
+                    const notify = () => toast("Doku Tipi başarılı bir şekilde kaydedildi.");
+                    notify();
                 }).catch(ex => {
-                    console.error(ex);
+                    const notify = () => toast("Doku Tipi kaydedilemedi. Hata Kodu: CRT-TIS-01");
+                    notify();
                 });
         }else {
             TissueTypeService.updateTissueType(this.state.id, tissueType).then(res => { 
-                    console.log(res); 
                     this.props.history.push('/tissuetypes');
+                    const notify = () => toast("Doku Tipi güncellendi.");
+                    notify();
                 }).catch(ex => {
-                    console.error(ex);
+                    const notify = () => toast("Doku Tipi güncellenemedi. Hata Kodu: CRT-TIS-01");
+                    notify();
                 });
         }   
 
@@ -122,6 +127,7 @@ class CreateTissueTypeComponent extends Component {
         return (
             <div>
             <div className="container">
+                <ToastContainer />
                 <div className="row">
                     <div className="card col-md-6 offset-md-3 offset-md-3"> 
                         {this.getTitle()}

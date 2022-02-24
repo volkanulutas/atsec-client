@@ -18,7 +18,6 @@ class CreateRawProductComponent extends Component {
       isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
       multiple: false,
 
-
       // Files 
       selectedFiles: [],
       currentFile: undefined,
@@ -27,6 +26,7 @@ class CreateRawProductComponent extends Component {
       fileInfos: [],
       selectedFileType: [], // Typeahead needs array.
       product_FileList: ["Onam Formu", "Transfer Formu", "Taşıma Formu", "Ek Formu"],
+      doctorName: "",
 
     
       donor: [], // Typeahead needs array.
@@ -161,6 +161,9 @@ class CreateRawProductComponent extends Component {
           let locationTemp = [product.location];
           let statusNameTemp = [product.statusName];
 
+          let signerTemp = product.signer;
+          let signDateTemp = this.convertString(product.signDate);
+
           this.setState({
             id: idTemp,
             donor: donorTemp,
@@ -171,6 +174,8 @@ class CreateRawProductComponent extends Component {
             arrivalDate: arrivalDateStr,
             information: product.information,
             statusName: statusNameTemp,
+            signer: signerTemp,
+            signDate: signDateTemp,
             deleted: product.deleted,
           });
         })
@@ -365,7 +370,7 @@ class CreateRawProductComponent extends Component {
         <form>
           <div className="form-group">
           <label>
-              Donor:{" "}
+              Donör:{" "}
               {this.state.donor[0] === undefined
                 ? "Seçilmedi"
                 : this.state.donor[0].code}
@@ -381,7 +386,7 @@ class CreateRawProductComponent extends Component {
                 options={this.state.product_DonorList}
                 placeholder="Donor Seç..."
                 selected={this.state.donor}
-                disabled={!this.state.isEditable || !(this.state.id === "_add" || this.state.id === null)}
+                /*disabled={!this.state.isEditable || !(this.state.id === "_add" || this.state.id === null)}*/
               />
           </div>
 

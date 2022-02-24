@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
-import { Typeahead } from "react-bootstrap-typeahead";
+import { Typeahead} from "react-bootstrap-typeahead";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import DonorService from '../../services/DonorService';
 
 class CreateDonorComponent extends Component {
     constructor(props)
     {
+    
         super(props)
         this.state = {
             id: this.props.match === undefined ? "_add" : this.props.match.params.id,
             isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
+            options: {
+                autoClose: false,
+                keepAfterRouteChange: false
+            },
             code: '',
             citizenshipNumber: '',
             name: '',
@@ -24,8 +32,7 @@ class CreateDonorComponent extends Component {
             bloodType: [],
             birthdate: "",
             sex: [],
-           
-           
+             
             deleted: false,
             multiple: false,
             errors: [],
@@ -98,8 +105,8 @@ class CreateDonorComponent extends Component {
     }
 
     checkTelephoneNumber = (value) => {
-        // (90) 532 342 33 27
-        var isValid = /^[(]?[0-9]{2}[)][0-9]{10}$/im.test(value);
+        // 0 532 342 33 27
+        var isValid = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(value);
         return isValid;
     }
 
@@ -134,7 +141,6 @@ class CreateDonorComponent extends Component {
     }
 
     componentDidMount(){
-
         DonorService.getCities()
         .then(res => {
             this.setState({donor_CityList: res.data});
@@ -165,7 +171,6 @@ class CreateDonorComponent extends Component {
             DonorService.getDonorById(this.state.id)
             .then(res => {
                 let donor = res.data;
-                alert(JSON.stringify(donor))
                 this.setState({
                     code: donor.code,
                     name: donor.name,
@@ -181,7 +186,6 @@ class CreateDonorComponent extends Component {
                     sex: [donor.sex],
                     birthdate: donor.birthdate,
                 });
-                console.log('donor: ' + JSON.stringify(donor));
             }).catch(ex => {
                 console.error(ex);
             });
@@ -230,7 +234,6 @@ class CreateDonorComponent extends Component {
        if(errors.length > 0){
            return false;
        }
-       
 
         let idParam = undefined;
         if(this.state.id !== "_add"){
@@ -241,20 +244,29 @@ class CreateDonorComponent extends Component {
             addressDistrict: this.state.addressDistrict[0], telephone: this.state.telephone,
             sex: this.state.sex[0], birthdate: this.state.birthdate, bloodType: this.state.bloodType[0],
             tissueType: this.state.tissueType, tissueNumber:this.state.tissueNumber, deleted: this.state.deleted };
-            console.log('donor: ' + JSON.stringify(donor));
         if(this.state.id === "_add"){ // create user
             DonorService.createDonor(donor).then(res => { 
-                console.log(res); 
+                const notify = () => toast("Donör başarılı bir şekilde kaydedildi.");
+                notify();
                 this.props.history.push('/donors'); 
                 }).catch(ex => {
-                    alert(ex);
+                    if(ex.response.data.message === 'Donor citizenship number is already taken!'){
+                        const notify = () => toast("Bu TC Kimlik numarası ile kaydedilmiş bir donör bulunmaktadır.");
+                        notify();
+                    }
+                    else{
+                        const notify = () => toast("Donör kaydedilemedi. Hata Kodu: CRT-DON-01");
+                        notify();
+                    }
                 });
-        }else{     // TODO: alert basarili
+        }else{
             DonorService.updateDonor(this.state.id, donor).then(res => { 
-                console.log(res); 
+                const notify = () => toast("Donör Kurum Listesi başarılı bir şekilde güncellendi.");
+                notify();
                 this.props.history.push('/donors');
             }).catch(ex => {
-                console.error(ex); 
+                const notify = () => toast("Donör güncellenemedi. Hata Kodu: CRT-DON-02");
+                notify();
             });
         } 
         
@@ -302,6 +314,11 @@ class CreateDonorComponent extends Component {
         return (
             <div>
             <div className="container">
+            <div>
+            <div>
+            <ToastContainer />
+      </div>
+      </div>   
                 <div className="row">
                     <div className="card col-md-6 offset-md-3 offset-md-3"> 
                         {this.getTitle()}
@@ -381,7 +398,7 @@ class CreateDonorComponent extends Component {
                             </div>
                             <div className="form-group">
                             <label>
-                            Kan Grubu:{" "}
+                                Kan Grubu:{" "}
                             {this.state.bloodType[0] === undefined
                                 ? "Seçilmedi"
                                 : this.state.bloodType[0].name}
@@ -443,8 +460,8 @@ class CreateDonorComponent extends Component {
                             </div>
                             <div className="form-group">
                                 <label>Telefon:</label>
-                                <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="(90)5321234567" name="telephone" 
-                                className={this.hasError("name") 
+                                <input type="tel"  placeholder="05321234567" name="telephone" 
+                                className={this.hasError("telephone") 
                                 ? "form-control is-invalid" 
                                 : "form-control"}
                                 value={this.state.telephone} onChange={this.changeTelephoneHandler}
@@ -474,8 +491,6 @@ class CreateDonorComponent extends Component {
                                 </label>
                                 <div>
                                 <Typeahead
-
-                                  
                                     multiple={multiple}
                                     id="select-addressCity"
                                     onChange={(selected) => {
@@ -536,7 +551,6 @@ class CreateDonorComponent extends Component {
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
         );

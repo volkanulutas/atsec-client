@@ -1,6 +1,10 @@
 import React from "react";
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 
+
+import pdf from '../modal/test.pdf'
+
+import PdfViewer from '../../pdfmanagement/PdfViewer'
 import ViewBarcodePdfComponent from "../ViewBarcodePdfComponent";
 import ProductService from "../../../services/ProductService";
 
@@ -9,6 +13,8 @@ class ProductBarcodeModal extends React.Component {
     super(props);
   
     this.state = {
+      showPdf: false,
+
       modal: props.initialModalState,
       data: props.data,
       callback: props.callback,
@@ -34,6 +40,7 @@ class ProductBarcodeModal extends React.Component {
     });
   }
 
+
   yes() { 
     this.toggle();
     if(this.state.callback) {
@@ -56,20 +63,13 @@ class ProductBarcodeModal extends React.Component {
   render() {
     return (
       <div>
-        <Button color="success" className="vlu-left-margin" onClick={this.toggle} disabled={!this.state.isEditable}>
-          Etiket Oluştur22
+      <PdfViewer pdf={pdf}
+                 onCancel={()=>this.setState({showPdf:false})}
+                 visible={this.state.showPdf}
+      />
+        <Button color="success" className="vlu-left-margin" onClick={()=>{this.setState({showPdf:!this.state.showPdf})}} disabled={!this.state.isEditable}>
+          Etiket Oluştur
         </Button>
-        <Modal
-          isOpen={this.state.modal}
-          toggle={this.toggle}
-          fade={this.state.fade}
-          className={this.props.className}
-        >
-          <ModalHeader toggle={this.toggle}>Modal</ModalHeader>
-            {this.findComponent()}
-          <ModalFooter>
-          </ModalFooter>
-        </Modal>
       </div>
     );
   }

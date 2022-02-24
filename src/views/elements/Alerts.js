@@ -32,32 +32,7 @@ class Alerts extends Component {
     return (
       <div>
         <Row>
-          <Col md={6}>
-            <Card>
-              <CardHeader>Inline Alert</CardHeader>
-              <CardBody>
-                <UncontrolledAlert color="info">
-                  Wow! This alert is amazing!
-                </UncontrolledAlert>
-                <UncontrolledAlert color="primary">
-                  Welcome! Glad to have you here!
-                </UncontrolledAlert>
-                <UncontrolledAlert color="success">
-                  Well done! You successfully read this important alert message.
-                </UncontrolledAlert>
-                <UncontrolledAlert color="warning">
-                  Heads up! This alert needs your attention, but it's not super
-                  important.
-                </UncontrolledAlert>
-                <UncontrolledAlert color="danger">
-                  Oh snap! Change a few things up and try submitting again.
-                </UncontrolledAlert>
-                <UncontrolledAlert color="default">
-                  Welcome! Glad to have you here!
-                </UncontrolledAlert>
-              </CardBody>
-            </Card>
-          </Col>
+
           <Col md={6}>
             <Card>
               <CardHeader>Page Alert</CardHeader>

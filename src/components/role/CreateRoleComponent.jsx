@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Typeahead } from "react-bootstrap-typeahead";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import RoleService from '../../services/RoleService';
 import PermissionService from '../../services/PermissionService';
@@ -92,17 +94,21 @@ class CreateRoleComponent extends Component {
              permissions: this.state.permissions, deleted: this.state.deleted };
         if(this.state.id === "_add"){
             RoleService.createRole(role).then(res => { 
-                console.log(res); 
+                const notify = () => toast("Rol başarılı bir şekilde kaydedildi.");
+                notify();
                 this.props.history.push('/roles');
             }).catch(ex => {
-                console.error(ex);
+                const notify = () => toast("Rol kaydilemedi. Hata Kodu: CRT-ROL-01");
+                notify();
             });
         }else{    
             RoleService.updateRole(this.state.id, role).then(res => {
-                console.log(res); 
+                const notify = () => toast("Rol başarılı bir şekilde güncellendi.");
+                notify(); 
                 this.props.history.push('/roles');
                 }).catch(ex => {
-                    console.error(ex);
+                    const notify = () => toast("Rol güncellenemedi. Hata Kodu: CRT-ROL-02");
+                    notify();
             });
         } 
         
@@ -150,6 +156,7 @@ class CreateRoleComponent extends Component {
         return (
             <div>
             <div className="container">
+                <ToastContainer />
                 <div className="row">
                     <div className="card col-md-6 offset-md-3 offset-md-3"> 
                         {this.getTitle()}

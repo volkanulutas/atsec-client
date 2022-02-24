@@ -177,7 +177,7 @@ const allPageList = [
     component: ListRawProductComponent,
   },
   {
-    name: "Ham Ürün Listesi 2",
+    name: "Ham Ürün Listesi",
     path: "/add-rawproduct/:state/:id",
     id: "RAWPRODUCT_PAGE_PERMISSION2", 
     component: MasterRawProduct,

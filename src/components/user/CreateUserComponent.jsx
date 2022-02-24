@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import ReactFormInputValidation from "react-form-input-validation";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import UserService from '../../services/UserService';
 import RoleService from '../../services/RoleService';
@@ -58,9 +60,9 @@ class CreateUserComponent extends Component {
                     enabled: user.enabled, 
                     role: user.role,
                 });
-                console.log('user: ' + JSON.stringify(user));
             }).catch(ex=>{
-                console.error(ex);
+                const notify = () => toast("Kullanıcı bulunamadı. Hata Kodu: CRT-USR-01");
+                notify();
             });
         }  
     }
@@ -107,15 +109,21 @@ class CreateUserComponent extends Component {
         console.log('user: ' + JSON.stringify(user));
         if(this.state.id === "_add"){
             UserService.createUser(user).then(res => {
+                const notify = () => toast("Kullanıcı kaydedildi.");
+                notify();
                  this.props.history.push('/users');
             }).catch(ex=> {
-                console.error(ex);
+                const notify = () => toast("Kullanıcı kaydedilemedi. Hata Kodu: CRT-USR-02");
+                notify();
             });  
         }else{
             UserService.updateUser(this.state.id, user).then(res => {
+                const notify = () => toast("Kullanıcı güncellendi.");
+                notify();
                  this.props.history.push('/users');
             }).catch(ex=> {
-                console.error(ex);
+                const notify = () => toast("Kullanıcı güncellenemedi. Hata Kodu: CRT-USR-03");
+                notify();
             })
         }   
 
@@ -214,6 +222,7 @@ class CreateUserComponent extends Component {
         return (
             <div>
             <div className="container">
+               <ToastContainer />
                 <div className="row">
                     <div className="card col-md-6 offset-md-3 offset-md-3"> 
                         {this.getTitle()}

@@ -4,6 +4,8 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import DeleteModal from "../util/modal/DeleteModal";
 import CustomerService from "../../services/CustomerService";
@@ -110,15 +112,16 @@ class ListCustomerComponent extends Component {
       .then((res) => {
         CustomerService.getAllCustomers()
           .then((res) => {
-            console.log(res.data);
             this.setState({ customers: res.data });
           })
           .catch((ex) => {
-            console.error(ex);
+            const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-CUS-01");
+            notify();
           });
       })
       .catch((ex) => {
-        console.error(ex);
+        const notify = () => toast("Müşteri silinemedi. Hata Kodu: LST-CUS-02");
+        notify();
       });
   };
 
@@ -172,6 +175,7 @@ class ListCustomerComponent extends Component {
 
     return (
       <div className="container">
+          <ToastContainer />
         <div className="col-sm-12 btn btn-info">Müşteri Listesi</div>
         <div>
           <ToolkitProvider

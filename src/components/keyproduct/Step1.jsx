@@ -15,7 +15,7 @@ const Step1 = props => {
       <FormGroup>
         <div className="form-group">
             <label>
-              Donör:{" "}
+              Donör Kodu:{" "}
               {props.donor[0] === undefined
                 ? "Seçilmedi"
                 : props.donor[0].code}
@@ -30,9 +30,9 @@ const Step1 = props => {
 
                 labelKey="code"
                 options={props.product_DonorList}
-                placeholder="Donör Seç..."
+                placeholder="Donör Kodu Seç..."
                 selected={props.donor}
-                disabled={!props.isEditable || !(props.id === "_add" || props.id === null)}
+                /*disabled={!props.isEditable || !(props.id === "_add" || props.id === null)}*/
               />
         <div
           className={
@@ -41,7 +41,40 @@ const Step1 = props => {
               : "hidden"
           }
         >
-          Donör seçmelisiniz.
+          Donör kodu seçmelisiniz.
+        </div>
+      </div>
+
+      <div className="form-group">
+            <label>
+              Donör Adı:{" "}
+              {props.donor[0] === undefined
+                ? "Seçilmedi"
+                : props.donor[0].name + " " + props.donor[0].surname}
+            </label>
+   
+            <Typeahead
+                multiple={props.multiple}
+                id="select-donor"
+                onChange={(selected) => {
+                  props.setDonor(selected);
+                }}
+
+           
+                labelKey={option => `${option.name} ${option.surname}`}
+                options={props.product_DonorList}
+                placeholder="Donör Adı Seç..."
+                selected={props.donor}
+                /*disabled={!props.isEditable || !(props.id === "_add" || props.id === null)}*/
+              />
+        <div
+          className={
+            props.hasError("donor")
+              ? "inline-errormsg"
+              : "hidden"
+          }
+        >
+          Donör adı seçmelisiniz.
         </div>
       </div>
 

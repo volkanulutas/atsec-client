@@ -30,6 +30,7 @@ class ProductService {
   }
 
   updateProduct(id, product) {
+    alert("update");
     return axios.put(API_BASE_URL + API_URL_PRODUCT + id, product, {headers: authHeader()});
   }
 

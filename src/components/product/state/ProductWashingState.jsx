@@ -59,7 +59,7 @@ class ProductWashingState extends Component {
     event.preventDefault();
 
     var errors = [];
-    if (this.state.checkedItems.size !== 8) {
+    if (this.state.checkedItems.size !== 10) {
       errors.push("washing-checkbox");
     }
 
@@ -106,11 +106,14 @@ class ProductWashingState extends Component {
        <ToastContainer />
         <div className="row">
           <div className="card col-md-6 offset-md-3 offset-md-3">
-            Delipidation...
+            Desetting...
             <div className="card-body">
               <form>
                 <div className="form-group">
                   {this.state.product_WashingList.map((item) => (
+                    <div>
+
+                    <br></br>
                     <Label>
                       <Input
                         type="checkbox"
@@ -119,6 +122,8 @@ class ProductWashingState extends Component {
                       ></Input>
                       {item}
                     </Label>
+                    <br></br>
+                    </div>
                   ))}
 
                   <div
@@ -131,39 +136,6 @@ class ProductWashingState extends Component {
                     Lütfen tüm alanları seçiniz.
                   </div>
                 </div>
-
-                <div className="form-group">
-                    <label>
-                      Yeni Lokasyon:{" "}
-                      {this.state.location[0] === undefined
-                        ? "Seçilmedi"
-                        : this.state.location[0].name}
-                    </label>
-                    <div>
-                      <Typeahead
-                        multiple={multiple}
-                        id="select-location-quarantina"
-                        onChange={(selected) => {
-                          this.setState({ location: selected });
-                        }}
-                        labelKey="name"
-                        options={this.state.product_LocationList}
-                        placeholder="Yeni Lokasyonunu Seç..."
-                        selected={this.state.location}
-                      />
-                    </div>
-
-                    <div
-                      className={
-                        this.hasError("location") ? "inline-errormsg" : "hidden"
-                      }
-                    >
-                      Lokasyonu girmelisiniz.
-                    </div>
-                  </div>
-
-  
-
                <div className="form-group">
                   <Button color="primary" onClick={this.accept}>
                     Tamam

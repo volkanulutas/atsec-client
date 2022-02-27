@@ -18,8 +18,7 @@ import { addPdf_BarcodePdfView } from '../../actions';
 
 import ProductCoarseModal from "./modal/ProductCoarseModal";
 import ProductPreprocessingModal from "./modal/ProductPreprocessingModal";
-import ProductFreezingModalAfterCourse from "./modal/ProductFreezingModalAfterCourse";
-import ProductFreezingModalAfterDelipidation from "./modal/ProductFreezingModalAfterDelipidation";
+import  ProductGranulationStateModal from "./modal/ProductGranulationStateModal";
 import ProductFreezingModal from "./modal/ProductFreezingModal";
 import AuthService from "../../services/AuthService";
 import ProductWashingModal from "./modal/ProductWashingModal";
@@ -81,7 +80,7 @@ class ListProductComponent extends Component {
               styleVar = "btn btn-danger";
             } else if (cell === "Dondurma 1") {
               styleVar = "btn btn-warning";
-            } else if (cell === "Delipidation") {
+            } else if (cell === "Desetting") {
               styleVar = "btn btn-success";
             }
             return <div className={styleVar}>{cell}</div>;
@@ -208,7 +207,7 @@ class ListProductComponent extends Component {
       return (
         // Dondurma 1 => Dondurma 1 - Kabul
         <div>
-          <ProductFreezingModalAfterCourse
+          <ProductGranulationStateModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
             data={row}
@@ -237,17 +236,6 @@ class ListProductComponent extends Component {
     } else if (row.status === "Dondurma 2 Sonrası") {
          // Delipidation -> Kimyasal Sterilizasyon
       return (
-        <button
-          type="button"
-          style={{ marginRight: "5px" }}
-          onClick={() => this.performFineGrilling(row)}
-          className="btn btn-success"
-        >
-          İnce Öğütme (Fine)
-        </button>
-      );
-    } else if (row.status === "İnce Öğütme Sonrası") {
-      return (
         <div>
         <ProductWashingModal
           style={{ marginRight: "5px" }}
@@ -257,17 +245,9 @@ class ListProductComponent extends Component {
           callback_reject={this.performWashing_reject}
         />
       </div>
-        /*
-        <ProductFreezingModalAfterDelipidation
-          style={{ marginRight: "5px" }}
-          initialModalState={false}
-          data={row}
-          callback_accept={this.performFreezingAfterDelipidation_accept}
-          callback_reject={this.performCourseGrinding_reject}
-        />
-        */
       );
-    } else if(row.status === "Delipidation Sonrası"){
+    } 
+    else if(row.status === "Desetting Sonrası"){
         // Delipidation -> Delipidation
       return(
       <div>
@@ -341,14 +321,16 @@ class ListProductComponent extends Component {
   performCoarseState_reject(row, data) {
   }
 
-  performFreezingState_accept(row, data) {
+  performFreezingState_accept(row, location, granulation) {
     // öğütme -> Delipidation
     // location change, state change
+    alert("öğütme");
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
-        product.location = data;
+        product.location = location;
         product.status = "Dondurma 1 Sonrası";
+        product.granulationType=granulation;
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -382,28 +364,6 @@ class ListProductComponent extends Component {
       })
       .catch((ex) => {
         const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-05");
-        notify();
-      });
-  }
-
-  performFineGrilling(row) {
-    ProductService.getProductById(row.id)
-      .then((res) => {
-        let product = res.data;
-
-        product.status = "İnce Öğütme Sonrası";
-
-        ProductService.updateProduct(row.id, product)
-          .then((res) => {
-            window.location.reload(false);
-          })
-          .catch((ex) => {
-            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-08");
-            notify();
-          });
-      })
-      .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-07");
         notify();
       });
   }
@@ -490,7 +450,7 @@ class ListProductComponent extends Component {
       .then((res) => {
         let product = res.data;
 
-        product.status = "Delipidation Sonrası";
+        product.status = "Desetting Sonrası";
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -510,13 +470,14 @@ class ListProductComponent extends Component {
   performWashing_reject(row) {
   }
 
-  performCourseGrinding_accept(row) {
+  performCourseGrinding_accept(row, granulationTypeList) {
 
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
 
         product.status = "Öğütme (Course) Sonrası";
+        product.granulationType = granulationTypeList;
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -535,24 +496,24 @@ class ListProductComponent extends Component {
 
   performFreezingState_reject(row, data) {}
 
-  performPreProcessingState_accept(row, data) {
-
-    alert(row);
+  performPreProcessingState_accept(row, productFormTypeList) {
+   
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
-
+   
         product.status = "Ön İşlem - Kabul";
 
-        var preProcessingList = ["Kesme", "Delipidation", "Kartilaj Alma"];
+        var preProcessingList = ["Kesme", "Desetting", "Kartilaj Alma"];
         product.performPreProcessingType = preProcessingList;
+        product.productFormType = productFormTypeList;
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
             window.location.reload(false);
           })
           .catch((ex) => {
-            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-18");
+            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-18" + ex);
             notify();
           });
       })

@@ -23,25 +23,26 @@ class ProductAfterWashingSterilationState extends Component {
       dampValue: 0,
       dampCheckboxDisabled: true,
 
-      product_PreprocessingList: ["%2'lik Peratatik Asit Etanol Steril Mili Q su >> Desikatöre Ekle",
-                                  "200 Milibar 4 Saat Vakum Uygula",
+      dampCheckboxDisabled2: true,
+
+      product_PreprocessingList: ["Kimyasal Sterilizasyon Çözeltisinin Hazırlanması >> Desikatöre Ekle",
+                                  "Desikatörde 200 Milibar 4 Saat Vakum altında Sterilizasyon",
                                   "PBS 4 Yıkama Yap",    
-      ],
-
-
-      product_Preprocessing2List: ["Kurutma İşlemi",    
       ],
 
       checkedItems: new Map(),
 
       checkedItems2: new Map(),
+
+      checkedItems3: new Map(),
     };
     // callback
     this.accept = this.accept.bind(this);
     this.reject = this.reject.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleChange2 = this.handleChange2.bind(this);
+    this.handleChange2 = this.handleChange2.bind(this);  
+    this.handleChange3 = this.handleChange3.bind(this);
   }
 
 
@@ -56,8 +57,10 @@ class ProductAfterWashingSterilationState extends Component {
     }
     if(phValueFloat >= 6 && phValueFloat <= 7) { // 6 veya 7 arasında ise;
       this.state.dampCheckboxDisabled = false;
+      this.state.dampCheckboxDisabled2 = false;
     } else {
       this.state.dampCheckboxDisabled = true;
+      this.state.dampCheckboxDisabled2 = true;
     }
   }
 
@@ -78,6 +81,10 @@ class ProductAfterWashingSterilationState extends Component {
     }
 
     if (this.state.checkedItems2.size !== 1) {
+      errors.push("preprocessing2-checkbox");
+    }
+
+    if (this.state.checkedItems3.size !== 1) {
       errors.push("preprocessing2-checkbox");
     }
     // PhValue 
@@ -136,6 +143,15 @@ class ProductAfterWashingSterilationState extends Component {
     }));
   }
 
+  handleChange3(event) {
+    var isChecked = event.target.checked;
+    var item = event.target.value;
+
+    this.setState((prevState) => ({
+      checkedItems3: prevState.checkedItems3.set(item, isChecked),
+    }));
+  }
+
   hasError(key) {
     return this.state.errors.indexOf(key) !== -1;
   }
@@ -149,7 +165,7 @@ class ProductAfterWashingSterilationState extends Component {
           <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
-              Kimyasal Sterilazsyon
+              Kimyasal Sterilizasyon
               <div className="card-body">
                 <form>
                 <div className="form-group">
@@ -188,17 +204,25 @@ class ProductAfterWashingSterilationState extends Component {
                             </div>
 
                             <div className="form-group">
-                    {this.state.product_Preprocessing2List.map((item) => (
-                      <Label>
+                            <Label>
                         <Input
                           type="checkbox"
-                          value={item}
+                          value={"Kurutma İşlemi"}
                           onChange={this.handleChange2}
                           disabled= {this.state.dampCheckboxDisabled}
                         ></Input>
-                        {item}
+                        Kurutma İşlemi
                       </Label>
-                    ))}
+                      <br></br>
+                      <Label>
+                        <Input
+                          type="checkbox"
+                          value={"İzotonik Yıkama"}
+                          onChange={this.handleChange3}
+                          disabled= {this.state.dampCheckboxDisabled2}
+                        ></Input>
+                        İzotonik Yıkama
+                      </Label>
 
                     <div
                       className={

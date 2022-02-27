@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProductService from "../../../services/ProductService";
 import LocationService from "../../../services/LocationService";
 
+// Dondurma 1 Sonrası -> Öğütme
 class ProductPreprocessingState extends Component {
   constructor(props) {
     super(props);
@@ -43,7 +44,8 @@ class ProductPreprocessingState extends Component {
     event.preventDefault();
 
     var errors = [];
-    if (this.state.location[0].name === undefined) {
+
+    if (this.state.location[0] === undefined) {
       errors.push("location");
     }
 
@@ -72,9 +74,10 @@ class ProductPreprocessingState extends Component {
           <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
-              Devreye Al
+              Dondurucuya Koy3
               <div className="card-body">
                 <form>
+                  
                   <div className="form-group">
                     <label>
                       Yeni Lokasyon:{" "}

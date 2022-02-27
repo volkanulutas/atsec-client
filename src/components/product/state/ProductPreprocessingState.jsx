@@ -16,24 +16,22 @@ class ProductPreprocessingState extends Component {
       callback_accept: props.callback_accept,
       callback_modalToggle: props.callback_modalToggle,
 
-      errors: [],
+      productFormTypeList: [],
 
-      product_PreprocessingList: [],
       checkedItems: new Map(),
-      selectedRadio: null, // data to be sent to callback.
+      product_PreprocessingList: [],
+    
+      errors: [],
     };
     // callback
     this.accept = this.accept.bind(this);
     this.reject = this.reject.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleRadio = this.handleRadio.bind(this);
+    this.handleProductFormChange = this.handleProductFormChange.bind(this);
   }
 
   componentDidMount() {
-    // getPreprocessingTypeList
-
-
     ProductService.getPreprocessingTypeList()
       .then((res) => {
         this.setState({ product_PreprocessingList: res.data });
@@ -48,24 +46,40 @@ class ProductPreprocessingState extends Component {
     event.preventDefault();
 
     var errors = [];
-    if (this.state.checkedItems.size !== 3) {
+    if (this.state.checkedItems.size !== 4) {
       errors.push("preprocessing-checkbox");
     }
-
-    if (this.state.selectedRadio === null) {
-      errors.push("radioButt");
+    if (this.state.productFormTypeList.length === 0) {
+      errors.push("productFormType-checkbox");
     }
 
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.row, this.state.selectedRadio);
+      this.state.callback_accept(this.state.row, this.state.productFormTypeList);
     }
   }
 
   reject(event) {
     event.preventDefault();
     this.state.callback_modalToggle();
+  }
+
+  handleProductFormChange(event){
+    var isChecked = event.target.checked;
+    var item = event.target.value;
+
+    if(isChecked){
+      this.setState({
+        productFormTypeList:[...this.state.productFormTypeList, item]
+      });
+    }else{
+      var index = this.state.productFormTypeList.indexOf(item);
+      if (index > -1) { 
+         var arr = this.state.productFormTypeList.splice(index, 1);
+         this.setState({arr});
+      }
+    }
   }
 
   handleChange(event) {
@@ -77,20 +91,20 @@ class ProductPreprocessingState extends Component {
     }));
   }
 
-  handleRadio(event) {
-    var isChecked = event.target.checked;
-    var item = event.target.value;
-    if (isChecked) {
-      this.setState({ selectedRadio: item });
-    }
-  }
-
   hasError(key) {
     return this.state.errors.indexOf(key) !== -1;
   }
 
   render() {
     const { multiple } = this.state;
+
+    const divStyle = {
+      margin: '5px',
+    };
+
+    const divStyle2 = {
+      marginLeft: '15px',
+    };
 
     return (
       <div>
@@ -101,7 +115,13 @@ class ProductPreprocessingState extends Component {
               Ön İşlem...
               <div className="card-body">
                 <form>
+
+                <div className="form-group">
+                <Label>İşlem Onayları</Label>
+                  </div>
+                  
                   <div className="form-group">
+              
                     {this.state.product_PreprocessingList.map((item) => (
                       <Label>
                         <Input
@@ -125,33 +145,79 @@ class ProductPreprocessingState extends Component {
                   </div>
 
                   <div className="form-group">
-                    <div></div>
+                    
+                    <div>
+                      <Label>Kesme İşlemi:</Label>
+                      <div
+                      className={
+                        this.hasError("productFormType-checkbox")
+                          ? "inline-errormsg"
+                          : "hidden"
+                      }
+                    >
+                      Lütfen seçim yapınız.
+                    </div>
+                    </div>
+
+                    
                     <div>
                       <div className="radio">
                         <FormGroup check1>
-                          <Label check1>
+                        <Label style={divStyle} >
                             <Input
-                              type="radio"
-                              name="radiobutt"
-                              value="radio1"
-                              onChange={this.handleRadio}
-                            />
-                            Çips
+                              type="checkbox"
+                               value={"Çips İçin Şerit"}
+                              onChange={this.handleChange2}
+                            ></Input>
+                          Çips İçin Şerit
                           </Label>
                         </FormGroup>
                       </div>
                       <div className="radio">
                         <FormGroup check1>
-                          <Label check1>
-                            <Input
-                              type="radio"
-                              name="radiobutt"
-                              value="radio2"
-                              onChange={this.handleRadio}
-                            />
-                            Küp
+                        <Label style={divStyle} >
+                          Küp
                           </Label>
+                          <br>
+                          </br>
+                          <Label style={divStyle2}>
+                            <Input
+                              type="checkbox"
+                              value={"10x10x20 mm"}
+                              onChange={this.handleProductFormChange}
+                            ></Input>
+                          10x10x20 mm
+                          </Label>
+                          <Label style={divStyle2}>
+                            <Input 
+                              type="checkbox"
+                              value={"20x20x30 mm"}
+                              onChange={this.handleProductFormChange}
+                            ></Input>
+                          20x20x30 mm
+                          </Label>
+                          <Label style={divStyle2}>
+                            <Input
+                              type="checkbox"
+                              value={"20x20x10 mm"}
+                              onChange={this.handleProductFormChange}
+                            ></Input>
+                          20x20x10 mm
+                          </Label>
+                          <Label style={divStyle2}>
+                            <Input
+                              type="checkbox"
+                              value={"10x10x10 mm"}
+                              onChange={this.handleProductFormChange}
+                            ></Input>
+                          10x10x10 mm
+                          </Label>
+                        
+                          
                         </FormGroup>
+                      </div>
+                      <div className="">
+
                       </div>
                       <div
                         className={
@@ -160,7 +226,7 @@ class ProductPreprocessingState extends Component {
                             : "hidden"
                         }
                       >
-                        Lütfen seçimi yapınız. [Çips, Küp]
+                        Lütfen seçimi yapınız. [Çips İçin Şerit, Küp]
                       </div>
                     </div>
                   </div>

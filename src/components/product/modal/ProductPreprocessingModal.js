@@ -38,7 +38,7 @@ class ProductPreprocessingModal extends React.Component {
           fade={this.state.fade}
           className={this.props.className}
         >
-          <ModalHeader toggle={this.toggle}>Ön İşlem</ModalHeader>
+          <ModalHeader toggle={this.toggle}>Ön İşlem Öncesi</ModalHeader>
           <ModalBody>
             <ProductPreprocessingState
               errors={this.errors}

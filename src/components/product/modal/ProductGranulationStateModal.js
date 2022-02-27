@@ -2,8 +2,9 @@ import React from "react";
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 
 import ProductFreezingState from "../state/ProductFreezingState";
+import ProductGranulationState from "../state/ProductGranulationState";
 
-class ProductFreezingModalAfterCourse extends React.Component {
+class ProductGranulationStateModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,7 +30,7 @@ class ProductFreezingModalAfterCourse extends React.Component {
     return (
       <div>
         <Button color="primary" onClick={this.toggle}>
-          Kaba Öğütme (Course) İşlemine Al
+          Öğütme İşlemine Al
         </Button>
         <Modal
           isOpen={this.state.modal}
@@ -37,9 +38,9 @@ class ProductFreezingModalAfterCourse extends React.Component {
           fade={this.state.fade}
           className={this.props.className}
         >
-          <ModalHeader toggle={this.toggle}>Kaba Öğütme (Course)</ModalHeader>
+          <ModalHeader toggle={this.toggle}>Öğütme</ModalHeader>
           <ModalBody>
-            <ProductFreezingState
+            <ProductGranulationState
               errors={this.errors}
               data={this.state.data}
               callback_modalToggle={this.toggle}
@@ -54,4 +55,4 @@ class ProductFreezingModalAfterCourse extends React.Component {
   }
 }
 
-export default ProductFreezingModalAfterCourse;
+export default ProductGranulationStateModal;

@@ -20,6 +20,8 @@ class ProductGranulationState extends Component {
 
       errors: [],
 
+      processDate: '',
+
       granulationTypeList: [],
 
       product_LocationList: [],
@@ -27,6 +29,7 @@ class ProductGranulationState extends Component {
     // callback
 
     this.handleGranulationChange = this.handleGranulationChange.bind(this);
+    this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
     this.accept = this.accept.bind(this);
     this.reject = this.reject.bind(this);
   }
@@ -40,6 +43,10 @@ class ProductGranulationState extends Component {
         const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-FRE-STT-01");
         notify();
       });
+  }
+
+  handleProcessDateChange(event){
+    this.setState({ processDate: event.target.value });
   }
 
   handleGranulationChange(event){
@@ -67,11 +74,14 @@ class ProductGranulationState extends Component {
     if (this.state.granulationTypeList.length === 0) {
       errors.push("granulationType-checkbox");
     }
+    if (this.state.processDate === '') {
+      errors.push("processDate");
+    }
 
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.granulationTypeList);
+      this.state.callback_accept(this.state.data, this.state.granulationTypeList, this.state.processDate);
     }
   }
 
@@ -100,6 +110,31 @@ class ProductGranulationState extends Component {
         <div className="container">
           <ToastContainer />
           <div className="row">
+          <div className="form-group">
+                  <label>İşlem Tarihi</label>
+                  <input
+                    type="datetime-local"
+                    id="arrivalDate"
+                    name="arrivalDate"
+                    className={
+                      this.hasError("processDate")
+                        ? "form-control is-invalid"
+                        : "form-control"
+                    }
+                    value={this.state.processDate}
+                    onChange={this.handleProcessDateChange}
+                  />
+                  <div
+                    className={
+                      this.hasError("processDate")
+                        ? "inline-errormsg"
+                        : "hidden"
+                    }
+                  >
+                    İşlem Tarihini girmelisiniz.
+                  </div>
+                </div>
+                  
             <div className="card col-md-6 offset-md-3 offset-md-3">
               Öğütme Türünü Seçiniz:
               <div className="card-body">

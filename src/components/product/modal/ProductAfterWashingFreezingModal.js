@@ -38,7 +38,7 @@ class ProductAfterWashingFreezingModal extends React.Component {
           fade={this.state.fade}
           className={this.props.className}
         >
-          <ModalHeader toggle={this.toggle}>Dondurucuya Koy (After Desetting)</ModalHeader>
+          <ModalHeader toggle={this.toggle}>Dondurucuya Koy (After Defatting)</ModalHeader>
           <ModalBody>
             <ProductAfterWashingFreezingState
               errors={this.errors}

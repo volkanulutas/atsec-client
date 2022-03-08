@@ -17,7 +17,6 @@ class DonorService {
   }
 
   updateDonor(id, donor) {
-    alert(API_BASE_URL + API_URL_DONOR + id);
     return axios.put(API_BASE_URL + API_URL_DONOR + id, donor, {headers: authHeader()});
   }
 

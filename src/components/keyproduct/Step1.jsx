@@ -130,28 +130,8 @@ const Step1 = props => {
            Doktor Adını girmelisiniz.
       </div>
       </div>
-
       <div className="form-group">
-        <label>Doku Alma Şekli</label>
-         <input placeholder="" name="tissueTakenType" 
-          className={props.hasError("tissueTakenType") 
-          ? "form-control is-invalid" 
-          : "form-control"}
-          value={props.tissueTakenType} onChange={props.setTissueTakenType}
-          disabled={!props.isEditable} />
-          <div className={props.hasError("tissueTakenType") ? "inline-errormsg" : "hidden"}>
-           Doku Alma Şeklini Girmelisiniz.
-      </div>
-      </div>
-
-
-
-      
-      
-
-
-      <div className="form-group">
-            <label>Doku Çıkarım Zamanı (Saat ve Tarih):</label>
+            <label>Doku Çıkarım Zamanı:</label>
             <input
               type="date"
               id="issueTissueDate"
@@ -176,6 +156,32 @@ const Step1 = props => {
             </div>
           </div>
 
+          <div className="form-group">
+            <label>Merkeze Geliş Zamanı:</label>
+            <input
+              type="date"
+              id="arrivalDate"
+              name="arrivalDate"
+              className={
+                props.hasError("arrivalDate")
+                  ? "form-control is-invalid"
+                  : "form-control"
+              }
+              value={props.arrivalDate}
+              onChange={props.changeArrivalDateHandler}
+              disabled={!props.isEditable}
+            />
+            <div
+              className={
+                props.hasError("arrivalDate")
+                  ? "inline-errormsg"
+                  : "hidden"
+              }
+            >
+              Merkeze Geliş Tarihini girmelisiniz.
+            </div>
+          </div>
+        
 
     <div className="form-group">
             <label>
@@ -255,12 +261,6 @@ const Step1 = props => {
               />
             </div>
           </div>
-
-
-       
-
-
-
       </FormGroup>
       
     </>

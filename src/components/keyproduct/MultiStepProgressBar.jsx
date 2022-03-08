@@ -10,7 +10,8 @@ const MultiStepProgressBar = props => {
     stepPercentage = 0;
   } else if (props.currentStep === 2) {
     stepPercentage = 50;
-  } else if (props.currentStep === 3) {
+  }
+   else if (props.currentStep === 3) {
     stepPercentage = 100;
   } else {
     stepPercentage = 0;

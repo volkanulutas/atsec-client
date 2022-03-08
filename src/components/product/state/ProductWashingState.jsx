@@ -20,6 +20,8 @@ class ProductWashingState extends Component {
 
       errors: [],
 
+      processDate: '',
+      
       location: [],
       product_LocationList: [],
 
@@ -33,6 +35,8 @@ class ProductWashingState extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleRadio = this.handleRadio.bind(this);
+
+    this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
   }
 
   componentDidMount() {
@@ -55,6 +59,10 @@ class ProductWashingState extends Component {
       });
   }
 
+  handleProcessDateChange(event){
+    this.setState({ processDate: event.target.value });
+  }
+
   accept(event) {
     event.preventDefault();
 
@@ -62,12 +70,15 @@ class ProductWashingState extends Component {
     if (this.state.checkedItems.size !== 10) {
       errors.push("washing-checkbox");
     }
+    if (this.state.processDate === '') {
+      errors.push("processDate");
+    }
 
     this.setState({ errors: errors });
 
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.selectedRadio);
+      this.state.callback_accept(this.state.data, this.state.selectedRadio, this.state.processDate);
     }
   }
 
@@ -106,9 +117,33 @@ class ProductWashingState extends Component {
        <ToastContainer />
         <div className="row">
           <div className="card col-md-6 offset-md-3 offset-md-3">
-            Desetting...
+          Defatting...
             <div className="card-body">
               <form>
+              <div className="form-group">
+                  <label>İşlem Tarihi</label>
+                  <input
+                    type="datetime-local"
+                    id="arrivalDate"
+                    name="arrivalDate"
+                    className={
+                      this.hasError("processDate")
+                        ? "form-control is-invalid"
+                        : "form-control"
+                    }
+                    value={this.state.processDate}
+                    onChange={this.handleProcessDateChange}
+                  />
+                  <div
+                    className={
+                      this.hasError("processDate")
+                        ? "inline-errormsg"
+                        : "hidden"
+                    }
+                  >
+                    İşlem Tarihini girmelisiniz.
+                  </div>
+                </div>
                 <div className="form-group">
                   {this.state.product_WashingList.map((item) => (
                     <div>

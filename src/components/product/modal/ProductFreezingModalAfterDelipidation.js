@@ -29,7 +29,7 @@ class ProductFreezingModalAfterDelipidation extends React.Component {
     return (
       <div>
         <Button color="primary" onClick={this.toggle}>
-          Dondurma (Desetting)
+          Dondurma (Defatting)
         </Button>
         <Modal
           isOpen={this.state.modal}
@@ -39,7 +39,7 @@ class ProductFreezingModalAfterDelipidation extends React.Component {
         >
           <ModalHeader toggle={this.toggle}>
             {" "}
-            Dondurma (Desetting)
+            Dondurma (Defatting)
           </ModalHeader>
           <ModalBody>
             <ProductFreezingStateAfterDelipidation

@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
+
 import { Typeahead } from "react-bootstrap-typeahead";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import ProductService from "../../../services/ProductService";
-import LocationService from "../../../services/LocationService";
-
-class ProductCoarseState extends Component {
+class ProductDryingState extends Component {
   constructor(props) {
     super(props);
 
@@ -21,8 +19,6 @@ class ProductCoarseState extends Component {
       errors: [],
 
       processDate: '',
-      location: [],
-      product_LocationList: [],
     };
     // callback
     this.accept = this.accept.bind(this);
@@ -32,14 +28,6 @@ class ProductCoarseState extends Component {
   }
 
   componentDidMount() {
-    LocationService.getAllLocations()
-      .then((res) => {
-        this.setState({ product_LocationList: res.data });
-      })
-      .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-CRS-STT-01");
-        notify();
-      });
   }
 
   handleProcessDateChange(event){
@@ -48,11 +36,9 @@ class ProductCoarseState extends Component {
 
   accept(event) {
     event.preventDefault();
-
+  
     var errors = [];
-    if (this.state.location[0].name === undefined) {
-      errors.push("location");
-    }
+
     if (this.state.processDate === '') {
       errors.push("processDate");
     }
@@ -60,7 +46,7 @@ class ProductCoarseState extends Component {
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.location, this.state.processDate);
+      this.state.callback_accept(this.state.processDate);
     }
   }
 
@@ -79,10 +65,10 @@ class ProductCoarseState extends Component {
     return (
       <div>
         <div className="container">
-         <ToastContainer />
+          <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
-              Devreye Al
+              Kurutma
               <div className="card-body">
                 <form>
                 <div className="form-group">
@@ -109,36 +95,7 @@ class ProductCoarseState extends Component {
                     İşlem Tarihini girmelisiniz.
                   </div>
                 </div>
-                  <div className="form-group">
-                    <label>
-                      Yeni Lokasyon:{" "}
-                      {this.state.location[0] === undefined
-                        ? "Seçilmedi"
-                        : this.state.location[0].name}
-                    </label>
-                    <div>
-                      <Typeahead
-                        multiple={multiple}
-                        id="select-location-quarantina"
-                        onChange={(selected) => {
-                          this.setState({ location: selected });
-                        }}
-                        labelKey="name"
-                        options={this.state.product_LocationList}
-                        placeholder="Yeni Lokasyonunu Seç..."
-                        selected={this.state.location}
-                      />
-                    </div>
-                    <div
-                      className={
-                        this.hasError("location") ? "inline-errormsg" : "hidden"
-                      }
-                    >
-                      Lokasyonu girmelisiniz.
-                    </div>
-                  </div>
 
-           
                   <div className="form-group">
                     <Button color="primary" onClick={this.accept}>
                       Kabul
@@ -148,7 +105,6 @@ class ProductCoarseState extends Component {
                     </Button>
                   </div>
                 </form>
-                <div></div>
               </div>
             </div>
           </div>
@@ -158,4 +114,4 @@ class ProductCoarseState extends Component {
   }
 }
 
-export default ProductCoarseState;
+export default ProductDryingState;

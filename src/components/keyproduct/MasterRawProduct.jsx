@@ -50,14 +50,19 @@ class MasterRawProduct extends Component {
       tissueType: [], // Typeahead needs array.
       location: [], // Typeahead needs array.
       doctorName: "",
-      tissueTakenType: "",
-      
+      arrivalDate: "",
+  
       // Step 2
       statusName: [], // Typeahead needs array.
       issueTissueDate: "",
-      arrivalDate: "",
-      information: "volkan",
+  
+      information: "bilgi",
       deleted: false,
+
+      tissueCarryCase: false,
+      sterialBag:false,
+      dataLogger: false,
+      temperature: 0,
 
       product_StatusNameList: [
         "Red",
@@ -88,8 +93,7 @@ class MasterRawProduct extends Component {
       messageExtra: "",
       extraFilesInfos: [],
 
-      signer:"",
-      signDate: "",
+      responsible:"",
 
       errors: [],
     };
@@ -111,12 +115,14 @@ class MasterRawProduct extends Component {
     this.changeInformationHandler = this.changeInformationHandler.bind(this);
     this.changeIssueTissueDateHandler = this.changeIssueTissueDateHandler.bind(this);
 
+    this.handleTissueCarryCase = this.handleTissueCarryCase.bind(this);
+    
+
     this.setDonor = this.setDonor.bind(this);
     this.setDonorInstitute = this.setDonorInstitute.bind(this);
     this.setTissueType = this.setTissueType.bind(this);
     this.setLocation = this.setLocation.bind(this);
     this.setDoctorName = this.setDoctorName.bind(this);
-    this.setTissueTakenType = this.setTissueTakenType.bind(this);
 
     this.setStatus = this.setStatus.bind(this);
 
@@ -128,8 +134,7 @@ class MasterRawProduct extends Component {
     this.uploadTransferFile = this.uploadTransferFile.bind(this);
     this.uploadExtraFile = this.uploadExtraFile.bind(this);
 
-    this.changeSignerHandler = this.changeSignerHandler.bind(this);
-    this.changeSignDateHandler = this.changeSignDateHandler.bind(this);
+    this.changeResponsibleandler = this.changeResponsibleHandler.bind(this);
 
     // Bind new functions for next and previous
     this._next = this._next.bind(this);
@@ -142,7 +147,6 @@ class MasterRawProduct extends Component {
       donor: this.state.donor[0],
       donorInstitute: this.state.donorInstitute[0],
       doctorName: this.state.doctorName,
-      tissueTakenType: this.state.TissueTakenType,
       issueTissueDate: this.convertDate(this.state.issueTissueDate),
       tissueType: this.state.tissueType[0],
       location: this.state.location[0],
@@ -155,8 +159,7 @@ class MasterRawProduct extends Component {
       deleted: this.state.deleted,
    
       
-      signer: this.state.signer,
-      signDate:  this.convertDate(this.state.signDate),
+      responsible: this.state.responsible,
     };
 
     if(isUpdate){
@@ -234,7 +237,6 @@ class MasterRawProduct extends Component {
         
           let product = res.data;
           let issueTissueDateStr = this.convertString(product.issueTissueDate);
-          alert(issueTissueDateStr)
           let arrivalDateStr = this.convertString(product.arrivalDate);
           let idTemp = product.id;
 
@@ -244,9 +246,13 @@ class MasterRawProduct extends Component {
           let locationTemp = [product.location];
           let statusNameTemp = [product.statusName];
           let doctorNameTemp = product.doctorName;
-          let tissueTakenTypeTemp = product.tissueTakenType;
-          let signerTemp = product.signer;
-          let signerDateTemp = product.signerDate;
+          let responsibleTemp = product.responsible;
+
+          let tissueCarryCaseTemp = product.tissueCarryCase;
+          let sterialBagTemp = product.sterialBag;
+          let dataLoggerTemp = product.dataLogger;
+          let temperatureTemp = product.temperature;
+  
 
           this.setState({
             id: idTemp,
@@ -255,14 +261,18 @@ class MasterRawProduct extends Component {
             tissueType: tissueTypeTemp,
             location: locationTemp,
             doctorName: doctorNameTemp,
-            tissueTakenType: tissueTakenTypeTemp,
             issueTissueDate: issueTissueDateStr,
             arrivalDate: arrivalDateStr,
-            signer: signerTemp,
-            signerDate: signerDateTemp,
+            responsible: responsibleTemp,
             information: product.information,
             statusName: statusNameTemp,
             deleted: product.deleted,
+
+            tissueCarryCase: tissueCarryCaseTemp,
+            sterialBag: sterialBagTemp,
+            dataLogger: dataLoggerTemp,
+            temperature: temperatureTemp,
+
           });
         })
         .catch((ex) => {
@@ -270,6 +280,28 @@ class MasterRawProduct extends Component {
           notify();
         });
     }
+  }
+
+  handleTissueCarryCase = (event)=>{
+    var isChecked = event.target.checked;
+    var item = event.target.value;
+    this.setState({ tissueCarryCase: isChecked });  
+  }
+
+  handleSterialBag = (event) =>{
+    var isChecked = event.target.checked;
+    var item = event.target.value;
+    this.setState({ sterialBag: isChecked });  
+  }
+
+  handleDataLogger = (event)=>{
+    var isChecked = event.target.checked;
+    var item = event.target.value;
+    this.setState({ dataLogger: isChecked });  
+  }
+
+  changeTemperatureHandler = (event) => {
+    this.setState({ temperature: event.target.value });
   }
 
   changeIssueTissueDateHandler = (event) => {
@@ -280,12 +312,8 @@ class MasterRawProduct extends Component {
     this.setState({ arrivalDate: event.target.value });
   };
 
-  changeSignDateHandler = (event) => {
-    this.setState({ signDate: event.target.value });
-  };
-
-  changeSignerHandler = (event) => {
-    this.setState({ signer: event.target.value });
+  changeResponsibleHandler = (event) => {
+    this.setState({ responsible: event.target.value });
   };
 
   changeInformationHandler = (event) => {
@@ -311,12 +339,6 @@ class MasterRawProduct extends Component {
 
   setDoctorName(data) {
     this.setState({ doctorName: data.target.value});
-  }
-  
-  setTissueTakenType(data) {
-    console.log("tissueTakenType:", data);
-
-    this.setState({ tissueTakenType: data});
   }
 
   setStatus(data) {
@@ -348,11 +370,8 @@ class MasterRawProduct extends Component {
     if(selectedExtraFiles === undefined) {
       errors.push("extraFile");
     }*/
-    if (this.state.signDate === "") {
-        errors.push("signDate");
-    }
-    if (this.state.signer === "") {
-        errors.push("signer");
+    if (this.state.responsible === "") {
+        errors.push("responsible");
     }
     this.setState({ errors: errors });
     if (errors.length > 0) {
@@ -392,6 +411,10 @@ class MasterRawProduct extends Component {
       if(this.state.donor[0] === undefined) {
         errors.push("donor");
       }
+      if (this.state.arrivalDate === "") {
+        errors.push("arrivalDate");
+      }
+
       if (this.state.donorInstitute[0] === undefined) {
         errors.push("donorInstitute");
       }
@@ -400,9 +423,6 @@ class MasterRawProduct extends Component {
       }
       if (this.state.issueTissueDate === "") {
          errors.push("issueTissueDate");
-      }
-      if (this.state.tissueTakenType === "") {
-        errors.push("tissueTakenType");
       }
       if (this.state.tissueType[0] === undefined) {
         errors.push("tissueType");
@@ -431,9 +451,20 @@ class MasterRawProduct extends Component {
       if(this.state.statusName[0] !== "Kabul" ) {
         errors.push("statusNotCompatible");  
       }
-      if (this.state.arrivalDate === "") {
-        errors.push("arrivalDate");
+      if(this.state.tissueCarryCase === false){
+        errors.push("tissueCarryCase");
       }
+      if(this.state.sterialBag === false){
+        errors.push("sterialBag");
+      }
+      if(this.state.dataLogger === false){
+        errors.push("dataLogger");
+      }
+      if(this.state.temperature === ""){
+        errors.push("temperature");
+      }
+
+
       this.setState({ errors: errors });
       if (errors.length > 0) {
         return false;
@@ -635,9 +666,6 @@ class MasterRawProduct extends Component {
                 tissueType={this.state.tissueType}
                 setTissueType = {this.setTissueType}
 
-                tissueTakenType={this.state.tissueTakenType}
-                setTissueTakenType = {this.setTissueTakenType}
-
                 id = {this.state.id}
                 isEditable = {this.state.isEditable}
                 multiple = {this.state.multiple}
@@ -655,6 +683,9 @@ class MasterRawProduct extends Component {
 
                 email={this.state.email}
 
+                arrivalDate={this.state.arrivalDate}
+                changeArrivalDateHandler = {this.changeArrivalDateHandler}
+
               />
               <Step2
                 currentStep={this.state.currentStep}
@@ -667,11 +698,20 @@ class MasterRawProduct extends Component {
                 error = {this.state.errors}
                 hasError = {this.hasError}
 
-                arrivalDate={this.state.arrivalDate}
-                changeArrivalDateHandler = {this.changeArrivalDateHandler}
-
                 information={this.state.information}
                 changeInformationHandler = {this.changeInformationHandler}
+
+                sterialBag = {this.state.sterialBag}
+                handleSterialBag = {this.handleSterialBag}
+
+                dataLogger = {this.state.dataLogger}
+                handleDataLogger = {this.handleDataLogger}
+
+                tissueCarryCase = {this.state.tissueCarryCase}
+                handleTissueCarryCase = {this.handleTissueCarryCase}
+
+                temperature = {this.state.temperature}
+                changeTemperatureHandler = {this.changeTemperatureHandler}
                 
                 setStatus = {this.setStatus}
 
@@ -685,8 +725,7 @@ class MasterRawProduct extends Component {
                 currentStep={this.state.currentStep}
                 handleChange={this.handleChange}
           
-                signer={this.state.signer}
-                signDate={this.state.signDate}
+                responsible={this.state.responsible}
 
                 id = {this.state.id}
                 isEditable = {this.state.isEditable}
@@ -698,8 +737,7 @@ class MasterRawProduct extends Component {
                 uploadTransferFile = {this.uploadTransferFile}
                 uploadExtraFile = {this.uploadExtraFile}
 
-                changeSignerHandler={this.changeSignerHandler}
-                changeSignDateHandler={this.changeSignDateHandler}
+                changeResponsibleandler={this.changeResponsibleHandler}
 
                 // methods
                 selectConfirmationFile = {this.selectConfirmationFile}

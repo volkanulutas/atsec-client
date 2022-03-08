@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 
-import ProductWashingState from "../state/ProductWashingState";
+import ProductDryingState from "../state/ProductDryingState";
 
-class ProductWashingModal extends React.Component {
+class ProductDryingModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,20 +28,19 @@ class ProductWashingModal extends React.Component {
   render() {
     return (
       <div>
-        <Button color="primary" onClick={this.toggle}>
-          Yıkama (Defatting) Yap
+        <Button color="success" onClick={this.toggle}>
+          Kurutma Yap
         </Button>
+
         <Modal
           isOpen={this.state.modal}
           toggle={this.toggle}
           fade={this.state.fade}
           className={this.props.className}
         >
-          <ModalHeader toggle={this.toggle}>
-          Defatting...
-          </ModalHeader>
+          <ModalHeader toggle={this.toggle}>Kurutma</ModalHeader>
           <ModalBody>
-            <ProductWashingState
+            <ProductDryingState
               errors={this.errors}
               data={this.state.data}
               callback_modalToggle={this.toggle}
@@ -56,4 +55,4 @@ class ProductWashingModal extends React.Component {
   }
 }
 
-export default ProductWashingModal;
+export default ProductDryingModal;

@@ -35,6 +35,8 @@ class ProductAfterWashingSterilationState extends Component {
       checkedItems2: new Map(),
 
       checkedItems3: new Map(),
+
+      processDate: '',
     };
     // callback
     this.accept = this.accept.bind(this);
@@ -43,6 +45,8 @@ class ProductAfterWashingSterilationState extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleChange2 = this.handleChange2.bind(this);  
     this.handleChange3 = this.handleChange3.bind(this);
+
+    this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
   }
 
 
@@ -72,6 +76,10 @@ class ProductAfterWashingSterilationState extends Component {
   componentDidMount() {
   }
 
+  handleProcessDateChange(event){
+    this.setState({ processDate: event.target.value });
+  }
+
   accept(event) {
     event.preventDefault();
   
@@ -99,6 +107,9 @@ class ProductAfterWashingSterilationState extends Component {
     } else {
       errors.push("phValue");
     }
+    if (this.state.processDate === '') {
+      errors.push("processDate");
+    }
     // DampValue
     var dampValueInt;
     try {
@@ -116,7 +127,7 @@ class ProductAfterWashingSterilationState extends Component {
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.selectedRadio);
+      this.state.callback_accept(this.state.data, this.state.selectedRadio, this.state.processDate);
     }
   }
 
@@ -169,6 +180,31 @@ class ProductAfterWashingSterilationState extends Component {
               <div className="card-body">
                 <form>
                 <div className="form-group">
+                  <label>İşlem Tarihi</label>
+                  <input
+                    type="datetime-local"
+                    id="arrivalDate"
+                    name="arrivalDate"
+                    className={
+                      this.hasError("processDate")
+                        ? "form-control is-invalid"
+                        : "form-control"
+                    }
+                    value={this.state.processDate}
+                    onChange={this.handleProcessDateChange}
+                  />
+                  <div
+                    className={
+                      this.hasError("processDate")
+                        ? "inline-errormsg"
+                        : "hidden"
+                    }
+                  >
+                    İşlem Tarihini girmelisiniz.
+                  </div>
+                </div>
+                  
+                <div className="form-group">
                     {this.state.product_PreprocessingList.map((item) => (
                       <Label>
                         <Input
@@ -204,7 +240,7 @@ class ProductAfterWashingSterilationState extends Component {
                             </div>
 
                             <div className="form-group">
-                            <Label>
+                            <Label> 
                         <Input
                           type="checkbox"
                           value={"Kurutma İşlemi"}

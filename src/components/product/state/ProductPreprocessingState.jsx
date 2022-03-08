@@ -20,6 +20,8 @@ class ProductPreprocessingState extends Component {
 
       checkedItems: new Map(),
       product_PreprocessingList: [],
+
+      processDate: '',
     
       errors: [],
     };
@@ -29,6 +31,7 @@ class ProductPreprocessingState extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleProductFormChange = this.handleProductFormChange.bind(this);
+    this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
   }
 
   componentDidMount() {
@@ -52,11 +55,14 @@ class ProductPreprocessingState extends Component {
     if (this.state.productFormTypeList.length === 0) {
       errors.push("productFormType-checkbox");
     }
+    if (this.state.processDate === '') {
+      errors.push("processDate");
+    }
 
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.row, this.state.productFormTypeList);
+      this.state.callback_accept(this.state.row, this.state.productFormTypeList, this.state.processDate);
     }
   }
 
@@ -80,6 +86,10 @@ class ProductPreprocessingState extends Component {
          this.setState({arr});
       }
     }
+  }
+
+  handleProcessDateChange(event){
+    this.setState({ processDate: event.target.value });
   }
 
   handleChange(event) {
@@ -119,6 +129,32 @@ class ProductPreprocessingState extends Component {
                 <div className="form-group">
                 <Label>İşlem Onayları</Label>
                   </div>
+
+
+                <div className="form-group">
+                  <label>İşlem Tarihi</label>
+                  <input
+                    type="datetime-local"
+                    id="arrivalDate"
+                    name="arrivalDate"
+                    className={
+                      this.hasError("processDate")
+                        ? "form-control is-invalid"
+                        : "form-control"
+                    }
+                    value={this.state.processDate}
+                    onChange={this.handleProcessDateChange}
+                  />
+                  <div
+                    className={
+                      this.hasError("processDate")
+                        ? "inline-errormsg"
+                        : "hidden"
+                    }
+                  >
+                    İşlem Tarihini girmelisiniz.
+                  </div>
+                </div>
                   
                   <div className="form-group">
               
@@ -145,7 +181,7 @@ class ProductPreprocessingState extends Component {
                   </div>
 
                   <div className="form-group">
-                    
+                      
                     <div>
                       <Label>Kesme İşlemi:</Label>
                       <div

@@ -41,7 +41,7 @@ const Step3 = props => {
   // onchange event
   const fileType=['application/pdf'];
 
-  if (props.currentStep !== 3) {
+  if (props.currentStep !== 4) {
     return null;
   }
 
@@ -253,43 +253,17 @@ const Step3 = props => {
       </form>
 
       <div className="form-group">
-        <label>İmza Sahibi</label>
-         <input placeholder="" name="signer" 
-          className={props.hasError("signer") 
+        <label>İşlem Sorumlusu:</label>
+         <input placeholder="" name="responsible" 
+          className={props.hasError("responsible") 
           ? "form-control is-invalid" 
           : "form-control"}
-          value={props.signer} onChange={props.changeSignerHandler}
+          value={props.responsible} onChange={props.changeResponsibleHandler}
           disabled={!props.isEditable} />
-          <div className={props.hasError("signer") ? "inline-errormsg" : "hidden"}>
-           İmza Sahibini girmelisiniz.
+          <div className={props.hasError("responsible") ? "inline-errormsg" : "hidden"}>
+           İşlem sorumlusunu girmelisiniz.
       </div>
       </div>
-
-      <div className="form-group">
-            <label>İmza Tarihi ve Saati:</label>
-            <input
-              type="date"
-              id="signDate"
-              name="signDate"
-              className={
-                props.hasError("signDate")
-                  ? "form-control is-invalid"
-                  : "form-control"
-              }
-              value={props.signDate}
-              onChange={props.changeSignDateHandler}
-              disabled={!props.isEditable}
-            />
-            <div
-              className={
-                props.hasError("signDate")
-                  ? "inline-errormsg"
-                  : "hidden"
-              }
-            >
-              İmza Tarihini girmelisiniz.
-            </div>
-          </div>
     </FormGroup>
     </>
   )

@@ -21,12 +21,15 @@ class ProductPreprocessingState extends Component {
 
       errors: [],
 
+      processDate: '',
       location: [],
       product_LocationList: [],
     };
     // callback
     this.accept = this.accept.bind(this);
     this.reject = this.reject.bind(this);
+
+    this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
   }
 
   componentDidMount() {
@@ -40,6 +43,10 @@ class ProductPreprocessingState extends Component {
       });
   }
 
+  handleProcessDateChange(event){
+    this.setState({ processDate: event.target.value });
+  }
+
   accept(event) {
     event.preventDefault();
 
@@ -48,11 +55,14 @@ class ProductPreprocessingState extends Component {
     if (this.state.location[0] === undefined) {
       errors.push("location");
     }
+    if (this.state.processDate === '') {
+      errors.push("processDate");
+    }
 
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.location);
+      this.state.callback_accept(this.state.data, this.state.location, this.state.processDate);
     }
   }
 
@@ -77,6 +87,31 @@ class ProductPreprocessingState extends Component {
               Dondurucuya Koy3
               <div className="card-body">
                 <form>
+
+                <div className="form-group">
+                  <label>İşlem Tarihi</label>
+                  <input
+                    type="datetime-local"
+                    id="arrivalDate"
+                    name="arrivalDate"
+                    className={
+                      this.hasError("processDate")
+                        ? "form-control is-invalid"
+                        : "form-control"
+                    }
+                    value={this.state.processDate}
+                    onChange={this.handleProcessDateChange}
+                  />
+                  <div
+                    className={
+                      this.hasError("processDate")
+                        ? "inline-errormsg"
+                        : "hidden"
+                    }
+                  >
+                    İşlem Tarihini girmelisiniz.
+                  </div>
+                </div>
                   
                   <div className="form-group">
                     <label>

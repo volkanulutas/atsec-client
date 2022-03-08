@@ -161,8 +161,7 @@ class CreateRawProductComponent extends Component {
           let locationTemp = [product.location];
           let statusNameTemp = [product.statusName];
 
-          let signerTemp = product.signer;
-          let signDateTemp = this.convertString(product.signDate);
+          let responsibleTemp = product.responsible;
 
           this.setState({
             id: idTemp,
@@ -174,8 +173,7 @@ class CreateRawProductComponent extends Component {
             arrivalDate: arrivalDateStr,
             information: product.information,
             statusName: statusNameTemp,
-            signer: signerTemp,
-            signDate: signDateTemp,
+            responsible: responsibleTemp,
             deleted: product.deleted,
           });
         })

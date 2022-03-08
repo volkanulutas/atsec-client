@@ -48,33 +48,6 @@ const Step2 = props => {
             </div>
           </div>
 
-          
-          <div className="form-group">
-            <label>Merkeze Geliş Zamanı (Tarih ve Saat):</label>
-            <input
-              type="date"
-              id="arrivalDate"
-              name="arrivalDate"
-              className={
-                props.hasError("arrivalDate")
-                  ? "form-control is-invalid"
-                  : "form-control"
-              }
-              value={props.arrivalDate}
-              onChange={props.changeArrivalDateHandler}
-              disabled={!props.isEditable}
-            />
-            <div
-              className={
-                props.hasError("arrivalDate")
-                  ? "inline-errormsg"
-                  : "hidden"
-              }
-            >
-              Merkeze Geliş Tarihini girmelisiniz.
-            </div>
-          </div>
-        
           <div className="form-group">
             <label>Ek Bilgi:</label>
             <input
@@ -87,7 +60,90 @@ const Step2 = props => {
             />
           </div>
 
+          <div>
+          <Label>
+              <Input
+              type="checkbox"
+              value="Doku Taşıma Çantası"
+              onChange={this.handleTissueCarryCase}
+             ></Input>
+            Doku Taşıma Çantası
+          </Label>
+          <div
+              className={
+                props.hasError("arrivalDate")
+                  ? "inline-errormsg"
+                  : "hidden"
+              }
+            >
+              Doku Taşıma Çantası seçilmelidir.
+            </div>
+          </div>
 
+        <div>
+          <Label>
+              <Input
+              type="checkbox"
+              value="Doku Taşıma Çantası"
+              onChange={this.handleSterialBag}
+             ></Input>
+            Steril Poşet
+          </Label>
+          <div
+              className={
+                props.hasError("arrivalDate")
+                  ? "inline-errormsg"
+                  : "hidden"
+              }
+            >
+             Steril Poşet seçilmelidir.
+            </div>
+        </div>
+        <div>
+          <Label>
+              <Input
+              type="checkbox"
+              value="Data Logger"
+              onChange={this.handleDataLogger}
+             ></Input>
+            Data Logger
+          </Label>
+          <div
+              className={
+                props.hasError("dataLogger")
+                  ? "inline-errormsg"
+                  : "hidden"
+              }
+            >
+              Data Logger seçilmelidir.
+            </div>
+      </div>
+
+
+      <div>
+      <div className="form-group">
+            <label>Sıcaklık Aralığı</label>
+            <input
+              placeholder="Sıcaklık Aralığı"
+              name="information"
+              className="form-control"
+              value={props.temperature}
+              onChange={props.changeTemperatureHandler}
+              disabled={!props.isEditable}
+            />
+                      <div
+              className={
+                props.hasError("arrivalDate")
+                  ? "inline-errormsg"
+                  : "hidden"
+              }
+            >
+              Sıcaklık Aralığı belirtilmelidir.
+            </div>
+          </div>
+
+      </div>
+         
       </FormGroup>
     </>
   );

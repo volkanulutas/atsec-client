@@ -24,6 +24,8 @@ import AuthService from "../../services/AuthService";
 import ProductWashingModal from "./modal/ProductWashingModal";
 import ProductAfterWashingFreezingModal from "./modal/ProductAfterWashingFreezingModal";
 import ProductAfterWashingSterilationModal from "./modal/ProductAfterWashingSterilationModal";
+import ProductDryingModal from "./modal/ProductDryingModal";
+import ProductMoistureModal from "./modal/ProductMoistureModal";
 
 import ProductBarcodeModal from "../product/modal/ProductBarcodeModal";
 import store from "../../store";
@@ -80,7 +82,7 @@ class ListProductComponent extends Component {
               styleVar = "btn btn-danger";
             } else if (cell === "Dondurma 1") {
               styleVar = "btn btn-warning";
-            } else if (cell === "Desetting") {
+            } else if (cell === "Defatting") {
               styleVar = "btn btn-success";
             }
             return <div className={styleVar}>{cell}</div>;
@@ -135,7 +137,7 @@ class ListProductComponent extends Component {
     this.updateProduct = this.updateProduct.bind(this);
     this.viewProduct = this.viewProduct.bind(this);
   }
-
+  
   componentDidMount() {
     // TODO: 
     // authService.checkSession();
@@ -247,7 +249,7 @@ class ListProductComponent extends Component {
       </div>
       );
     } 
-    else if(row.status === "Desetting Sonrası"){
+    else if(row.status === "Defatting Sonrası"){
         // Delipidation -> Delipidation
       return(
       <div>
@@ -271,7 +273,43 @@ class ListProductComponent extends Component {
    </div>
 );
 
-    } else if (row.status === "Dondurma 3 Sonrası"){
+    }
+    else if (row.status === "Kurutma"){
+      return (
+       
+        <div>
+
+        <ProductDryingModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            data={row}
+            callback_accept={this.performDrying_accept}
+            callback_reject={this.performDrying_reject}
+        />  
+
+        </div>
+      );
+    }
+    else if (row.status === "Nem Tayini"){
+      return (
+       
+        <div>
+
+        <ProductMoistureModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            data={row}
+            callback_accept={this.performMoisture_accept}
+            callback_reject={this.performMoisture_reject}
+        />  
+
+        </div>
+      );
+    }
+    
+    
+    
+    else if (row.status === "Dondurma 3 Sonrası"){
       return (
        
         <div>
@@ -296,12 +334,18 @@ class ListProductComponent extends Component {
     } 
   }
 
-  performCoarseState_accept(row, data) {
+  performCoarseState_accept(row, data, processDate) {
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
         product.location = data;
         product.status = "Dondurma 2 Sonrası";
+
+        let statusDate = {
+          productStatus:  "Dondurma 2 Sonrası",
+          processDate: new Date(processDate).getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -321,15 +365,21 @@ class ListProductComponent extends Component {
   performCoarseState_reject(row, data) {
   }
 
-  performFreezingState_accept(row, location, granulation) {
+  performFreezingState_accept(row, location, granulation, processDate) {
     // öğütme -> Delipidation
     // location change, state change
-    alert("öğütme");
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
         product.location = location;
         product.status = "Dondurma 1 Sonrası";
+
+        let statusDate = {
+          productStatus:  "Dondurma 1 Sonrası",
+          processDate: new Date(processDate).getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
+
         product.granulationType=granulation;
 
         ProductService.updateProduct(row.id, product)
@@ -346,12 +396,18 @@ class ListProductComponent extends Component {
         notify();
       });
   }
-  performCoarse(row) {
-    ProductService.getProductById(row.id)
+  performCoarse(row,  processDate) {
+    ProductService.getProductById(row.id,)
       .then((res) => {
         let product = res.data;
 
         product.status = "Dondurma (Course)";
+
+        let statusDate = {
+          productStatus:  "Dondurma (Course)",
+          processDate: new Date(processDate).getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -368,12 +424,18 @@ class ListProductComponent extends Component {
       });
   }
 
-  performFreezingAfterDelipidation_accept(row) {
+  performFreezingAfterDelipidation_accept(row, processDate) {
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
 
         product.status = "Sterilizasyon";
+
+        let statusDate = {
+          productStatus:  "Sterilizasyon",
+          processDate: new Date(processDate).getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -390,12 +452,80 @@ class ListProductComponent extends Component {
       });
   }
 
-  performAfterWashingSterilation_accept(row){
+  performMoisture_accept(row, processDate){
+    ProductService.getProductById(row.id)
+    .then((res) => {
+      let product = res.data;
+
+      product.status = "Paketleme";
+
+      let statusDate = {
+        productStatus:  "Paketleme",
+        processDate: new Date(processDate).getTime(),
+      };
+      product.productStatusDateRequests.push(statusDate);
+
+      ProductService.updateProduct(row.id, product)
+        .then((res) => {
+          window.location.reload(false);
+        })
+        .catch((ex) => {
+          const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-23");
+          notify();
+        });
+    })
+    .catch((ex) => {
+      const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-24");
+      notify();
+    });
+  }
+
+  performMoisture_reject(row){
+  }
+
+  performDrying_accept(row, processDate){
+
+    ProductService.getProductById(row.id)
+    .then((res) => {
+      let product = res.data;
+
+      product.status = "Nem Tayini";
+
+      let statusDate = {
+        productStatus:  "Nem Tayini",
+        processDate: new Date(processDate).getTime(),
+      };
+      product.productStatusDateRequests.push(statusDate);
+
+      ProductService.updateProduct(row.id, product)
+        .then((res) => {
+          window.location.reload(false);
+        })
+        .catch((ex) => {
+          const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-21");
+          notify();
+        });
+    })
+    .catch((ex) => {
+      const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-22");
+      notify();
+    });
+  }
+
+  performDrying_reject(row){}
+
+  performAfterWashingSterilation_accept(row, processDate){
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
 
-        product.status = "Paketleme";
+        product.status = "Kurutma";
+
+        let statusDate = {
+          productStatus:  "Kurutma",
+          processDate: new Date(processDate).getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -413,7 +543,7 @@ class ListProductComponent extends Component {
   performAfterWashingSterilation_reject(row){
   }
 
-  performAfterWashingFreezing_accept(row){
+  performAfterWashingFreezing_accept(row, processDate){
         // Dondurucuya Koy (After Delipidation) -> Sterilizasyon
 
         ProductService.getProductById(row.id)
@@ -421,6 +551,12 @@ class ListProductComponent extends Component {
           let product = res.data;
   
           product.status = "Dondurma 3 Sonrası";
+
+          let statusDate = {
+            productStatus:  "Dondurma 3 Sonrası",
+            processDate: new Date(processDate).getTime(),
+          };
+          product.productStatusDateRequests.push(statusDate);
   
           ProductService.updateProduct(row.id, product)
             .then((res) => {
@@ -443,14 +579,20 @@ class ListProductComponent extends Component {
 
   performCourseGrinding_reject(row) {}
 
-  performWashing_accept(row) {
+  performWashing_accept(row, processDate) {
     // Delipidation -> Delipidation (Yıkama)
 
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
 
-        product.status = "Desetting Sonrası";
+        product.status = "Defatting Sonrası";
+
+        let statusDate = {
+          productStatus:  "Defatting Sonrası",
+          processDate: new Date(processDate).getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -470,7 +612,7 @@ class ListProductComponent extends Component {
   performWashing_reject(row) {
   }
 
-  performCourseGrinding_accept(row, granulationTypeList) {
+  performCourseGrinding_accept(row, granulationTypeList, processDate) {
 
     ProductService.getProductById(row.id)
       .then((res) => {
@@ -478,6 +620,12 @@ class ListProductComponent extends Component {
 
         product.status = "Öğütme (Course) Sonrası";
         product.granulationType = granulationTypeList;
+
+        let statusDate = {
+          productStatus:  "Öğütme (Course) Sonrası",
+          processDate: new Date(processDate).getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -496,7 +644,9 @@ class ListProductComponent extends Component {
 
   performFreezingState_reject(row, data) {}
 
-  performPreProcessingState_accept(row, productFormTypeList) {
+ 
+
+  performPreProcessingState_accept(row, productFormTypeList, processDate) {
    
     ProductService.getProductById(row.id)
       .then((res) => {
@@ -504,7 +654,14 @@ class ListProductComponent extends Component {
    
         product.status = "Ön İşlem - Kabul";
 
-        var preProcessingList = ["Kesme", "Desetting", "Kartilaj Alma"];
+         let statusDate = {
+          productStatus:  "Ön İşlem - Kabul",
+          processDate: new Date(processDate).getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
+
+      
+        var preProcessingList = ["Kesme", "Defatting", "Kartilaj Alma"];
         product.performPreProcessingType = preProcessingList;
         product.productFormType = productFormTypeList;
 
@@ -513,12 +670,12 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-18" + ex);
+            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-18 " + ex);
             notify();
           });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-17");
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-17 " + ex);
         notify();
       });
   }

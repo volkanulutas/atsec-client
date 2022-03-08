@@ -30,7 +30,7 @@ class ProductGranulationStateModal extends React.Component {
     return (
       <div>
         <Button color="primary" onClick={this.toggle}>
-          Öğütme İşlemine Al
+          Öğütme Yap
         </Button>
         <Modal
           isOpen={this.state.modal}

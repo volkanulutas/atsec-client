@@ -133,18 +133,18 @@ const allPageList = [
     component: CreatePermissionComponent,
   },
   {
-    name: "Donor Listesi",
+    name: "Donör Listesi",
     path: "/donors/",
     id: "DONOR_PAGE_PERMISSION", 
     component: ListDonorComponent,
   },
   {
-    name: "Donor Ekle/Güncelle",
+    name: "Donör Ekle/Güncelle",
     path: "/add-donor/:state/:id",
     component: CreateDonorComponent,
   },
   {
-    name: "Donor Detayı",
+    name: "Donör Detayı",
     path: "/add-donor/:state/:id",
     component: CreateDonorComponent,
   },

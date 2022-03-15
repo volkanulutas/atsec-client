@@ -8,6 +8,10 @@ class DonorService {
     return axios.get(API_BASE_URL + API_URL_DONOR, {headers: authHeader()});
   }
 
+  getDonorByCode(code) {
+    return axios.get(API_BASE_URL + API_URL_DONOR + "code/" + code, {headers: authHeader()});
+  }
+
   getDonorById(id) {
     return axios.get(API_BASE_URL + API_URL_DONOR + id, {headers: authHeader()});
   }

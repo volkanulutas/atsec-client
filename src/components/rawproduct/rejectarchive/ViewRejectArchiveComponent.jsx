@@ -215,7 +215,7 @@ class ViewRejectArchiveComponent extends Component {
                         }}
                         labelKey="name"
                         options={this.state.product_DonorInstituteList}
-                        placeholder="Donor Kurumu Seç..."
+                        placeholder="Donör Kurumu Seç..."
                         disabled
                       />
                     </div>

@@ -28,7 +28,7 @@ class ListPackingProductComponent extends Component {
       columns: [
         {
           dataField: "donor.code",
-          text: "DONOR ID",
+          text: "Donör Id",
           align: "center",
           title: true,
           sort: true,

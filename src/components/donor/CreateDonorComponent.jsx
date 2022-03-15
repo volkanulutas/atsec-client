@@ -195,6 +195,10 @@ class CreateDonorComponent extends Component {
     saveDonor = (event) => {
         event.preventDefault();
         var errors = [];
+
+        if(this.state.code === "" || this.state.code.length > 8){
+            errors.push("code");
+        }
         if(this.state.name === ""){
             errors.push("name");
         }
@@ -235,6 +239,27 @@ class CreateDonorComponent extends Component {
            return false;
        }
 
+       var isBreak = false;
+
+       DonorService.getDonorByCode(this.state.code)
+       .then(res => {
+
+        let donor = res.data;
+        if(donor.code === this.state.code){
+            isBreak = false;
+        }
+        else {
+            const notify = () => toast("Lütfen önceden kullanılmamış bir donör Id kullanınız.");
+            notify();
+            isBreak = true;
+        }  
+       })
+       .catch(ex => {
+        // Hiç bir şey yapma
+       });
+
+       if(!isBreak){
+
         let idParam = undefined;
         if(this.state.id !== "_add"){
             idParam = this.state.id;
@@ -274,6 +299,9 @@ class CreateDonorComponent extends Component {
         if(this.state.callbackModalYes){
             this.state.callbackModalYes();
         }
+           
+       }
+        
     }
 
     cancel = (event) => {
@@ -287,10 +315,10 @@ class CreateDonorComponent extends Component {
 
     getTitle(){
         if(this.state.id === "_add"){
-            return <h3 className="text-center">Donor Ekle</h3>;
+            return <h3 className="text-center">Donör Ekle</h3>;
         }
         else{
-            return <h3 className="text-center">Donor Güncelle</h3>
+            return <h3 className="text-center">Donör Güncelle</h3>
         }
     }
 
@@ -324,6 +352,18 @@ class CreateDonorComponent extends Component {
                         {this.getTitle()}
                         <div className="card-body"> 
                         <form>
+                        <div className="form-group">
+                                <label>Donor Id:</label>
+                                <input placeholder="code" name="code"
+                                className={this.hasError("code") 
+                                ? "form-control is-invalid" 
+                                : "form-control"}
+                                value={this.state.code} onChange={this.changeCodeHandler}
+                                disabled={!this.state.isEditable} />
+                                <div className={this.hasError("code") ? "inline-errormsg" : "hidden"}>
+                                       Donör Id girilmemiş ya da uygun uzunlukta değildir.
+                                </div>
+                            </div>
                             <div className="form-group">
                                 <label>Donor Adı:</label>
                                 <input placeholder="Ali" name="name"

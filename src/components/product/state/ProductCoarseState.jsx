@@ -60,7 +60,7 @@ class ProductCoarseState extends Component {
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.location, this.state.processDate);
+      this.state.callback_accept(this.state.data, this.state.location[0], this.state.processDate);
     }
   }
 

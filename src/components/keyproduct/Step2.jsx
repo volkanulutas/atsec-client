@@ -65,7 +65,7 @@ const Step2 = props => {
               <Input
               type="checkbox"
               value="Doku Taşıma Çantası"
-              onChange={this.handleTissueCarryCase}
+              onChange={props.handleTissueCarryCase}
              ></Input>
             Doku Taşıma Çantası
           </Label>
@@ -85,7 +85,7 @@ const Step2 = props => {
               <Input
               type="checkbox"
               value="Doku Taşıma Çantası"
-              onChange={this.handleSterialBag}
+              onChange={props.handleSterialBag}
              ></Input>
             Steril Poşet
           </Label>
@@ -104,7 +104,7 @@ const Step2 = props => {
               <Input
               type="checkbox"
               value="Data Logger"
-              onChange={this.handleDataLogger}
+              onChange={props.handleDataLogger}
              ></Input>
             Data Logger
           </Label>

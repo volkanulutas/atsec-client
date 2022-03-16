@@ -307,8 +307,6 @@ class ListProductComponent extends Component {
       );
     }
     
-    
-    
     else if (row.status === "Dondurma 3 Sonrası"){
       return (
        
@@ -365,13 +363,14 @@ class ListProductComponent extends Component {
   performCoarseState_reject(row, data) {
   }
 
-  performFreezingState_accept(row, location, granulation, processDate) {
+  performFreezingState_accept(row, location, processDate) {
     // öğütme -> Delipidation
     // location change, state change
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
         product.location = location;
+        alert("Dondurma sonrasi");
         product.status = "Dondurma 1 Sonrası";
 
         let statusDate = {
@@ -380,14 +379,14 @@ class ListProductComponent extends Component {
         };
         product.productStatusDateRequests.push(statusDate);
 
-        product.granulationType=granulation;
+        // product.granulationType=granulation;
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
             window.location.reload(false);
           })
           .catch((ex) => {
-            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-04");
+            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-04 "+ ex);
             notify();
           });
       })

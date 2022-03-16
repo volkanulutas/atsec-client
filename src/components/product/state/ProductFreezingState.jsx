@@ -9,7 +9,7 @@ import ProductService from "../../../services/ProductService";
 import LocationService from "../../../services/LocationService";
 
 // Dondurma 1 Sonrası -> Öğütme
-class ProductPreprocessingState extends Component {
+class ProductFreezingState extends Component {
   constructor(props) {
     super(props);
 
@@ -62,7 +62,7 @@ class ProductPreprocessingState extends Component {
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.location, this.state.processDate);
+      this.state.callback_accept(this.state.data, this.state.location[0], this.state.processDate);
     }
   }
 
@@ -160,4 +160,4 @@ class ProductPreprocessingState extends Component {
   }
 }
 
-export default ProductPreprocessingState;
+export default ProductFreezingState;

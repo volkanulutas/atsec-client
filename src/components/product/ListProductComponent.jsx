@@ -152,7 +152,10 @@ class ListProductComponent extends Component {
       });
   }
 
+
+
   checkstatus(row) {
+
     if (row.status === "Ön İşlem") {
 
     ProductService.createBarcode(row.id)
@@ -163,7 +166,6 @@ class ListProductComponent extends Component {
     .catch((ex) => {
       console.error(ex);
     });
-
       return (
         // (Ön İşlem) => (Ön İşlem - Kabul) Etiket Oluştur
         <div>
@@ -184,6 +186,18 @@ class ListProductComponent extends Component {
         />
         </div>
       );
+    } else if (row.status === "Paketleme Öncesi"){
+      return (      
+      <button
+        type="button"
+        style={{ marginRight: "5px" }}
+        onClick={() => this.performPacking(row)}
+        className="btn btn-success"
+      >
+        Paketleme İşlemine Al
+      </button>);
+
+
     } else if (row.status === "Ön İşlem - Kabul") {
       return (
         // (Ön İşlem - Kabul) => (Dondurma 1)
@@ -370,7 +384,6 @@ class ListProductComponent extends Component {
       .then((res) => {
         let product = res.data;
         product.location = location;
-        alert("Dondurma sonrasi");
         product.status = "Dondurma 1 Sonrası";
 
         let statusDate = {
@@ -451,6 +464,35 @@ class ListProductComponent extends Component {
       });
   }
 
+  performPacking(row){
+    ProductService.getProductById(row.id)
+    .then((res) => {
+      let product = res.data;
+
+      product.status = "Paketleme";
+
+      let statusDate = {
+        productStatus:  "Paketleme",
+        processDate: new Date().getTime(),
+      };
+      product.productStatusDateRequests.push(statusDate);
+
+      ProductService.updateProduct(row.id, product)
+        .then((res) => {
+          window.location.reload(false);
+        })
+        .catch((ex) => {
+          const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-25");
+          notify();
+        });
+    })
+    .catch((ex) => {
+      const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-24");
+      notify();
+    });
+
+  }
+
   performMoisture_accept(row, processDate){
     ProductService.getProductById(row.id)
     .then((res) => {
@@ -483,15 +525,14 @@ class ListProductComponent extends Component {
   }
 
   performDrying_accept(row, processDate){
-
     ProductService.getProductById(row.id)
     .then((res) => {
       let product = res.data;
 
-      product.status = "Nem Tayini";
+      product.status = "Paketleme Öncesi";
 
       let statusDate = {
-        productStatus:  "Nem Tayini",
+        productStatus:  "Paketleme Öncesi",
         processDate: new Date(processDate).getTime(),
       };
       product.productStatusDateRequests.push(statusDate);

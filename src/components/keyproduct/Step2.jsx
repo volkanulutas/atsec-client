@@ -6,7 +6,7 @@ const Step2 = props => {
   if (props.currentStep !== 2) {
     return null;
   }
-
+  
   return (
     <>
       <FormGroup>
@@ -61,7 +61,7 @@ const Step2 = props => {
           </div>
 
           <div>
-          <Label>
+          <Label style={{marginLeft: "20px"}}>
               <Input
               type="checkbox"
               value="Doku Taşıma Çantası"
@@ -81,7 +81,7 @@ const Step2 = props => {
           </div>
 
         <div>
-          <Label>
+          <Label style={{marginLeft: "20px"}}>
               <Input
               type="checkbox"
               value="Doku Taşıma Çantası"
@@ -100,7 +100,7 @@ const Step2 = props => {
             </div>
         </div>
         <div>
-          <Label>
+          <Label style={{marginLeft: "20px"}}>
               <Input
               type="checkbox"
               value="Data Logger"

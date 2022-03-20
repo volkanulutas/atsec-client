@@ -6,6 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import DonorService from '../../services/DonorService';
+import DonorInstituteService from "../../services/DonorInstituteService";
+import AddModal from "../util/modal/AddModal";
 
 class CreateDonorComponent extends Component {
     constructor(props)
@@ -37,6 +39,11 @@ class CreateDonorComponent extends Component {
             multiple: false,
             errors: [],
 
+            isCreation: false,
+
+            donorInstitute: [], // Typeahead needs array.
+            product_DonorInstituteList: [],
+
             donor_Districts: [],
             donor_CityList: [],
             donor_DistrictList: [],
@@ -46,6 +53,7 @@ class CreateDonorComponent extends Component {
             callbackModalYes: props.callbackModalYes,
             callbackModalNo: props.callbackModalNo,
         }
+        this.addCreateDonorInstituteComponent = this.addCreateDonorInstituteComponent.bind(this);
         this.saveDonor = this.saveDonor.bind(this);
         this.changeCitizenshipNumberHandler = this.changeCitizenshipNumberHandler.bind(this);
         this.changeCodeHandler = this.changeCodeHandler.bind(this);
@@ -59,6 +67,11 @@ class CreateDonorComponent extends Component {
         this.changeBloodTypeHandler = this.changeBloodTypeHandler.bind(this);
         this.changeSexHandler = this.changeSexHandler.bind(this);
     } 
+
+    addCreateDonorInstituteComponent() {
+        window.location.reload();
+      }
+    
 
     changeCodeHandler = (event) => {
         this.setState({code:event.target.value});
@@ -149,6 +162,14 @@ class CreateDonorComponent extends Component {
             console.log(ex);
         });
 
+        DonorInstituteService.getAllDonorInstitutes()
+        .then((res) => {
+          this.setState({ product_DonorInstituteList: res.data });
+        })
+        .catch((ex) => {
+          console.error(ex);
+        });
+
         DonorService.getBloodTypeList()
         .then(res => {
             this.setState({donor_BloodTypeList: res.data});
@@ -166,8 +187,11 @@ class CreateDonorComponent extends Component {
         });
 
         if(this.state.id === "_add"){
+            this.setState({isCreation: true});
+            
             return;
         }else{
+            this.setState({isCreation: false});
             DonorService.getDonorById(this.state.id)
             .then(res => {
                 let donor = res.data;
@@ -179,6 +203,7 @@ class CreateDonorComponent extends Component {
                     citizenshipNumber: donor.citizenshipNumber,
                     address: donor.address, 
                     addressCity: [donor.addressCity],
+                    donorInstitute : [donor.donorInstitute],
                     addressDistrict : [donor.addressDistrict],
                     tissueNumber: donor.tissueNumber,
                     tissueType: donor.tissueType,
@@ -199,6 +224,9 @@ class CreateDonorComponent extends Component {
         if(this.state.code === "" || this.state.code.length > 8){
             errors.push("code");
         }
+        if (this.state.donorInstitute[0] === undefined) {
+            errors.push("donorInstitute");
+          }
         if(this.state.name === ""){
             errors.push("name");
         }
@@ -266,7 +294,7 @@ class CreateDonorComponent extends Component {
         }
         let donor = {id: idParam, code: this.state.code, citizenshipNumber: this.state.citizenshipNumber,  name: this.state.name, 
             surname: this.state.surname, address: this.state.address, addressCity: this.state.addressCity[0], 
-            addressDistrict: this.state.addressDistrict[0], telephone: this.state.telephone,
+            addressDistrict: this.state.addressDistrict[0], donorInstitute:this.state.donorInstitute[0], telephone: this.state.telephone,
             sex: this.state.sex[0], birthdate: this.state.birthdate, bloodType: this.state.bloodType[0],
             tissueType: this.state.tissueType, tissueNumber:this.state.tissueNumber, deleted: this.state.deleted };
         if(this.state.id === "_add"){ // create user
@@ -301,7 +329,6 @@ class CreateDonorComponent extends Component {
         }
            
        }
-        
     }
 
     cancel = (event) => {
@@ -359,7 +386,7 @@ class CreateDonorComponent extends Component {
                                 ? "form-control is-invalid" 
                                 : "form-control"}
                                 value={this.state.code} onChange={this.changeCodeHandler}
-                                disabled={!this.state.isEditable} />
+                                disabled={this.state.isCreation || !this.state.isEditable} />
                                 <div className={this.hasError("code") ? "inline-errormsg" : "hidden"}>
                                        Donör Id girilmemiş ya da uygun uzunlukta değildir.
                                 </div>
@@ -400,6 +427,46 @@ class CreateDonorComponent extends Component {
                                     TC numarası uygun formatta değil veya girilmemiş.
                                 </div>
                             </div>
+
+                            <div className="form-group">
+            <label>
+              Gönderen Kurum:{" "}
+              {this.state.donorInstitute[0] === undefined
+                ? "Seçilmedi"
+                : this.state.donorInstitute[0].name}
+            </label>
+            <div>
+              <Typeahead
+                multiple={multiple}
+                id="select-donorInstitute"
+                onChange={(selected) => {
+                  this.setState({ donorInstitute: selected });
+                }}
+                labelKey="name"
+                options={this.state.product_DonorInstituteList}
+                placeholder="Gönderen Kurumu Seç..."
+                selected={this.state.donorInstitute}
+                disabled={!this.state.isEditable}
+              />
+              <div
+                className={
+                  this.hasError("donorInstitute")
+                    ? "inline-errormsg"
+                    : "hidden"
+                }
+              >
+                Gönderen Kurumu girmelisiniz.
+              </div>
+              <AddModal
+                style={{ marginRight: "5px" }}
+                initialModalState={false}
+                component={"CreateDonorInstituteComponent"}
+                callback={this.addCreateDonorInstituteComponent}
+                isEditable ={this.state.isEditable}
+              />
+            </div>
+          </div>
+
                             <div className="form-group">
                                 <label>Doku Adedi:</label>
                                 <input type="number" placeholder="2" name="tissueNumber" 

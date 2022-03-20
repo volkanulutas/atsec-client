@@ -49,7 +49,7 @@ class ProductPreprocessingState extends Component {
     event.preventDefault();
 
     var errors = [];
-    if (this.state.checkedItems.size !== 4) {
+    if (this.state.checkedItems.size !== 3) {
       errors.push("preprocessing-checkbox");
     }
     if (this.state.productFormTypeList.length === 0) {

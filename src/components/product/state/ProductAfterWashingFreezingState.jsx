@@ -31,7 +31,7 @@ class ProductAfterWashingFreezingState extends Component {
   }
 
   componentDidMount() {
-    LocationService.getAllLocations()
+    LocationService.getLocationsByType("REJECT")
     .then((res) => {
       this.setState({ product_LocationList: res.data });
     })

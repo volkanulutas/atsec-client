@@ -6,7 +6,6 @@ import RawProductService from "../../services/RawProductService";
 import LocationService from "../../services/LocationService";
 import DonorService from "../../services/DonorService";
 import TissueTypeService from "../../services/TissueTypeService";
-import DonorInstituteService from "../../services/DonorInstituteService";
 import AddModal from "../util/modal/AddModal";
 
 class CreateRawProductComponent extends Component {
@@ -30,7 +29,7 @@ class CreateRawProductComponent extends Component {
 
     
       donor: [], // Typeahead needs array.
-      donorInstitute: [], // Typeahead needs array.
+      
       tissueType: [], // Typeahead needs array.
       location: [], // Typeahead needs array.
       statusName: [], // Typeahead needs array.
@@ -54,10 +53,10 @@ class CreateRawProductComponent extends Component {
         "Tıbbi Atık",
       ],
 
-      product_LocationList: [],
+      product_LocationNormalList: [],
       product_DonorList: [],
       product_TissueTypeList: [],
-      product_DonorInstituteList: [],
+    
       // modal property
       callbackModalYes: props.callbackModalYes,
       callbackModalNo: props.callbackModalNo,
@@ -72,7 +71,7 @@ class CreateRawProductComponent extends Component {
 
     this.save = this.save.bind(this);
 
-    this.addCreateDonorInstituteComponent = this.addCreateDonorInstituteComponent.bind(this);
+ 
     this.addCreateDonorComponent = this.addCreateDonorComponent.bind(this);
     this.addCreateTissueTypeComponent = this.addCreateTissueTypeComponent.bind(this);
     this.addCreateLocationComponent = this.addCreateLocationComponent.bind(this);
@@ -93,9 +92,6 @@ class CreateRawProductComponent extends Component {
     window.location.reload();
   }
 
-  addCreateDonorInstituteComponent() {
-    window.location.reload();
-  }
 
   addCreateLocationComponent(){
     window.location.reload();
@@ -108,9 +104,9 @@ class CreateRawProductComponent extends Component {
   };
 
   componentDidMount() {
-    LocationService.getAllLocations()
+    LocationService.getLocationsByType("NORMAL")
       .then((res) => {
-        this.setState({ product_LocationList: res.data });
+        this.setState({ product_LocationNormalList: res.data });
       })
       .catch((ex) => {
         console.error(ex);
@@ -130,13 +126,7 @@ class CreateRawProductComponent extends Component {
       .catch((ex) => {
         console.error(ex);
       });
-    DonorInstituteService.getAllDonorInstitutes()
-      .then((res) => {
-        this.setState({ product_DonorInstituteList: res.data });
-      })
-      .catch((ex) => {
-        console.error(ex);
-      });
+
     if (this.state.id === "_add") {
        return;
     } else {
@@ -156,7 +146,6 @@ class CreateRawProductComponent extends Component {
           let idTemp = product.id;
 
           let donorTemp = [product.donor];
-          let donorInstituteTemp = [product.donorInstitute];
           let tissueTypeTemp = [product.tissueType];
           let locationTemp = [product.location];
           let statusNameTemp = [product.statusName];
@@ -166,7 +155,6 @@ class CreateRawProductComponent extends Component {
           this.setState({
             id: idTemp,
             donor: donorTemp,
-            donorInstitute: donorInstituteTemp,
             tissueType: tissueTypeTemp,
             location: locationTemp,
             issueTissueDate: issueTissueDateStr,
@@ -220,9 +208,6 @@ class CreateRawProductComponent extends Component {
     if (this.state.issueTissueDate === "") {
       errors.push("issueTissueDate");
     }
-    if (this.state.donorInstitute[0] === undefined) {
-      errors.push("donorInstitute");
-    }
     if (this.state.donor[0] === undefined) {
       errors.push("donor");
     }
@@ -245,15 +230,9 @@ class CreateRawProductComponent extends Component {
       this.state.id = null;
     }*/
 
- 
-
-    
-
-
     let product = {
       id: this.state.id,
       donor: this.state.donor[0],
-      donorInstitute: this.state.donorInstitute[0],
       issueTissueDate: this.state.issueTissueDate,
       arrivalDate: this.convertDate(this.state.arrivalDate),
       issueTissueDate: this.convertDate(this.state.issueTissueDate),
@@ -388,44 +367,7 @@ class CreateRawProductComponent extends Component {
               />
           </div>
 
-          <div className="form-group">
-            <label>
-              Gönderen Kurum:{" "}
-              {this.state.donorInstitute[0] === undefined
-                ? "Seçilmedi"
-                : this.state.donorInstitute[0].name}
-            </label>
-            <div>
-              <Typeahead
-                multiple={multiple}
-                id="select-donorInstitute"
-                onChange={(selected) => {
-                  this.setState({ donorInstitute: selected });
-                }}
-                labelKey="name"
-                options={this.state.product_DonorInstituteList}
-                placeholder="Gönderen Kurumu Seç..."
-                selected={this.state.donorInstitute}
-                disabled={!this.state.isEditable}
-              />
-              <div
-                className={
-                  this.hasError("donorInstitute")
-                    ? "inline-errormsg"
-                    : "hidden"
-                }
-              >
-                Gönderen Kurumu girmelisiniz.
-              </div>
-              <AddModal
-                style={{ marginRight: "5px" }}
-                initialModalState={false}
-                component={"CreateDonorInstituteComponent"}
-                callback={this.addCreateDonorInstituteComponent}
-                isEditable ={this.state.isEditable}
-              />
-            </div>
-          </div>
+     
 
           <div className="form-group">
             <label>Doku Çıkarım Zamanı (Saat ve Tarih):</label>
@@ -532,7 +474,7 @@ class CreateRawProductComponent extends Component {
                   this.setState({ location: selected });
                 }}
                 labelKey="name"
-                options={this.state.product_LocationList}
+                options={this.state.product_LocationNormalList}
                 placeholder="Karantina Lokasyonunu Seç..."
                 selected={this.state.location}
                 disabled={!this.state.isEditable}

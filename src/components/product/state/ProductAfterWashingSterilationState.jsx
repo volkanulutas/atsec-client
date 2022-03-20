@@ -20,7 +20,7 @@ class ProductAfterWashingSterilationState extends Component {
 
       phValue: 0,
 
-      dampValue: 0,
+
       dampCheckboxDisabled: true,
 
       dampCheckboxDisabled2: true,
@@ -49,7 +49,6 @@ class ProductAfterWashingSterilationState extends Component {
     this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
   }
 
-
   changePhValueHandler = (event) => {
     this.setState({phValue:event.target.value});
     // PhValue 
@@ -66,11 +65,6 @@ class ProductAfterWashingSterilationState extends Component {
       this.state.dampCheckboxDisabled = true;
       this.state.dampCheckboxDisabled2 = true;
     }
-  }
-
-  changeDampValueHandler = (event) => {
-    var value = event.target.value;
-    this.setState({dampValue: value});
   }
 
   componentDidMount() {
@@ -111,18 +105,7 @@ class ProductAfterWashingSterilationState extends Component {
       errors.push("processDate");
     }
     // DampValue
-    var dampValueInt;
-    try {
-      dampValueInt  = parseInt(this.state.dampValue);
-    } catch{
-      dampValueInt = 0;
-    }
-    if(dampValueInt >= 6) {
-      errors.push("dampValue");
-    }
-    else {
-      this.state.dampValue = dampValueInt + "";
-    }
+
 
     this.setState({ errors: errors });
     if (errors.length <= 0) {
@@ -270,20 +253,6 @@ class ProductAfterWashingSterilationState extends Component {
                       Lütfen tüm alanları seçiniz.
                     </div>
                   </div>
-
-
-                  <div className="form-group">
-                                <label>Nem Tayini % Değerini Gir: [6'dan küçük değer]</label>
-                                <input type="number" name="dampValue"
-                             
-                                className={this.hasError("dampValue") 
-                                ? "form-control is-invalid" 
-                                : "form-control"}
-                                value={this.state.dampValue} onChange={this.changeDampValueHandler} />
-                                <div className={this.hasError("dampValue") ? "inline-errormsg" : "hidden"}>
-                                    Nem değeri uygun aralıkta değil, Kurutma işlemini tekrarlayınız.
-                                </div>
-                            </div>
 
                   <div className="form-group">
                     <Button color="primary" onClick={this.accept}>

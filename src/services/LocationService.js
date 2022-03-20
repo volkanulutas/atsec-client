@@ -4,6 +4,11 @@ import { API_BASE_URL, API_URL_LOCATION } from "../constants";
 import authHeader from "./AuthHeader"
 
 class LocationService {
+
+  getLocationsByType(type) {
+    return axios.get(API_BASE_URL + API_URL_LOCATION + type, {headers: authHeader()});
+  }
+
   getAllLocations() {
     return axios.get(API_BASE_URL + API_URL_LOCATION, {headers: authHeader()});
   }

@@ -11,6 +11,9 @@ import { addPdf_Confirmation, addPdf_Transfer, addPdf_Extra} from '../../actions
 import { ADDPDF_CONFIRMATION, ADDPDF_TRANSFER, ADDPDF_EXTRA } from '../../constants';
 import store from '../../store';
 
+import RawProductAcceptModal from '../keyproduct/modal/RawProductAcceptModal';
+import RawProductRejectModal from '../keyproduct/modal/RawProductRejectModal';
+
 import RawProductService from '../../services/RawProductService';
 
 const Step3 = props => {
@@ -41,7 +44,7 @@ const Step3 = props => {
   // onchange event
   const fileType=['application/pdf'];
 
-  if (props.currentStep !== 4) {
+  if (props.currentStep !== 3) {
     return null;
   }
 
@@ -116,9 +119,6 @@ const Step3 = props => {
       console.log('Dosya Seç:');
     }
   }
-
-  
-
 
   const handlePdfFileSubmit_Transfer=(e)=>{
     let selectedFile=e.target.files[0];
@@ -264,6 +264,27 @@ const Step3 = props => {
            İşlem sorumlusunu girmelisiniz.
       </div>
       </div>
+
+
+        <div>
+         <RawProductAcceptModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            callback_accept={props.acceptRawProduct_accept}
+            callback_reject={props.acceptRawProduct_reject}
+          />
+        </div>
+
+
+        <div>
+         <RawProductRejectModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            callback_accept={props.rejectRawProduct_accept}
+            callback_reject={props.rejectRawProduct_reject}
+          />
+        </div>
+    
     </FormGroup>
     </>
   )

@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProductService from "../../../services/ProductService";
 import LocationService from "../../../services/LocationService";
 
-class ProductCoarseState extends Component {
+class RawProductRejectState extends Component {
   constructor(props) {
     super(props);
 
@@ -27,8 +27,6 @@ class ProductCoarseState extends Component {
     // callback
     this.accept = this.accept.bind(this);
     this.reject = this.reject.bind(this);
-
-    this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
   }
 
   componentDidMount() {
@@ -37,13 +35,9 @@ class ProductCoarseState extends Component {
         this.setState({ product_LocationList: res.data });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-CRS-STT-01");
+        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: RAW-REJ-01");
         notify();
       });
-  }
-
-  handleProcessDateChange(event){
-    this.setState({ processDate: event.target.value });
   }
 
   accept(event) {
@@ -52,9 +46,6 @@ class ProductCoarseState extends Component {
     var errors = [];
     if (this.state.location[0].name === undefined) {
       errors.push("location");
-    }
-    if (this.state.processDate === '') {
-      errors.push("processDate");
     }
 
     this.setState({ errors: errors });
@@ -82,33 +73,10 @@ class ProductCoarseState extends Component {
          <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
-              Devreye Al
+              Ham Ürünler Reddet
               <div className="card-body">
                 <form>
-                <div className="form-group">
-                  <label>İşlem Tarihi</label>
-                  <input
-                    type="datetime-local"
-                    id="arrivalDate"
-                    name="arrivalDate"
-                    className={
-                      this.hasError("processDate")
-                        ? "form-control is-invalid"
-                        : "form-control"
-                    }
-                    value={this.state.processDate}
-                    onChange={this.handleProcessDateChange}
-                  />
-                  <div
-                    className={
-                      this.hasError("processDate")
-                        ? "inline-errormsg"
-                        : "hidden"
-                    }
-                  >
-                    İşlem Tarihini girmelisiniz.
-                  </div>
-                </div>
+        
                   <div className="form-group">
                     <label>
                       Yeni Lokasyon:{" "}
@@ -141,7 +109,7 @@ class ProductCoarseState extends Component {
            
                   <div className="form-group">
                     <Button color="primary" onClick={this.accept}>
-                      Kabul
+                      Tamam
                     </Button>{" "}
                     <Button color="danger" onClick={this.reject}>
                       İptal
@@ -158,4 +126,4 @@ class ProductCoarseState extends Component {
   }
 }
 
-export default ProductCoarseState;
+export default RawProductRejectState;

@@ -95,6 +95,7 @@ class MasterRawProduct extends Component {
 
       responsible:"",
 
+
       errors: [],
     };
 
@@ -135,6 +136,14 @@ class MasterRawProduct extends Component {
     this.uploadExtraFile = this.uploadExtraFile.bind(this);
 
     this.changeResponsibleandler = this.changeResponsibleHandler.bind(this);
+
+    // Step3
+    this.acceptRawProduct_accept = this.acceptRawProduct_accept.bind(this);
+    this.acceptRawProduct_reject = this.acceptRawProduct_reject.bind(this);
+    
+    this.rejectRawProduct_accept = this.rejectRawProduct_accept.bind(this);
+    this.rejectRawProduct_reject = this.rejectRawProduct_reject.bind(this);
+    
 
     // Bind new functions for next and previous
     this._next = this._next.bind(this);
@@ -190,7 +199,7 @@ class MasterRawProduct extends Component {
   }
 
   componentDidMount() {
-    LocationService.getAllLocations()
+    LocationService.getLocationsByType("REJECT")
       .then((res) => {
         this.setState({ product_LocationList: res.data });
       })
@@ -316,6 +325,54 @@ class MasterRawProduct extends Component {
     this.setState({ responsible: event.target.value });
   };
 
+  acceptRawProduct_accept = (event) => {
+      RawProductService.getRawProductById(this.state.id)
+      .then((res) => {
+        let rawProduct = res.data;
+
+        rawProduct.statusName = "Kabul";
+
+        RawProductService.updateRawProduct(this.state.id, rawProduct)
+          .then((res) => {
+            this.props.history.push('/rawproducts');
+          })
+          .catch((ex) => {
+            console.error(ex);
+          });
+      })
+      .catch((ex) => {
+        console.error(ex);
+      });
+  };
+
+  acceptRawProduct_reject = (event) => {
+    // do nothing
+};
+
+  rejectRawProduct_accept = (event) => {
+    RawProductService.getRawProductById(this.state.id)
+    .then((res) => {
+      let rawProduct = res.data;
+
+      rawProduct.statusName = "Red";
+
+      RawProductService.updateRawProduct(this.state.id, rawProduct)
+        .then((res) => {
+          this.props.history.push('/rawproducts');
+        })
+        .catch((ex) => {
+          console.error(ex);
+        });
+    })
+    .catch((ex) => {
+      console.error(ex);
+    });
+  };
+
+  rejectRawProduct_reject = (event) => {
+    // do nothing
+  };
+
   changeInformationHandler = (event) => {
     this.setState({ information: event.target.value });
   };
@@ -329,7 +386,6 @@ class MasterRawProduct extends Component {
   }
 
   setTissueType(data) {
-    console.log("tissueType:", data);
     this.setState({ tissueType: data});
   }
 
@@ -342,7 +398,6 @@ class MasterRawProduct extends Component {
   }
 
   setStatus(data) {
-    console.log("statusName:", data);
     this.setState({ statusName: data});
   }
   
@@ -369,14 +424,14 @@ class MasterRawProduct extends Component {
     }
     if(selectedExtraFiles === undefined) {
       errors.push("extraFile");
-    }*/
+    }
     if (this.state.responsible === "") {
         errors.push("responsible");
     }
     this.setState({ errors: errors });
     if (errors.length > 0) {
       return false;
-    }
+    }*/
     // todoo update raw   
     this.saveRawProduct(true); 
     this.props.history.push('/rawproducts'); 
@@ -408,6 +463,7 @@ class MasterRawProduct extends Component {
       
       var errors = [];
       
+      /*
       if(this.state.donor[0] === undefined) {
         errors.push("donor");
       }
@@ -430,6 +486,7 @@ class MasterRawProduct extends Component {
       if(this.state.doctorName === ""){
         errors.push("doctorName")
       }
+      */
       
       this.setState({ errors: errors });
       if (errors.length > 0) {
@@ -443,7 +500,7 @@ class MasterRawProduct extends Component {
     if(currentStep === 2){
       
       var errors = [];
-       
+     /*
       if(this.state.statusName[0] === undefined ) {
         errors.push("status");
       }
@@ -463,7 +520,7 @@ class MasterRawProduct extends Component {
       if(this.state.temperature === ""){
         errors.push("temperature");
       }
-
+*/
 
       this.setState({ errors: errors });
       if (errors.length > 0) {
@@ -739,17 +796,29 @@ class MasterRawProduct extends Component {
 
                 changeResponsibleandler={this.changeResponsibleHandler}
 
+
+                acceptRawProduct_accept= {this.acceptRawProduct_accept}
+                acceptRawProduct_reject={this.acceptRawProduct_reject}
+                rejectRawProduct_accept={this.rejectRawProduct_accept}
+                rejectRawProduct_reject= {this.rejectRawProduct_reject}
+
                 // methods
                 selectConfirmationFile = {this.selectConfirmationFile}
                 selectTransferFile = {this.selectTransferFile}
                 selectExtraFile = {this.state.selectExtraFile}
-
 
                 selectedConfirmationFiles = {this.state.selectedConfirmationFiles}
                 currentConfirmationFile = {this.state.currentConfirmationFile}
                 progressConfirmation = {this.state.progressConfirmation}
                 messageConfirmation= {this.state.messageTransfer}
                 confirmationFilesInfos = {this.state.confirmationFilesInfos}
+
+
+                
+
+                acceptRawProduct = {this.acceptRawProduct}
+                rejectRawProduct = {this.rejectRawProduct}
+
 
 
                 selectedTransferFiles = {this.state.selectedTransferFiles}

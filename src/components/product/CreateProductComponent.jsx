@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProductService from "../../services/ProductService";
 import CustomerService from "../../services/CustomerService";
 import AddModal from "../util/modal/AddModal";
-
+ 
 class CreateProductComponent extends Component {
   constructor(props) {
     super(props);

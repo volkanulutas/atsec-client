@@ -42,8 +42,7 @@ class ProductAfterWashingSterilationState extends Component {
     this.accept = this.accept.bind(this);
     this.reject = this.reject.bind(this);
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleChange2 = this.handleChange2.bind(this);  
+    this.handleChange = this.handleChange.bind(this);;  
     this.handleChange3 = this.handleChange3.bind(this);
 
     this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
@@ -78,11 +77,11 @@ class ProductAfterWashingSterilationState extends Component {
     event.preventDefault();
   
     var errors = [];
+
     if (this.state.checkedItems.size !== 3) {
       errors.push("preprocessing-checkbox");
     }
-
-    if (this.state.checkedItems2.size !== 1) {
+    if (this.state.checkedItems2.size !== 0) {
       errors.push("preprocessing2-checkbox");
     }
 
@@ -125,15 +124,6 @@ class ProductAfterWashingSterilationState extends Component {
 
     this.setState((prevState) => ({
       checkedItems: prevState.checkedItems.set(item, isChecked),
-    }));
-  }
-
-  handleChange2(event) {
-    var isChecked = event.target.checked;
-    var item = event.target.value;
-
-    this.setState((prevState) => ({
-      checkedItems2: prevState.checkedItems2.set(item, isChecked),
     }));
   }
 
@@ -223,15 +213,6 @@ class ProductAfterWashingSterilationState extends Component {
                             </div>
 
                             <div className="form-group">
-                            <Label> 
-                        <Input
-                          type="checkbox"
-                          value={"Kurutma İşlemi"}
-                          onChange={this.handleChange2}
-                          disabled= {this.state.dampCheckboxDisabled}
-                        ></Input>
-                        Kurutma İşlemi
-                      </Label>
                       <br></br>
                       <Label>
                         <Input

@@ -11,6 +11,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import ProductService from "../../services/ProductService";
+import PackingProductService from "../../services/PackingProductService";
+
 import DeleteModal from "../util/modal/DeleteModal";
 
 import {connect} from 'react-redux';
@@ -20,6 +22,7 @@ import ProductCoarseModal from "./modal/ProductCoarseModal";
 import ProductPreprocessingModal from "./modal/ProductPreprocessingModal";
 import  ProductGranulationStateModal from "./modal/ProductGranulationStateModal";
 import ProductFreezingModal from "./modal/ProductFreezingModal";
+import ProductPackingModal from "./modal/ProductPackingModal";
 import AuthService from "../../services/AuthService";
 import ProductWashingModal from "./modal/ProductWashingModal";
 import ProductAfterWashingFreezingModal from "./modal/ProductAfterWashingFreezingModal";
@@ -187,15 +190,16 @@ class ListProductComponent extends Component {
         </div>
       );
     } else if (row.status === "Paketleme Öncesi"){
-      return (      
-      <button
-        type="button"
-        style={{ marginRight: "5px" }}
-        onClick={() => this.performPacking(row)}
-        className="btn btn-success"
-      >
-        Paketleme İşlemine Al
-      </button>);
+      return (   
+        
+        <ProductPackingModal
+          style={{ marginRight: "5px" }}
+          initialModalState={false}
+          data={row}
+          callback_accept={this.performPacking}
+          callback_reject={this.performFreezingState_reject}
+       />
+      );
 
 
     } else if (row.status === "Ön İşlem - Kabul") {
@@ -464,7 +468,7 @@ class ListProductComponent extends Component {
       });
   }
 
-  performPacking(row){
+  performPacking(row, data){
     ProductService.getProductById(row.id)
     .then((res) => {
       let product = res.data;
@@ -490,6 +494,16 @@ class ListProductComponent extends Component {
       const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-24");
       notify();
     });
+
+    for(var i = 0; i<data.number; i++){
+
+      var packingProduct={ size: data.size, lot: data.lot, gamaDate: data.gamaDate, donor: null, partitionId: (i+1) };
+      PackingProductService.createProduct(packingProduct)
+      .then((res)=> {})
+      .catch((ex)=> {});
+    }
+
+
 
   }
 

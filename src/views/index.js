@@ -40,6 +40,8 @@ import CreateCustomerComponent from "../components/customer/CreateCustomerCompon
 import ListProductComponent from "../components/product/ListProductComponent";
 import ListPackingProductComponent from "../components/packingproduct/ListPackingProductComponent";
 
+import CreatePackingProductComponent from "../components/packingproduct/CreatePackingProductComponent";
+
 
 import CreateProductComponent from "../components/product/CreateProductComponent";
 
@@ -149,12 +151,6 @@ const allPageList = [
     component: CreateDonorComponent,
   },
   {
-    name: "Paketlenmiş Ürün Listesi",
-    path: "/packingproducts/",
-    id: "PACKINGPRODUCT_PAGE_PERMISSION", 
-    component: ListPackingProductComponent,
-  },
-  {
     name: "Müşteri Listesi",
     path: "/customers/",
     id: "CUSTOMER_PAGE_PERMISSION", 
@@ -229,6 +225,25 @@ const allPageList = [
     path: "/products/",
     id: "PRODUCT_PAGE_PERMISSION", 
     component: ListProductComponent,
+  },
+
+  {
+    name: "Paketlenmiş Ürün Listesi",
+    path: "/packingproducts/",
+    id: "PACKINGPRODUCT_PAGE_PERMISSION", 
+    component: ListPackingProductComponent,
+  },
+
+
+  {
+    name: "Paketlenmiş Ürün Ekle/Güncelle",
+    path: "/add-packingproduct/:state/:id",
+    component: CreatePackingProductComponent,
+  },
+  {
+    name: "Paketlenmiş Ürün Görüntüle",
+    path: "/add-packingproduct/:state/:id",
+    component: CreatePackingProductComponent,
   },
 
   {

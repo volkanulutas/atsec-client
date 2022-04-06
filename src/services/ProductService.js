@@ -45,7 +45,6 @@ class ProductService {
   getWashingTypeList() {
     return axios.get(API_BASE_URL + API_URL_PRODUCT + "washingtypelist", {headers: authHeader()}); 
   }
-  
 }
 
 export default new ProductService();

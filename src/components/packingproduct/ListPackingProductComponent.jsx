@@ -10,8 +10,10 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import ProductService from "../../services/ProductService";
+import PackingProductService from "../../services/PackingProductService";
 import DeleteModal from "../util/modal/DeleteModal";
+import PackingProductProcessingModal from "../packingproduct/modal/PackingProductProcessingModal";
+import PackingProductBarcodeModal from "../packingproduct/modal/PackingProductBarcodeModal";
 
 
 const { SearchBar } = Search;
@@ -34,28 +36,42 @@ class ListPackingProductComponent extends Component {
           sort: true,
         },
         {
-          dataField: "definition",
-          text: "Açıklama",
+          dataField: "lot",
+          text: "lot",
           sort: true,
           title: true,
         },
         {
-          dataField: "secCode",
-          text: "SEC Kodu",
+          dataFiegld: "gamaDate",
+          text: "Gama Tarihi",
           align: "center",
           sort: true,
           title: true,
         },
         {
-          dataField: "customer.identityNumber",
-          text: "Müşteri ID",
+          dataField: "packingProductCode",
+          text: "Paketlenen Ürün Kodu",
           align: "center",
           sort: true,
           title: true,
         },
         {
-          dataField: "status",
-          text: "DURUM",
+          dataField: "partitionId",
+          text: "Bölünme Id",
+          align: "center",
+          sort: true,
+          title: true,
+          formatter: (cell, row) => {
+            let styleVar = "btn btn-secondary";
+            if (cell === "Paketleme") {
+              styleVar = "btn btn-danger";
+            }
+            return <div className={styleVar}>{cell}</div>;
+          },
+        },
+        {
+          dataField: "size",
+          text: "Boyut",
           align: "center",
           sort: true,
           title: true,
@@ -89,20 +105,6 @@ class ListPackingProductComponent extends Component {
                   >
                     Görüntüle
                   </button>
-                  <button
-                    type="button"
-                    style={{ marginRight: "5px" }}
-                    onClick={() => this.updateProduct(row)}
-                    className="btn btn-info"
-                  >
-                    Güncelle
-                  </button>
-                  <DeleteModal
-                    style={{ marginRight: "5px" }}
-                    initialModalState={false}
-                    data={row}
-                    callback={this.delete}
-                  />
                 </div>
 
                 {this.checkstatus(row)}
@@ -112,13 +114,21 @@ class ListPackingProductComponent extends Component {
         },
       ],
     };
+
+    this.updateProduct = this.updateProduct.bind(this);
+    this.viewProduct = this.viewProduct.bind(this);
+  }
+
+  viewProduct(row) {
+    this.props.history.push(`/add-packingproduct/view/${row.id}`);
+  }
+
+  updateProduct(row) {
+    this.props.history.push(`/add-packingproduct/update/${row.id}`);
   }
 
   componentDidMount() {
-    // TODO: 
-    // uthService.checkSession();
-
-    ProductService.getAllPackingProducts()
+    PackingProductService.getAll()
       .then((res) => {
         console.log(res.data);
         this.setState({ products: res.data });
@@ -129,7 +139,51 @@ class ListPackingProductComponent extends Component {
       });
   }
 
+  convertString(dateLong) {
+    if (dateLong !== undefined) {
+      let date = new Date(dateLong);
+      let year = date.getFullYear();
+      let month = date.getMonth() + 1 + "";
+      let day = date.getDate() + "";
+      let hour = date.getHours();
+      let min = date.getMinutes();
+      if (month.length === 1) {
+        month = "0" + month;
+      }
+      if (day.length === 1) {
+        day = "0" + day;
+      }
+      let d = year + "-" + month + "-" + day + "T" + hour + ":" + min;
+      return d;
+    }
+  }
+
   checkstatus(row) {
+
+    if (row.status === "Paketleme") {
+      return (
+        <div>
+            <PackingProductProcessingModal
+              style={{ marginRight: "5px" }}
+              initialModalState={false}
+              row={row}
+              callback_accept={this.performPreprocessing_accept}
+              callback_reject={this.performPreprocessing_reject}
+            />
+        </div>
+      );
+    } else if (row.status === "Paketleme Etiket" ){
+      <div>
+          <PackingProductBarcodeModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            row={row}
+            callback_accept={this.performBarcode_accept}
+            callback_reject={this.performBarcode_reject}
+          />
+      </div>
+    }
+
   }
 
   render() {

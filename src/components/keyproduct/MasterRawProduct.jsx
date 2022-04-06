@@ -416,7 +416,7 @@ class MasterRawProduct extends Component {
        selectedExtraFiles } = this.state;
 
     var errors = [];
-    /*if (selectedConfirmationFiles === undefined ) {
+    if (selectedConfirmationFiles === undefined ) {
       errors.push("confirmationFile");
     }
     if(selectedTransferFiles === undefined) {
@@ -431,7 +431,7 @@ class MasterRawProduct extends Component {
     this.setState({ errors: errors });
     if (errors.length > 0) {
       return false;
-    }*/
+    }
     // todoo update raw   
     this.saveRawProduct(true); 
     this.props.history.push('/rawproducts'); 
@@ -463,7 +463,6 @@ class MasterRawProduct extends Component {
       
       var errors = [];
       
-      /*
       if(this.state.donor[0] === undefined) {
         errors.push("donor");
       }
@@ -486,7 +485,6 @@ class MasterRawProduct extends Component {
       if(this.state.doctorName === ""){
         errors.push("doctorName")
       }
-      */
       
       this.setState({ errors: errors });
       if (errors.length > 0) {
@@ -500,7 +498,7 @@ class MasterRawProduct extends Component {
     if(currentStep === 2){
       
       var errors = [];
-     /*
+     
       if(this.state.statusName[0] === undefined ) {
         errors.push("status");
       }
@@ -520,8 +518,7 @@ class MasterRawProduct extends Component {
       if(this.state.temperature === ""){
         errors.push("temperature");
       }
-*/
-
+      
       this.setState({ errors: errors });
       if (errors.length > 0) {
         return false;

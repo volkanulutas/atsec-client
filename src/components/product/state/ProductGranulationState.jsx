@@ -110,32 +110,34 @@ class ProductGranulationState extends Component {
         <div className="container">
           <ToastContainer />
           <div className="row">
-          <div className="form-group">
-                  <label>İşlem Tarihi</label>
-                  <input
-                    type="datetime-local"
-                    id="arrivalDate"
-                    name="arrivalDate"
-                    className={
-                      this.hasError("processDate")
-                        ? "form-control is-invalid"
-                        : "form-control"
-                    }
-                    value={this.state.processDate}
-                    onChange={this.handleProcessDateChange}
-                  />
-                  <div
-                    className={
-                      this.hasError("processDate")
-                        ? "inline-errormsg"
-                        : "hidden"
-                    }
-                  >
-                    İşlem Tarihini girmelisiniz.
-                  </div>
-                </div>
+          <div className="card col-md-6 offset-md-3 offset-md-3">
+             
+            <div className="form-group">
+                    <label>İşlem Tarihi</label>
+                    <input
+                      type="datetime-local"
+                      id="arrivalDate"
+                      name="arrivalDate"
+                      className={
+                        this.hasError("processDate")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.processDate}
+                      onChange={this.handleProcessDateChange}
+                    />
+                    <div
+                      className={
+                        this.hasError("processDate")
+                          ? "inline-errormsg"
+                          : "hidden"
+                      }
+                    >
+                      İşlem Tarihini girmelisiniz.
+                    </div>
+            </div>
                   
-            <div className="card col-md-6 offset-md-3 offset-md-3">
+            <div className="form-group">
               Öğütme Türünü Seçiniz:
               <div className="card-body">
                 <form>
@@ -201,6 +203,10 @@ class ProductGranulationState extends Component {
                 </form>
                 <div></div>
               </div>
+            
+            
+           
+            </div>
             </div>
           </div>
         </div>

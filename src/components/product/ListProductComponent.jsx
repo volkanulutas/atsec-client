@@ -7,20 +7,20 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import ProductService from "../../services/ProductService";
 import PackingProductService from "../../services/PackingProductService";
 
 import DeleteModal from "../util/modal/DeleteModal";
 
-import {connect} from 'react-redux';
-import { addPdf_BarcodePdfView } from '../../actions';
+import { connect } from "react-redux";
+import { addPdf_BarcodePdfView } from "../../actions";
 
 import ProductCoarseModal from "./modal/ProductCoarseModal";
 import ProductPreprocessingModal from "./modal/ProductPreprocessingModal";
-import  ProductGranulationStateModal from "./modal/ProductGranulationStateModal";
+import ProductGranulationStateModal from "./modal/ProductGranulationStateModal";
 import ProductFreezingModal from "./modal/ProductFreezingModal";
 import ProductPackingModal from "./modal/ProductPackingModal";
 import AuthService from "../../services/AuthService";
@@ -140,9 +140,9 @@ class ListProductComponent extends Component {
     this.updateProduct = this.updateProduct.bind(this);
     this.viewProduct = this.viewProduct.bind(this);
   }
-  
+
   componentDidMount() {
-    // TODO: 
+    // TODO:
     // authService.checkSession();
 
     ProductService.getAllPreprocessingProducts()
@@ -155,20 +155,16 @@ class ListProductComponent extends Component {
       });
   }
 
-
-
   checkstatus(row) {
-
     if (row.status === "Ön İşlem") {
-
-    ProductService.createBarcode(row.id)
-    .then((res) => {
-      let file = res.data;
-      this.props.addPdf_BarcodePdfView(file);
-    })
-    .catch((ex) => {
-      console.error(ex);
-    });
+      ProductService.createBarcode(row.id)
+        .then((res) => {
+          let file = res.data;
+          this.props.addPdf_BarcodePdfView(file);
+        })
+        .catch((ex) => {
+          console.error(ex);
+        });
       return (
         // (Ön İşlem) => (Ön İşlem - Kabul) Etiket Oluştur
         <div>
@@ -181,27 +177,24 @@ class ListProductComponent extends Component {
             callback_reject={this.performPreProcessingState_reject}
           />
           <ProductBarcodeModal
-          productId={row.id}
-          class="vlu-left-margin"
-          initialModalState={false}
-          product={row}
-          isEditable={true}
-        />
+            productId={row.id}
+            class="vlu-left-margin"
+            initialModalState={false}
+            product={row}
+            isEditable={true}
+          />
         </div>
       );
-    } else if (row.status === "Paketleme Öncesi"){
-      return (   
-        
+    } else if (row.status === "Paketleme Öncesi") {
+      return (
         <ProductPackingModal
           style={{ marginRight: "5px" }}
           initialModalState={false}
           data={row}
           callback_accept={this.performPacking}
-          callback_reject={this.performFreezingState_reject}
-       />
+          callback_reject={this.performPacking_reject}
+        />
       );
-
-
     } else if (row.status === "Ön İşlem - Kabul") {
       return (
         // (Ön İşlem - Kabul) => (Dondurma 1)
@@ -236,14 +229,11 @@ class ListProductComponent extends Component {
           />
         </div>
       );
-    } 
-    
-    
-    else if (row.status === "Öğütme (Course) Sonrası") {
-     // Course Öğütme Sonrası -> Öğütme (Course)
+    } else if (row.status === "Öğütme (Course) Sonrası") {
+      // Course Öğütme Sonrası -> Öğütme (Course)
       return (
         <div>
-         <ProductCoarseModal
+          <ProductCoarseModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
             data={row}
@@ -251,103 +241,80 @@ class ListProductComponent extends Component {
             callback_reject={this.performCoarseState_reject}
           />
         </div>
-    
       );
     } else if (row.status === "Dondurma 2 Sonrası") {
-         // Delipidation -> Kimyasal Sterilizasyon
+      // Delipidation -> Kimyasal Sterilizasyon
       return (
         <div>
-        <ProductWashingModal
-          style={{ marginRight: "5px" }}
-          initialModalState={false}
-          data={row}
-          callback_accept={this.performWashing_accept}
-          callback_reject={this.performWashing_reject}
-        />
-      </div>
+          <ProductWashingModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            data={row}
+            callback_accept={this.performWashing_accept}
+            callback_reject={this.performWashing_reject}
+          />
+        </div>
       );
-    } 
-    else if(row.status === "Defatting Sonrası"){
-        // Delipidation -> Delipidation
-      return(
-      <div>
-
-
-        <ProductAfterWashingFreezingModal
+    } else if (row.status === "Defatting Sonrası") {
+      // Delipidation -> Delipidation
+      return (
+        <div>
+          <ProductAfterWashingFreezingModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
             data={row}
             callback_accept={this.performAfterWashingFreezing_accept}
             callback_reject={this.performAfterWashingFreezing_reject}
-        />
+          />
 
-        <ProductAfterWashingSterilationModal
+          <ProductAfterWashingSterilationModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
             data={row}
             callback_accept={this.performAfterWashingSterilation_accept}
             callback_reject={this.performAfterWashingSterilation_reject}
-        />  
-   </div>
-);
-
-    }
-    else if (row.status === "Kurutma"){
+          />
+        </div>
+      );
+    } else if (row.status === "Kurutma") {
       return (
-       
         <div>
-
-        <ProductDryingModal
+          <ProductDryingModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
             data={row}
             callback_accept={this.performDrying_accept}
             callback_reject={this.performDrying_reject}
-        />  
-
+          />
         </div>
       );
-    }
-    else if (row.status === "Nem Tayini"){
+    } else if (row.status === "Nem Tayini") {
       return (
-       
         <div>
-
-        <ProductMoistureModal
+          <ProductMoistureModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
             data={row}
             callback_accept={this.performMoisture_accept}
             callback_reject={this.performMoisture_reject}
-        />  
-
+          />
         </div>
       );
-    }
-    
-    else if (row.status === "Dondurma 3 Sonrası"){
+    } else if (row.status === "Dondurma 3 Sonrası") {
       return (
-       
         <div>
-
-        <ProductAfterWashingSterilationModal
+          <ProductAfterWashingSterilationModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
             data={row}
             callback_accept={this.performAfterWashingSterilation_accept}
             callback_reject={this.performAfterWashingSterilation_reject}
-        />  
-
+          />
         </div>
       );
+    } else if (row.status === "Sterilizasyon") {
+      return <div></div>;
     }
-    else if(row.status === "Sterilizasyon"){
-      return (
-        <div>
-
-        </div>
-      );
-    } 
   }
 
   performCoarseState_accept(row, data, processDate) {
@@ -358,7 +325,7 @@ class ListProductComponent extends Component {
         product.status = "Dondurma 2 Sonrası";
 
         let statusDate = {
-          productStatus:  "Dondurma 2 Sonrası",
+          productStatus: "Dondurma 2 Sonrası",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
@@ -368,18 +335,19 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: LST-PRD-02");
+            const notify = () =>
+              toast("Ürün güncellenemedi. Hata Kodu: LST-PRD-02");
             notify();
           });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile bağlantı kurulamadı. Hata Kodu: LST-PRD-01");
+        const notify = () =>
+          toast("Sunucu ile bağlantı kurulamadı. Hata Kodu: LST-PRD-01");
         notify();
       });
   }
 
-  performCoarseState_reject(row, data) {
-  }
+  performCoarseState_reject(row, data) {}
 
   performFreezingState_accept(row, location, processDate) {
     // öğütme -> Delipidation
@@ -391,7 +359,7 @@ class ListProductComponent extends Component {
         product.status = "Dondurma 1 Sonrası";
 
         let statusDate = {
-          productStatus:  "Dondurma 1 Sonrası",
+          productStatus: "Dondurma 1 Sonrası",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
@@ -403,24 +371,26 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-04 "+ ex);
+            const notify = () =>
+              toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-04 " + ex);
             notify();
           });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile bağlantı kurulamadı. Hata Kodu: CRT-PRD-03");
+        const notify = () =>
+          toast("Sunucu ile bağlantı kurulamadı. Hata Kodu: CRT-PRD-03");
         notify();
       });
   }
-  performCoarse(row,  processDate) {
-    ProductService.getProductById(row.id,)
+  performCoarse(row, processDate) {
+    ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
 
         product.status = "Dondurma (Course)";
 
         let statusDate = {
-          productStatus:  "Dondurma (Course)",
+          productStatus: "Dondurma (Course)",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
@@ -430,12 +400,14 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-06");
+            const notify = () =>
+              toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-06");
             notify();
           });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-05");
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-05");
         notify();
       });
   }
@@ -448,7 +420,7 @@ class ListProductComponent extends Component {
         product.status = "Sterilizasyon";
 
         let statusDate = {
-          productStatus:  "Sterilizasyon",
+          productStatus: "Sterilizasyon",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
@@ -458,117 +430,135 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-10");
+            const notify = () =>
+              toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-10");
             notify();
           });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-09");
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-09");
         notify();
       });
   }
 
-  performPacking(row, data){
+  performPacking_reject(row, data) {}
+
+  performPacking(row, data) {
     ProductService.getProductById(row.id)
-    .then((res) => {
-      let product = res.data;
+      .then((res) => {
+        let product = res.data;
 
-      product.status = "Paketleme";
+        product.status = "Paketleme";
 
-      let statusDate = {
-        productStatus:  "Paketleme",
-        processDate: new Date().getTime(),
+        let statusDate = {
+          productStatus: "Paketleme",
+          processDate: new Date().getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
+
+        ProductService.updateProduct(row.id, product)
+          .then((res) => {
+            window.location.reload(false);
+          })
+          .catch((ex) => {
+            const notify = () =>
+              toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-25");
+            notify();
+          });
+      })
+      .catch((ex) => {
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-24");
+        notify();
+      });
+
+    for (var i = 0; i < data.number; i++) {
+      var packingProduct = {
+        size: data.size,
+        lot: data.lot,
+        date: data.date,
+        donor: data.donor,
+        partitionId: i + 1,
       };
-      product.productStatusDateRequests.push(statusDate);
-
-      ProductService.updateProduct(row.id, product)
-        .then((res) => {
-          window.location.reload(false);
-        })
-        .catch((ex) => {
-          const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-25");
-          notify();
-        });
-    })
-    .catch((ex) => {
-      const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-24");
-      notify();
-    });
-
-    for(var i = 0; i<data.number; i++){
-
-      var packingProduct={ size: data.size, lot: data.lot, gamaDate: data.gamaDate, donor: null, partitionId: (i+1) };
       PackingProductService.createProduct(packingProduct)
-      .then((res)=> {})
-      .catch((ex)=> {});
+        .then((res) => {
+          const notify = () => toast("Paketlenmiş ürün oluşturuldu.");
+          notify();
+        })
+        .catch((ex) => {
+          const notify = () =>
+            toast("Paketlenmiş ürün oluşturulamadı. Hata Kodu: CRT-PRD-26");
+          notify();
+        });
     }
-
-
-
   }
 
-  performMoisture_accept(row, processDate){
+  performMoisture_accept(row, processDate) {
     ProductService.getProductById(row.id)
-    .then((res) => {
-      let product = res.data;
+      .then((res) => {
+        let product = res.data;
 
-      product.status = "Paketleme";
+        product.status = "Paketleme";
 
-      let statusDate = {
-        productStatus:  "Paketleme",
-        processDate: new Date(processDate).getTime(),
-      };
-      product.productStatusDateRequests.push(statusDate);
+        let statusDate = {
+          productStatus: "Paketleme",
+          processDate: new Date(processDate).getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
 
-      ProductService.updateProduct(row.id, product)
-        .then((res) => {
-          window.location.reload(false);
-        })
-        .catch((ex) => {
-          const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-23");
-          notify();
-        });
-    })
-    .catch((ex) => {
-      const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-24");
-      notify();
-    });
+        ProductService.updateProduct(row.id, product)
+          .then((res) => {
+            window.location.reload(false);
+          })
+          .catch((ex) => {
+            const notify = () =>
+              toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-23");
+            notify();
+          });
+      })
+      .catch((ex) => {
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-24");
+        notify();
+      });
   }
 
-  performMoisture_reject(row){
-  }
+  performMoisture_reject(row) {}
 
-  performDrying_accept(row, processDate){
+  performDrying_accept(row, processDate) {
     ProductService.getProductById(row.id)
-    .then((res) => {
-      let product = res.data;
+      .then((res) => {
+        let product = res.data;
 
-      product.status = "Paketleme Öncesi";
+        product.status = "Paketleme Öncesi";
 
-      let statusDate = {
-        productStatus:  "Paketleme Öncesi",
-        processDate: new Date(processDate).getTime(),
-      };
-      product.productStatusDateRequests.push(statusDate);
+        let statusDate = {
+          productStatus: "Paketleme Öncesi",
+          processDate: new Date(processDate).getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
 
-      ProductService.updateProduct(row.id, product)
-        .then((res) => {
-          window.location.reload(false);
-        })
-        .catch((ex) => {
-          const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-21");
-          notify();
-        });
-    })
-    .catch((ex) => {
-      const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-22");
-      notify();
-    });
+        ProductService.updateProduct(row.id, product)
+          .then((res) => {
+            window.location.reload(false);
+          })
+          .catch((ex) => {
+            const notify = () =>
+              toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-21");
+            notify();
+          });
+      })
+      .catch((ex) => {
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-22");
+        notify();
+      });
   }
 
-  performDrying_reject(row){}
+  performDrying_reject(row) {}
 
-  performAfterWashingSterilation_accept(row, processDate){
+  performAfterWashingSterilation_accept(row, processDate) {
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
@@ -576,7 +566,7 @@ class ListProductComponent extends Component {
         product.status = "Kurutma";
 
         let statusDate = {
-          productStatus:  "Kurutma",
+          productStatus: "Kurutma",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
@@ -594,40 +584,41 @@ class ListProductComponent extends Component {
       });
   }
 
-  performAfterWashingSterilation_reject(row){
+  performAfterWashingSterilation_reject(row) {}
+
+  performAfterWashingFreezing_accept(row, processDate) {
+    // Dondurucuya Koy (After Delipidation) -> Sterilizasyon
+
+    ProductService.getProductById(row.id)
+      .then((res) => {
+        let product = res.data;
+
+        product.status = "Dondurma 3 Sonrası";
+
+        let statusDate = {
+          productStatus: "Dondurma 3 Sonrası",
+          processDate: new Date(processDate).getTime(),
+        };
+        product.productStatusDateRequests.push(statusDate);
+
+        ProductService.updateProduct(row.id, product)
+          .then((res) => {
+            window.location.reload(false);
+          })
+          .catch((ex) => {
+            const notify = () =>
+              toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-11");
+            notify();
+          });
+      })
+      .catch((ex) => {
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-12");
+        notify();
+      });
   }
 
-  performAfterWashingFreezing_accept(row, processDate){
-        // Dondurucuya Koy (After Delipidation) -> Sterilizasyon
-
-        ProductService.getProductById(row.id)
-        .then((res) => {
-          let product = res.data;
-  
-          product.status = "Dondurma 3 Sonrası";
-
-          let statusDate = {
-            productStatus:  "Dondurma 3 Sonrası",
-            processDate: new Date(processDate).getTime(),
-          };
-          product.productStatusDateRequests.push(statusDate);
-  
-          ProductService.updateProduct(row.id, product)
-            .then((res) => {
-              window.location.reload(false);
-            })
-            .catch((ex) => {
-              const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-11");
-              notify();
-            });
-        })
-        .catch((ex) => {
-          const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-12");
-          notify();
-        });
-  }
-
-  performAfterWashingFreezing_reject(row){}
+  performAfterWashingFreezing_reject(row) {}
 
   performFreezingAfterDelipidation_reject(row) {}
 
@@ -643,7 +634,7 @@ class ListProductComponent extends Component {
         product.status = "Defatting Sonrası";
 
         let statusDate = {
-          productStatus:  "Defatting Sonrası",
+          productStatus: "Defatting Sonrası",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
@@ -653,21 +644,21 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-14");
+            const notify = () =>
+              toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-14");
             notify();
           });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-13");
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-13");
         notify();
       });
   }
 
-  performWashing_reject(row) {
-  }
+  performWashing_reject(row) {}
 
   performCourseGrinding_accept(row, granulationTypeList, processDate) {
-
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
@@ -676,7 +667,7 @@ class ListProductComponent extends Component {
         product.granulationType = granulationTypeList;
 
         let statusDate = {
-          productStatus:  "Öğütme (Course) Sonrası",
+          productStatus: "Öğütme (Course) Sonrası",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
@@ -686,35 +677,33 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-15");
+            const notify = () =>
+              toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-15");
             notify();
           });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-16");
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-16");
         notify();
       });
   }
 
   performFreezingState_reject(row, data) {}
 
- 
-
   performPreProcessingState_accept(row, productFormTypeList, processDate) {
-   
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
-   
+
         product.status = "Ön İşlem - Kabul";
 
-         let statusDate = {
-          productStatus:  "Ön İşlem - Kabul",
+        let statusDate = {
+          productStatus: "Ön İşlem - Kabul",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
 
-      
         var preProcessingList = ["Kesme", "Defatting", "Kartilaj Alma"];
         product.performPreProcessingType = preProcessingList;
         product.productFormType = productFormTypeList;
@@ -724,12 +713,14 @@ class ListProductComponent extends Component {
             window.location.reload(false);
           })
           .catch((ex) => {
-            const notify = () => toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-18 " + ex);
+            const notify = () =>
+              toast("Ürün güncellenemedi. Hata Kodu: CRT-PRD-18 " + ex);
             notify();
           });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-17 " + ex);
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-PRD-17 " + ex);
         notify();
       });
   }
@@ -760,7 +751,8 @@ class ListProductComponent extends Component {
         notify();
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile bağlantı kurulamadı. Hata Kodu: CRT-PRD-20");
+        const notify = () =>
+          toast("Sunucu ile bağlantı kurulamadı. Hata Kodu: CRT-PRD-20");
         notify();
       });
   }
@@ -851,12 +843,12 @@ class ListProductComponent extends Component {
     );
   }
 }
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return {
     barcodePdfView: state.barcodePdfView,
-  }
+  };
 }
 
-export default connect(mapStateToProps, 
-  {addPdf_BarcodePdfView})
-  (ListProductComponent);
+export default connect(mapStateToProps, { addPdf_BarcodePdfView })(
+  ListProductComponent
+);

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import ProductService from "../../../services/ProductService";
 import LocationService from "../../../services/LocationService";
@@ -20,7 +20,7 @@ class ProductCoarseState extends Component {
 
       errors: [],
 
-      processDate: '',
+      processDate: "",
       location: [],
       product_LocationList: [],
     };
@@ -37,12 +37,13 @@ class ProductCoarseState extends Component {
         this.setState({ product_LocationList: res.data });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-CRS-STT-01");
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-CRS-STT-01");
         notify();
       });
   }
 
-  handleProcessDateChange(event){
+  handleProcessDateChange(event) {
     this.setState({ processDate: event.target.value });
   }
 
@@ -50,17 +51,21 @@ class ProductCoarseState extends Component {
     event.preventDefault();
 
     var errors = [];
-    if (this.state.location[0].name === undefined) {
+    if (this.state.location[0] === undefined) {
       errors.push("location");
     }
-    if (this.state.processDate === '') {
+    if (this.state.processDate === "") {
       errors.push("processDate");
     }
 
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.location[0], this.state.processDate);
+      this.state.callback_accept(
+        this.state.data,
+        this.state.location[0],
+        this.state.processDate
+      );
     }
   }
 
@@ -79,36 +84,36 @@ class ProductCoarseState extends Component {
     return (
       <div>
         <div className="container">
-         <ToastContainer />
+          <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
               Devreye Al
               <div className="card-body">
                 <form>
-                <div className="form-group">
-                  <label>İşlem Tarihi</label>
-                  <input
-                    type="datetime-local"
-                    id="arrivalDate"
-                    name="arrivalDate"
-                    className={
-                      this.hasError("processDate")
-                        ? "form-control is-invalid"
-                        : "form-control"
-                    }
-                    value={this.state.processDate}
-                    onChange={this.handleProcessDateChange}
-                  />
-                  <div
-                    className={
-                      this.hasError("processDate")
-                        ? "inline-errormsg"
-                        : "hidden"
-                    }
-                  >
-                    İşlem Tarihini girmelisiniz.
+                  <div className="form-group">
+                    <label>İşlem Tarihi</label>
+                    <input
+                      type="datetime-local"
+                      id="arrivalDate"
+                      name="arrivalDate"
+                      className={
+                        this.hasError("processDate")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.processDate}
+                      onChange={this.handleProcessDateChange}
+                    />
+                    <div
+                      className={
+                        this.hasError("processDate")
+                          ? "inline-errormsg"
+                          : "hidden"
+                      }
+                    >
+                      İşlem Tarihini girmelisiniz.
+                    </div>
                   </div>
-                </div>
                   <div className="form-group">
                     <label>
                       Yeni Lokasyon:{" "}
@@ -138,7 +143,6 @@ class ProductCoarseState extends Component {
                     </div>
                   </div>
 
-           
                   <div className="form-group">
                     <Button color="primary" onClick={this.accept}>
                       Kabul

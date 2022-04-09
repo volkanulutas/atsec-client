@@ -29,7 +29,7 @@ class ProductWashingModal extends React.Component {
     return (
       <div>
         <Button color="primary" onClick={this.toggle}>
-          Yıkama (Defatting) Yap
+          Defatting Yap
         </Button>
         <Modal
           isOpen={this.state.modal}
@@ -37,9 +37,7 @@ class ProductWashingModal extends React.Component {
           fade={this.state.fade}
           className={this.props.className}
         >
-          <ModalHeader toggle={this.toggle}>
-          Defatting...
-          </ModalHeader>
+          <ModalHeader toggle={this.toggle}>Defatting...</ModalHeader>
           <ModalBody>
             <ProductWashingState
               errors={this.errors}

@@ -84,7 +84,7 @@ class ProductFreezingState extends Component {
           <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
-              Dondurucuya Koy3
+              Dondurucuya Koy
               <div className="card-body">
                 <form>
 

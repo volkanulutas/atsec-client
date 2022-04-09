@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import PackingProductService from "../../../services/PackingProductService";
 
@@ -19,10 +19,10 @@ class ProductPackingState extends Component {
 
       errors: [],
 
-      number: '',
-      gamaDate: '',
-      lot: '',
-      processDate: '',
+      number: "",
+      date: "",
+      lot: "",
+      processDate: "",
       packingSize: [],
       product_PackingSizeList: [],
     };
@@ -31,34 +31,35 @@ class ProductPackingState extends Component {
     this.reject = this.reject.bind(this);
 
     this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
-    this.changeGamaDateHandler = this.changeGamaDateHandler.bind(this);
+    this.changeDateHandler = this.changeDateHandler.bind(this);
     this.changeNumberHandler = this.changeNumberHandler.bind(this);
   }
 
   componentDidMount() {
     PackingProductService.getPackingProductSizeList()
-    .then((res) => {
-      this.setState({ product_PackingSizeList: res.data });
-    })
-    .catch((ex) => {
-      const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: PRD_PACK-01");
-      notify();
-    });
+      .then((res) => {
+        this.setState({ product_PackingSizeList: res.data });
+      })
+      .catch((ex) => {
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: PRD_PACK-01");
+        notify();
+      });
   }
 
-  changeGamaDateHandler(event){
+  changeDateHandler(event) {
     var date = event.target.value;
     var splittedDate = date.split("-");
     var lotTmp = splittedDate[1] + splittedDate[0] + "";
-    this.setState({ gamaDate: event.target.value});
-    this.setState({ lot: lotTmp});
+    this.setState({ date: event.target.value });
+    this.setState({ lot: lotTmp });
   }
 
-  changeNumberHandler(event){
-    this.setState({ number: event.target.value}); 
+  changeNumberHandler(event) {
+    this.setState({ number: event.target.value });
   }
 
-  handleProcessDateChange(event){
+  handleProcessDateChange(event) {
     this.setState({ processDate: event.target.value });
   }
 
@@ -74,15 +75,22 @@ class ProductPackingState extends Component {
     if (this.state.packingSize[0] === undefined) {
       errors.push("packingSize");
     }
-    if (this.state.processDate === '') {
+    if (this.state.processDate === "") {
       errors.push("processDate");
     }
-
     this.setState({ errors: errors });
+
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      let data = { size: this.state.packingSize[0], lot: this.state.lot, gamaDate: this.convertDate(this.state.gamaDate), donor: this.state.data.donor, number: this.state.number };
-      this.state.callback_accept(this.state.data, data);
+      var donorTmp = this.state.data.donor;
+      let packingProduct = {
+        size: this.state.packingSize[0],
+        lot: this.state.lot,
+        date: this.convertDate(this.state.date),
+        donor: donorTmp,
+        number: this.state.number,
+      };
+      this.state.callback_accept(this.state.data, packingProduct);
     }
   }
 
@@ -107,32 +115,31 @@ class ProductPackingState extends Component {
               Paketlemeye Geçiş
               <div className="card-body">
                 <form>
-
-                <div className="form-group">
-                  <label>İşlem Tarihi</label>
-                  <input
-                    type="datetime-local"
-                    id="arrivalDate"
-                    name="arrivalDate"
-                    className={
-                      this.hasError("processDate")
-                        ? "form-control is-invalid"
-                        : "form-control"
-                    }
-                    value={this.state.processDate}
-                    onChange={this.handleProcessDateChange}
-                  />
-                  <div
-                    className={
-                      this.hasError("processDate")
-                        ? "inline-errormsg"
-                        : "hidden"
-                    }
-                  >
-                    İşlem Tarihini girmelisiniz.
+                  <div className="form-group">
+                    <label>İşlem Tarihi</label>
+                    <input
+                      type="datetime-local"
+                      id="arrivalDate"
+                      name="arrivalDate"
+                      className={
+                        this.hasError("processDate")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.processDate}
+                      onChange={this.handleProcessDateChange}
+                    />
+                    <div
+                      className={
+                        this.hasError("processDate")
+                          ? "inline-errormsg"
+                          : "hidden"
+                      }
+                    >
+                      İşlem Tarihini girmelisiniz.
+                    </div>
                   </div>
-                </div>
-                  
+
                   <div className="form-group">
                     <label>
                       Paketleme Boyutu:{" "}
@@ -155,31 +162,39 @@ class ProductPackingState extends Component {
                     </div>
                     <div
                       className={
-                        this.hasError("packingSize") ? "inline-errormsg" : "hidden"
+                        this.hasError("packingSize")
+                          ? "inline-errormsg"
+                          : "hidden"
                       }
                     >
                       Paketleme Boyutunu seçmelisiniz.
                     </div>
                   </div>
-
                   <div className="form-group">
-                                <label>Gamaya Gönderim Tarihi:</label>
-                                <input type="date" placeholder="" name="gamaDate" 
-                                className={this.hasError("gamaDate") 
-                                ? "form-control is-invalid" 
-                                : "form-control"}
-                                value={this.state.birthdate} onChange={this.changeGamaDateHandler}
-                                 />
-                                <div className={this.hasError("gamaDate") ? "inline-errormsg" : "hidden"}>
-                                   Gama GÖnderim Tarihi girilmemiş.
-                                </div>
+                    <label>Gamaya Gönderim Tarihi:</label>
+                    <input
+                      type="date"
+                      placeholder=""
+                      name="date"
+                      className={
+                        this.hasError("date")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.birthdate}
+                      onChange={this.changeDateHandler}
+                    />
+                    <div
+                      className={
+                        this.hasError("date") ? "inline-errormsg" : "hidden"
+                      }
+                    >
+                      Gama Gönderim Tarihi girilmemiş.
                     </div>
-
-                    <div className="form-group">
-                       <label>LOT: </label> {this.state.lot}
-                    </div>
-
-
+                  </div>
+                  <div className="form-group">
+                    <label>LOT: </label> {this.state.lot}
+                  </div>
                   <div className="form-group">
                     <label>Adet:</label>
                     <input
@@ -190,9 +205,6 @@ class ProductPackingState extends Component {
                       onChange={this.changeNumberHandler}
                     />
                   </div>
-                  
-
-
                   <div className="form-group">
                     <Button color="primary" onClick={this.accept}>
                       Kabul
@@ -202,7 +214,6 @@ class ProductPackingState extends Component {
                     </Button>
                   </div>
                 </form>
-                <div></div>
               </div>
             </div>
           </div>
@@ -211,5 +222,4 @@ class ProductPackingState extends Component {
     );
   }
 }
-
 export default ProductPackingState;

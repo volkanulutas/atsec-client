@@ -29,7 +29,7 @@ class ProductCoarseModal extends React.Component {
     return (
       <div>
         <Button color="primary" onClick={this.toggle}>
-          Dondurucuya Koy 2
+          Dondurucuya Koy
         </Button>
         <Modal
           isOpen={this.state.modal}

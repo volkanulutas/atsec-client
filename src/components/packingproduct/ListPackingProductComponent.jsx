@@ -7,14 +7,13 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import PackingProductService from "../../services/PackingProductService";
 import DeleteModal from "../util/modal/DeleteModal";
 import PackingProductProcessingModal from "../packingproduct/modal/PackingProductProcessingModal";
 import PackingProductBarcodeModal from "../packingproduct/modal/PackingProductBarcodeModal";
-
 
 const { SearchBar } = Search;
 
@@ -29,31 +28,18 @@ class ListPackingProductComponent extends Component {
       selectedRowId: "",
       columns: [
         {
+          dataField: "id",
+          text: "Id",
+          align: "center",
+          title: true,
+          sort: true,
+        },
+        {
           dataField: "donor.code",
           text: "Donör Id",
           align: "center",
           title: true,
           sort: true,
-        },
-        {
-          dataField: "lot",
-          text: "lot",
-          sort: true,
-          title: true,
-        },
-        {
-          dataFiegld: "gamaDate",
-          text: "Gama Tarihi",
-          align: "center",
-          sort: true,
-          title: true,
-        },
-        {
-          dataField: "packingProductCode",
-          text: "Paketlenen Ürün Kodu",
-          align: "center",
-          sort: true,
-          title: true,
         },
         {
           dataField: "partitionId",
@@ -70,6 +56,19 @@ class ListPackingProductComponent extends Component {
           },
         },
         {
+          dataField: "packingProductCode",
+          text: "Paketlenen Ürün Kodu",
+          align: "center",
+          sort: true,
+          title: true,
+        },
+        {
+          dataField: "lot",
+          text: "lot",
+          sort: true,
+          title: true,
+        },
+        {
           dataField: "size",
           text: "Boyut",
           align: "center",
@@ -82,6 +81,13 @@ class ListPackingProductComponent extends Component {
             }
             return <div className={styleVar}>{cell}</div>;
           },
+        },
+        {
+          dataField: "date",
+          text: "Gama Tarihi",
+          align: "center",
+          sort: true,
+          title: true,
         },
         {
           dataField: "df",
@@ -130,60 +136,39 @@ class ListPackingProductComponent extends Component {
   componentDidMount() {
     PackingProductService.getAll()
       .then((res) => {
-        console.log(res.data);
         this.setState({ products: res.data });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-PAC-01");
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-PAC-01");
         notify();
       });
   }
 
-  convertString(dateLong) {
-    if (dateLong !== undefined) {
-      let date = new Date(dateLong);
-      let year = date.getFullYear();
-      let month = date.getMonth() + 1 + "";
-      let day = date.getDate() + "";
-      let hour = date.getHours();
-      let min = date.getMinutes();
-      if (month.length === 1) {
-        month = "0" + month;
-      }
-      if (day.length === 1) {
-        day = "0" + day;
-      }
-      let d = year + "-" + month + "-" + day + "T" + hour + ":" + min;
-      return d;
-    }
-  }
-
   checkstatus(row) {
-
     if (row.status === "Paketleme") {
       return (
         <div>
-            <PackingProductProcessingModal
-              style={{ marginRight: "5px" }}
-              initialModalState={false}
-              row={row}
-              callback_accept={this.performPreprocessing_accept}
-              callback_reject={this.performPreprocessing_reject}
-            />
-        </div>
-      );
-    } else if (row.status === "Paketleme Etiket" ){
-      <div>
-          <PackingProductBarcodeModal
+          <PackingProductProcessingModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
             row={row}
-            callback_accept={this.performBarcode_accept}
-            callback_reject={this.performBarcode_reject}
+            callback_accept={this.performPreprocessing_accept}
+            callback_reject={this.performPreprocessing_reject}
           />
-      </div>
+        </div>
+      );
+    } else if (row.status === "Paketleme Etiket") {
+      <div>
+        <PackingProductBarcodeModal
+          style={{ marginRight: "5px" }}
+          initialModalState={false}
+          row={row}
+          callback_accept={this.performBarcode_accept}
+          callback_reject={this.performBarcode_reject}
+        />
+      </div>;
     }
-
   }
 
   render() {
@@ -235,8 +220,8 @@ class ListPackingProductComponent extends Component {
     };
     return (
       <div className="container">
-          <ToastContainer />
-        <div className="col-sm-12 btn btn-info">Ürün Listesi</div>
+        <ToastContainer />
+        <div className="col-sm-12 btn btn-info">Paketlenmiş Ürün Listesi</div>
         <div>
           <ToolkitProvider
             keyField="id"

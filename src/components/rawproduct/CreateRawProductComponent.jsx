@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
 
 import RawProductService from "../../services/RawProductService";
 import LocationService from "../../services/LocationService";
@@ -14,22 +14,31 @@ class CreateRawProductComponent extends Component {
 
     this.state = {
       id: this.props.match === undefined ? "_add" : this.props.match.params.id,
-      isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
+      isEditable:
+        this.props.match === undefined
+          ? true
+          : this.props.match.params.state === "view"
+          ? false
+          : true,
       multiple: false,
 
-      // Files 
+      // Files
       selectedFiles: [],
       currentFile: undefined,
       progress: 0,
       message: "",
       fileInfos: [],
       selectedFileType: [], // Typeahead needs array.
-      product_FileList: ["Onam Formu", "Transfer Formu", "Taşıma Formu", "Ek Formu"],
+      product_FileList: [
+        "Onam Formu",
+        "Transfer Formu",
+        "Taşıma Formu",
+        "Ek Formu",
+      ],
       doctorName: "",
 
-    
       donor: [], // Typeahead needs array.
-      
+
       tissueType: [], // Typeahead needs array.
       location: [], // Typeahead needs array.
       statusName: [], // Typeahead needs array.
@@ -37,7 +46,6 @@ class CreateRawProductComponent extends Component {
       arrivalDate: "",
       information: "",
       deleted: false,
- 
 
       selectedFile: [], // Typeahead needs array.
 
@@ -56,25 +64,25 @@ class CreateRawProductComponent extends Component {
       product_LocationNormalList: [],
       product_DonorList: [],
       product_TissueTypeList: [],
-    
+
       // modal property
       callbackModalYes: props.callbackModalYes,
       callbackModalNo: props.callbackModalNo,
     };
 
     this.changeDonorHandler = this.changeDonorHandler.bind(this);
-    this.changeIssueTissueDateHandler = this.changeIssueTissueDateHandler.bind(
-      this
-    );
+    this.changeIssueTissueDateHandler =
+      this.changeIssueTissueDateHandler.bind(this);
     this.changeArrivalDateHandler = this.changeArrivalDateHandler.bind(this);
     this.changeInformationHandler = this.changeInformationHandler.bind(this);
 
     this.save = this.save.bind(this);
 
- 
     this.addCreateDonorComponent = this.addCreateDonorComponent.bind(this);
-    this.addCreateTissueTypeComponent = this.addCreateTissueTypeComponent.bind(this);
-    this.addCreateLocationComponent = this.addCreateLocationComponent.bind(this);
+    this.addCreateTissueTypeComponent =
+      this.addCreateTissueTypeComponent.bind(this);
+    this.addCreateLocationComponent =
+      this.addCreateLocationComponent.bind(this);
 
     this.selectFile = this.selectFile.bind(this);
   }
@@ -84,16 +92,15 @@ class CreateRawProductComponent extends Component {
     this.setState({ selectedFiles: [...this.state.selectedFiles, file] });
   }
 
-  addCreateTissueTypeComponent(){
+  addCreateTissueTypeComponent() {
     window.location.reload();
   }
 
-  addCreateDonorComponent(){
+  addCreateDonorComponent() {
     window.location.reload();
   }
 
-
-  addCreateLocationComponent(){
+  addCreateLocationComponent() {
     window.location.reload();
   }
 
@@ -104,8 +111,10 @@ class CreateRawProductComponent extends Component {
   };
 
   componentDidMount() {
+    alert("hello");
     LocationService.getLocationsByType("NORMAL")
       .then((res) => {
+        alert("location: " + JSON.stringify(res.data));
         this.setState({ product_LocationNormalList: res.data });
       })
       .catch((ex) => {
@@ -114,7 +123,9 @@ class CreateRawProductComponent extends Component {
     DonorService.getAllDonors()
       .then((res) => {
         this.setState({ product_DonorList: res.data });
-        console.log('customer: ' + JSON.stringify(this.state.product_DonorList));
+        console.log(
+          "customer: " + JSON.stringify(this.state.product_DonorList)
+        );
       })
       .catch((ex) => {
         console.error(ex);
@@ -128,9 +139,8 @@ class CreateRawProductComponent extends Component {
       });
 
     if (this.state.id === "_add") {
-       return;
+      return;
     } else {
-
       RawProductService.getFiles(this.state.id).then((response) => {
         this.setState({
           fileInfos: response.data,
@@ -139,7 +149,6 @@ class CreateRawProductComponent extends Component {
 
       RawProductService.getRawProductById(this.state.id)
         .then((res) => {
-        
           let product = res.data;
           let issueTissueDateStr = this.convertString(product.issueTissueDate);
           let arrivalDateStr = this.convertString(product.arrivalDate);
@@ -150,7 +159,7 @@ class CreateRawProductComponent extends Component {
           let locationTemp = [product.location];
           let statusNameTemp = [product.statusName];
 
-          let responsibleTemp = product.responsible;
+          let responsibleSignerTemp = product.responsibleSigner;
 
           this.setState({
             id: idTemp,
@@ -161,7 +170,7 @@ class CreateRawProductComponent extends Component {
             arrivalDate: arrivalDateStr,
             information: product.information,
             statusName: statusNameTemp,
-            responsible: responsibleTemp,
+            responsibleSigner: responsibleSignerTemp,
             deleted: product.deleted,
           });
         })
@@ -193,7 +202,7 @@ class CreateRawProductComponent extends Component {
     event.preventDefault();
     var errors = [];
     let currentFile = this.state.selectedFiles[0];
-  /*i
+    /*i
     if (this.state.selectedFiles.length === 0) {
       errors.push("fileList");
     }
@@ -269,18 +278,18 @@ class CreateRawProductComponent extends Component {
         });
     }
     // If opened as modal
-    if(this.state.callbackModalYes){
-        this.state.callbackModalYes();
+    if (this.state.callbackModalYes) {
+      this.state.callbackModalYes();
     }
   };
 
   cancel = (event) => {
     // If opened as modal
-    if(this.state.callbackModalNo){
-        this.state.callbackModalNo();
-    } else {
-        this.props.history.push('/rawproducts');
-    } 
+    if (this.state.callbackModalNo) {
+      this.state.callbackModalNo();
+    } else {
+      this.props.history.push("/rawproducts");
+    }
   };
 
   getTitle() {
@@ -333,307 +342,299 @@ class CreateRawProductComponent extends Component {
       progress,
       message,
       fileInfos,
-      multiple
+      multiple,
     } = this.state;
-
 
     return (
       <div>
-<div className="container">
-  <div className="row">
-    <div className="card col-md-6 offset-md-3 offset-md-3">
-      {this.getTitle()} -- {this.state.selectedFiles.length}
-      <div className="card-body">
-        <form>
-          <div className="form-group">
-          <label>
-              Donör:{" "}
-              {this.state.donor[0] === undefined
-                ? "Seçilmedi"
-                : this.state.donor[0].code}
-            </label>
-   
-            <Typeahead
-                multiple={multiple}
-                id="select-donor"
-                onChange={(selected) => {
-                  this.setState({ donor: selected });
-                }}
-                labelKey="code"
-                options={this.state.product_DonorList}
-                placeholder="Donor Seç..."
-                selected={this.state.donor}
-                /*disabled={!this.state.isEditable || !(this.state.id === "_add" || this.state.id === null)}*/
-              />
-          </div>
+        <div className="container">
+          <div className="row">
+            <div className="card col-md-6 offset-md-3 offset-md-3">
+              {this.getTitle()} -- {this.state.selectedFiles.length}
+              <div className="card-body">
+                <form>
+                  <div className="form-group">
+                    <label>
+                      Donör:{" "}
+                      {this.state.donor[0] === undefined
+                        ? "Seçilmedi"
+                        : this.state.donor[0].code}
+                    </label>
 
-     
+                    <Typeahead
+                      multiple={multiple}
+                      id="select-donor"
+                      onChange={(selected) => {
+                        this.setState({ donor: selected });
+                      }}
+                      labelKey="code"
+                      options={this.state.product_DonorList}
+                      placeholder="Donor Seç..."
+                      selected={this.state.donor}
+                      /*disabled={!this.state.isEditable || !(this.state.id === "_add" || this.state.id === null)}*/
+                    />
+                  </div>
 
-          <div className="form-group">
-            <label>Doku Çıkarım Zamanı (Saat ve Tarih):</label>
-            <input
-              type="datetime-local"
-              id="issueTissueDate"
-              name="issueTissueDate"
-              className={
-                this.hasError("issueTissueDate")
-                  ? "form-control is-invalid"
-                  : "form-control"
-              }
-              value={this.state.issueTissueDate}
-              onChange={this.changeIssueTissueDateHandler}
-              disabled={!this.state.isEditable}
-            />
-            <div
-              className={
-                this.hasError("issueTissueDate")
-                  ? "inline-errormsg"
-                  : "hidden"
-              }
-            >
-              Doku Çıkarım Zamanını girmelisiniz.
-            </div>
-          </div>
+                  <div className="form-group">
+                    <label>Doku Çıkarım Zamanı (Saat ve Tarih):</label>
+                    <input
+                      type="datetime-local"
+                      id="issueTissueDate"
+                      name="issueTissueDate"
+                      className={
+                        this.hasError("issueTissueDate")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.issueTissueDate}
+                      onChange={this.changeIssueTissueDateHandler}
+                      disabled={!this.state.isEditable}
+                    />
+                    <div
+                      className={
+                        this.hasError("issueTissueDate")
+                          ? "inline-errormsg"
+                          : "hidden"
+                      }
+                    >
+                      Doku Çıkarım Zamanını girmelisiniz.
+                    </div>
+                  </div>
 
-          <div className="form-group">
-            <label>Merkeze Geliş Zamanı (Tarih ve Saat):</label>
-            <input
-              type="datetime-local"
-              id="arrivalDate"
-              name="arrivalDate"
-              className={
-                this.hasError("issueTissueDate")
-                  ? "form-control is-invalid"
-                  : "form-control"
-              }
-              value={this.state.arrivalDate}
-              onChange={this.changeArrivalDateHandler}
-              disabled={!this.state.isEditable}
-            />
-            <div
-              className={
-                this.hasError("arrivalDate")
-                  ? "inline-errormsg"
-                  : "hidden"
-              }
-            >
-              Merkeze Geliş Tarihini girmelisiniz.
-            </div>
-          </div>
-          <div className="form-group">
-            <label>
-              Doku Tipi:{" "}
-              {this.state.tissueType[0] === undefined
-                ? "Seçilmedi"
-                : this.state.tissueType[0].name}{" "}
-            </label>
-            <div>
-              <Typeahead
-                multiple={multiple}
-                id="select-tissueType"
-                onChange={(selected) => {
-                  this.setState({ tissueType: selected });
-                }}
-                labelKey="name"
-                options={this.state.product_TissueTypeList}
-                placeholder="Doku Tipini Seçiniz..."
-                selected={this.state.tissueType}
-                disabled={!this.state.isEditable}
-              />
-              <div
-                className={
-                  this.hasError("tissueType")
-                    ? "inline-errormsg"
-                    : "hidden"
-                }
-              >
-                Doku Tipini girmelisiniz.
+                  <div className="form-group">
+                    <label>Merkeze Geliş Zamanı (Tarih ve Saat):</label>
+                    <input
+                      type="datetime-local"
+                      id="arrivalDate"
+                      name="arrivalDate"
+                      className={
+                        this.hasError("issueTissueDate")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.arrivalDate}
+                      onChange={this.changeArrivalDateHandler}
+                      disabled={!this.state.isEditable}
+                    />
+                    <div
+                      className={
+                        this.hasError("arrivalDate")
+                          ? "inline-errormsg"
+                          : "hidden"
+                      }
+                    >
+                      Merkeze Geliş Tarihini girmelisiniz.
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label>
+                      Doku Tipi:{" "}
+                      {this.state.tissueType[0] === undefined
+                        ? "Seçilmedi"
+                        : this.state.tissueType[0].name}{" "}
+                    </label>
+                    <div>
+                      <Typeahead
+                        multiple={multiple}
+                        id="select-tissueType"
+                        onChange={(selected) => {
+                          this.setState({ tissueType: selected });
+                        }}
+                        labelKey="name"
+                        options={this.state.product_TissueTypeList}
+                        placeholder="Doku Tipini Seçiniz..."
+                        selected={this.state.tissueType}
+                        disabled={!this.state.isEditable}
+                      />
+                      <div
+                        className={
+                          this.hasError("tissueType")
+                            ? "inline-errormsg"
+                            : "hidden"
+                        }
+                      >
+                        Doku Tipini girmelisiniz.
+                      </div>
+                      <AddModal
+                        style={{ marginRight: "5px" }}
+                        initialModalState={false}
+                        component={"CreateTissueTypeComponent"}
+                        callback={this.addCreateTissueTypeComponent}
+                        isEditable={this.state.isEditable}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>
+                      Karantina Lokasyonu:{" "}
+                      {this.state.location[0] === undefined
+                        ? "Seçilmedi"
+                        : this.state.location[0].name}
+                    </label>
+                    <div>
+                      <Typeahead
+                        multiple={multiple}
+                        id="select-location"
+                        onChange={(selected) => {
+                          this.setState({ location: selected });
+                        }}
+                        labelKey="name"
+                        options={this.state.product_LocationNormalList}
+                        placeholder="Karantina Lokasyonunu Seç..."
+                        selected={this.state.location}
+                        disabled={!this.state.isEditable}
+                      />
+                      <div
+                        className={
+                          this.hasError("location")
+                            ? "inline-errormsg"
+                            : "hidden"
+                        }
+                      >
+                        Karantina Lokasyonunu girmelisiniz.
+                      </div>
+                      <AddModal
+                        style={{ marginRight: "5px" }}
+                        initialModalState={false}
+                        component={"CreateLocationComponent"}
+                        callback={this.addCreateLocationComponent}
+                        isEditable={this.state.isEditable}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Ek Bilgi:</label>
+                    <input
+                      placeholder="Ek Bilgi"
+                      name="information"
+                      className="form-control"
+                      value={this.state.information}
+                      onChange={this.changeInformationHandler}
+                      disabled={!this.state.isEditable}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>
+                      Durumu:{" "}
+                      {this.state.statusName[0] === undefined
+                        ? "Seçilmedi..."
+                        : this.state.statusName[0]}
+                    </label>
+                    <Typeahead
+                      multiple={multiple}
+                      id="select-status"
+                      onChange={(selected) => {
+                        this.setState({ statusName: selected });
+                      }}
+                      options={this.state.product_StatusNameList}
+                      placeholder="Durumu Seç..."
+                      selected={this.state.statusName}
+                      disabled={!this.state.isEditable}
+                    />
+                  </div>
+
+                  {/* Begin of Files */}
+                  <div>
+                    <div>
+                      <label>Form Ekle:</label>
+                      <Typeahead
+                        multiple={false}
+                        id="select-status"
+                        onChange={(selected) => {
+                          this.setState({ selectedFileType: selected });
+                        }}
+                        options={this.state.product_FileList}
+                        placeholder="Form Türü Seç..."
+                        selected={this.state.selectedFileType}
+                        disabled={false}
+                        // TODO: disabled={!this.state.isEditable}
+                      />
+                      <div
+                        className={
+                          this.hasError("fileList")
+                            ? "inline-errormsg"
+                            : "hidden"
+                        }
+                      ></div>
+                    </div>
+
+                    {currentFile && (
+                      <div className="progress">
+                        <div
+                          className="progress-bar progress-bar-info progress-bar-striped"
+                          role="progressbar"
+                          aria-valuenow={progress}
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                          style={{ width: progress + "%" }}
+                        >
+                          {progress}%
+                        </div>
+                      </div>
+                    )}
+
+                    <label className="btn btn-default">
+                      <input type="file" onChange={this.selectFile} />
+                    </label>
+
+                    <button
+                      className="btn btn-success"
+                      disabled={!selectedFiles}
+                      onClick={this.upload}
+                    >
+                      Yükle
+                    </button>
+
+                    <div className="alert alert-light" role="alert">
+                      {message}
+                    </div>
+
+                    <div className="card">
+                      <div className="card-header">Yüklenen Form Listesi</div>
+                      <ul className="list-group list-group-flush">
+                        {fileInfos &&
+                          fileInfos.map((file, index) => (
+                            <li className="list-group-item" key={index}>
+                              <a href={file.url}>
+                                {file.name} - {file.dataType}{" "}
+                              </a>
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                  </div>
+                  {/* End of Files */}
+
+                  <input
+                    type="file"
+                    multiple //To select multiple files
+                    onChange={(e) => this.selectFile(e)}
+                  />
+
+                  <button
+                    className="btn btn-success"
+                    onClick={this.save.bind(this)}
+                    disabled={!this.state.isEditable}
+                  >
+                    {this.getButtonText()}
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={this.cancel.bind(this)}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    İptal
+                  </button>
+                </form>
               </div>
-              <AddModal
-                style={{ marginRight: "5px" }}
-                initialModalState={false}
-                component={"CreateTissueTypeComponent"}
-                callback={this.addCreateTissueTypeComponent}
-                isEditable ={this.state.isEditable}
-              />
             </div>
           </div>
-
-          <div className="form-group">
-            <label>
-              Karantina Lokasyonu:{" "}
-              {this.state.location[0] === undefined
-                ? "Seçilmedi"
-                : this.state.location[0].name}
-            </label>
-            <div>
-              <Typeahead
-                multiple={multiple}
-                id="select-location"
-                onChange={(selected) => {
-                  this.setState({ location: selected });
-                }}
-                labelKey="name"
-                options={this.state.product_LocationNormalList}
-                placeholder="Karantina Lokasyonunu Seç..."
-                selected={this.state.location}
-                disabled={!this.state.isEditable}
-              />
-              <div
-                className={
-                  this.hasError("location")
-                    ? "inline-errormsg"
-                    : "hidden"
-                }
-              >
-                Karantina Lokasyonunu girmelisiniz.
-              </div>
-              <AddModal
-                style={{ marginRight: "5px" }}
-                initialModalState={false}
-                component={"CreateLocationComponent"}
-                callback={this.addCreateLocationComponent}
-                isEditable = {this.state.isEditable}
-              />
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>Ek Bilgi:</label>
-            <input
-              placeholder="Ek Bilgi"
-              name="information"
-              className="form-control"
-              value={this.state.information}
-              onChange={this.changeInformationHandler}
-              disabled={!this.state.isEditable}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>
-              Durumu:{" "}
-              {this.state.statusName[0] === undefined
-                ? "Seçilmedi..."
-                : this.state.statusName[0]}
-            </label>
-            <Typeahead
-              multiple={multiple}
-              id="select-status"
-              onChange={(selected) => {
-                this.setState({ statusName: selected });
-              }}
-              options={this.state.product_StatusNameList}
-              placeholder="Durumu Seç..."
-              selected={this.state.statusName}
-              disabled={!this.state.isEditable}
-            />
-          </div>
-
-         {/* Begin of Files */}
-          <div>
-          <div>
-              <label>Form Ekle:</label>
-                <Typeahead
-                  multiple={false}
-                  id="select-status"
-                  onChange={(selected) => {
-                    this.setState({ selectedFileType: selected });
-                  }}
-                  options={this.state.product_FileList}
-                  placeholder="Form Türü Seç..."
-                  selected={this.state.selectedFileType}
-                  disabled= {false}
-                  // TODO: disabled={!this.state.isEditable}
-                />  
-                <div
-                    className={
-                      this.hasError("fileList")
-                        ? "inline-errormsg"
-                        : "hidden"
-                }
-              ></div>
-          </div>
-
-
-        {currentFile && (
-          <div className="progress">
-            <div
-              className="progress-bar progress-bar-info progress-bar-striped"
-              role="progressbar"
-              aria-valuenow={progress}
-              aria-valuemin="0"
-              aria-valuemax="100"
-              style={{ width: progress + "%" }}
-            >
-              {progress}%
-            </div>
-          </div>
-        )}
-
-        <label className="btn btn-default">
-          <input type="file" onChange={this.selectFile} />
-        </label>
-
-        <button
-          className="btn btn-success"
-          disabled={!selectedFiles}
-          onClick={this.upload}
-        >
-          Yükle
-        </button>
-
-        <div className="alert alert-light" role="alert">
-          {message}
-        </div>
-
-        <div className="card">
-          <div className="card-header">Yüklenen Form Listesi</div>
-          <ul className="list-group list-group-flush">
-            {fileInfos &&
-              fileInfos.map((file, index) => (
-   
-                <li className="list-group-item" key={index}>
-                  <a href={file.url}>{file.name} -  {file.dataType} </a>
-                </li>
-              ))}
-          </ul>
         </div>
       </div>
-      {/* End of Files */}
-
-      <input
-          type="file"
-          multiple  //To select multiple files
-          onChange={(e) => this.selectFile(e)}
-        />
-
-
-
-
-          <button
-            className="btn btn-success"
-            onClick={this.save.bind(this)}
-            disabled={!this.state.isEditable}
-          >
-            {this.getButtonText()}
-          </button>
-          <button
-            className="btn btn-danger"
-            onClick={this.cancel.bind(this)}
-            style={{ marginLeft: "10px" }}
-          >
-            İptal
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-    
- );
+    );
   }
 }
 

@@ -1,19 +1,24 @@
 import React, { Component } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import ProductService from "../../services/ProductService";
 import CustomerService from "../../services/CustomerService";
 import AddModal from "../util/modal/AddModal";
- 
+
 class CreateProductComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       id: this.props.match === undefined ? "_add" : this.props.match.params.id,
-      isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
+      isEditable:
+        this.props.match === undefined
+          ? true
+          : this.props.match.params.state === "view"
+          ? false
+          : true,
       multiple: false,
 
       donor: {},
@@ -36,9 +41,8 @@ class CreateProductComponent extends Component {
     this.changeCustomerHandler = this.changeCustomerHandler.bind(this);
     this.changeStatusHandler = this.changeStatusHandler.bind(this);
     this.changeTypeHandler = this.changeTypeHandler.bind(this);
-    this.changePreProcessingTypeHandler = this.changePreProcessingTypeHandler.bind(
-      this
-    );
+    this.changePreProcessingTypeHandler =
+      this.changePreProcessingTypeHandler.bind(this);
     this.changeDefinitionHandler = this.changeDefinitionHandler.bind(this);
     this.changeInformationHandler = this.changeInformationHandler.bind(this);
   }
@@ -152,7 +156,8 @@ class CreateProductComponent extends Component {
           this.props.history.push("/products");
         })
         .catch((ex) => {
-          const notify = () => toast("Ürün kaydedilemedi. Hata Kodu: CRT-PRD-01");
+          const notify = () =>
+            toast("Ürün kaydedilemedi. Hata Kodu: CRT-PRD-01");
           notify();
         });
     } else {
@@ -163,24 +168,25 @@ class CreateProductComponent extends Component {
           this.props.history.push("/products");
         })
         .catch((ex) => {
-          const notify = () => toast("Ürün kaydedilemedi. Hata Kodu: CRT-PRD-02");
+          const notify = () =>
+            toast("Ürün kaydedilemedi. Hata Kodu: CRT-PRD-02");
           notify();
         });
     }
-    
+
     // If opened as modal
-    if(this.state.callbackModalYes){
-          this.state.callbackModalYes();
+    if (this.state.callbackModalYes) {
+      this.state.callbackModalYes();
     }
   };
 
   cancel = (event) => {
     // If opened as modal
-    if(this.state.callbackModalNo){
-        this.state.callbackModalNo();
-    } else {
-        this.props.history.push('/products');
-    } 
+    if (this.state.callbackModalNo) {
+      this.state.callbackModalNo();
+    } else {
+      this.props.history.push("/products");
+    }
   };
 
   getTitle() {
@@ -218,7 +224,7 @@ class CreateProductComponent extends Component {
                       className="form-control"
                       value={this.state.donor.code}
                       onChange={this.changeDonorHandler}
-                      disabled
+                      disabled={!this.state.isEditable}
                     />
                   </div>
 
@@ -282,7 +288,7 @@ class CreateProductComponent extends Component {
                       name="type"
                       className="form-control"
                       value={this.state.type}
-                      disabled
+                      disabled={!this.state.isEditable}
                     />
                   </div>
 
@@ -293,7 +299,7 @@ class CreateProductComponent extends Component {
                       name="status"
                       className="form-control"
                       value={this.state.status}
-                      disabled
+                      disabled={!this.state.isEditable}
                     />
                   </div>
 
@@ -304,7 +310,7 @@ class CreateProductComponent extends Component {
                       name="secCode"
                       className="form-control"
                       value={this.state.secCode}
-                      disabled
+                      disabled={!this.state.isEditable}
                     />
                   </div>
 

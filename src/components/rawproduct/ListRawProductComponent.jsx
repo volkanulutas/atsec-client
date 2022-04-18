@@ -312,7 +312,7 @@ class ListRawProductComponent extends Component {
         console.error(ex);
       });
 
-    this.props.history.push("/rawproducts");
+    // this.props.history.push("/rawproducts");
   }
 
   // called by modal, callback.

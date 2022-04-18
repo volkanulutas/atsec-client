@@ -225,9 +225,11 @@ class CreateDonorComponent extends Component {
     event.preventDefault();
     var errors = [];
 
+    /*
     if (this.state.code === "" || this.state.code.length > 8) {
       errors.push("code");
     }
+    */
     if (this.state.donorInstitute[0] === undefined) {
       errors.push("donorInstitute");
     }
@@ -277,6 +279,7 @@ class CreateDonorComponent extends Component {
 
     var isBreak = false;
 
+    /*
     DonorService.getDonorByCode(this.state.code)
       .then((res) => {
         let donor = res.data;
@@ -292,7 +295,7 @@ class CreateDonorComponent extends Component {
       .catch((ex) => {
         // do nothing
       });
-
+*/
     if (!isBreak) {
       let idParam = undefined;
       if (this.state.id !== "_add") {
@@ -317,6 +320,7 @@ class CreateDonorComponent extends Component {
         deleted: this.state.deleted,
       };
       if (this.state.id === "_add") {
+        alert("create");
         // create user
         DonorService.createDonor(donor)
           .then((res) => {
@@ -342,6 +346,7 @@ class CreateDonorComponent extends Component {
             }
           });
       } else {
+        alert("update");
         DonorService.updateDonor(this.state.id, donor)
           .then((res) => {
             const notify = () =>
@@ -410,7 +415,7 @@ class CreateDonorComponent extends Component {
                   <div className="form-group">
                     <label>Donor Id:</label>
                     <input
-                      placeholder="code"
+                      placeholder="Donör Id Sistem tarafından üretilecektir."
                       name="code"
                       className={
                         this.hasError("code")

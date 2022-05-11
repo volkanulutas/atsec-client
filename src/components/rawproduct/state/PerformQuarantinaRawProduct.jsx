@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
 import { Button } from "reactstrap";
 
 import RawProductService from "../../../services/RawProductService";
@@ -373,7 +373,7 @@ class PerformQuarantinaRawProduct extends Component {
                       color="success"
                       onClick={this.state.callback_modalToggle}
                     >
-                      İptal
+                      Vazgeç
                     </Button>
                   </div>
                 </form>

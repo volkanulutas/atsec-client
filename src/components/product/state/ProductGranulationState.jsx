@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import LocationService from "../../../services/LocationService";
 
@@ -20,7 +20,7 @@ class ProductGranulationState extends Component {
 
       errors: [],
 
-      processDate: '',
+      processDate: "",
 
       granulationTypeList: [],
 
@@ -40,28 +40,29 @@ class ProductGranulationState extends Component {
         this.setState({ product_LocationList: res.data });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-FRE-STT-01");
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-FRE-STT-01");
         notify();
       });
   }
 
-  handleProcessDateChange(event){
+  handleProcessDateChange(event) {
     this.setState({ processDate: event.target.value });
   }
 
-  handleGranulationChange(event){
+  handleGranulationChange(event) {
     var isChecked = event.target.checked;
     var item = event.target.value;
 
-    if(isChecked){
+    if (isChecked) {
       this.setState({
-        granulationTypeList:[...this.state.granulationTypeList, item]
+        granulationTypeList: [...this.state.granulationTypeList, item],
       });
-    }else{
+    } else {
       var index = this.state.granulationTypeList.indexOf(item);
-      if (index > -1) { 
-         var arr = this.state.granulationTypeList.splice(index, 1);
-         this.setState({arr});
+      if (index > -1) {
+        var arr = this.state.granulationTypeList.splice(index, 1);
+        this.setState({ arr });
       }
     }
   }
@@ -74,14 +75,18 @@ class ProductGranulationState extends Component {
     if (this.state.granulationTypeList.length === 0) {
       errors.push("granulationType-checkbox");
     }
-    if (this.state.processDate === '') {
+    if (this.state.processDate === "") {
       errors.push("processDate");
     }
 
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.granulationTypeList, this.state.processDate);
+      this.state.callback_accept(
+        this.state.data,
+        this.state.granulationTypeList,
+        this.state.processDate
+      );
     }
   }
 
@@ -98,11 +103,11 @@ class ProductGranulationState extends Component {
     const { multiple } = this.state;
 
     const divStyle = {
-      margin: '5px',
+      margin: "5px",
     };
 
     const divStyle2 = {
-      marginLeft: '15px',
+      marginLeft: "15px",
     };
 
     return (
@@ -110,103 +115,94 @@ class ProductGranulationState extends Component {
         <div className="container">
           <ToastContainer />
           <div className="row">
-          <div className="card col-md-6 offset-md-3 offset-md-3">
-             
-            <div className="form-group">
-                    <label>İşlem Tarihi</label>
-                    <input
-                      type="datetime-local"
-                      id="arrivalDate"
-                      name="arrivalDate"
-                      className={
-                        this.hasError("processDate")
-                          ? "form-control is-invalid"
-                          : "form-control"
-                      }
-                      value={this.state.processDate}
-                      onChange={this.handleProcessDateChange}
-                    />
-                    <div
-                      className={
-                        this.hasError("processDate")
-                          ? "inline-errormsg"
-                          : "hidden"
-                      }
-                    >
-                      İşlem Tarihini girmelisiniz.
-                    </div>
-            </div>
-                  
-            <div className="form-group">
-              Öğütme Türünü Seçiniz:
-              <div className="card-body">
-                <form>
-                  
-                <div className="radio">
-                        <FormGroup check1>
-                          <Label style={divStyle2}>
-                            <Input
-                              type="checkbox"
-                              value={"f"}
-                              onChange={this.handleGranulationChange}
-                            ></Input>
+            <div className="card col-md-6 offset-md-3 offset-md-3">
+              <div className="form-group">
+                <label>İşlem Tarihi</label>
+                <input
+                  type="datetime-local"
+                  id="arrivalDate"
+                  name="arrivalDate"
+                  className={
+                    this.hasError("processDate")
+                      ? "form-control is-invalid"
+                      : "form-control"
+                  }
+                  value={this.state.processDate}
+                  onChange={this.handleProcessDateChange}
+                />
+                <div
+                  className={
+                    this.hasError("processDate") ? "inline-errormsg" : "hidden"
+                  }
+                >
+                  İşlem Tarihini girmelisiniz.
+                </div>
+              </div>
+
+              <div className="form-group">
+                Öğütme Türünü Seçiniz:
+                <div className="card-body">
+                  <form>
+                    <div className="radio">
+                      <FormGroup check1>
+                        <Label style={divStyle2}>
+                          <Input
+                            type="checkbox"
+                            value={"f"}
+                            onChange={this.handleGranulationChange}
+                          ></Input>
                           f
-                          </Label>
-                          <Label style={divStyle2}>
-                            <Input 
-                              type="checkbox"
-                              value={"xf"}
-                              onChange={this.handleGranulationChange}
-                            ></Input>
+                        </Label>
+                        <Label style={divStyle2}>
+                          <Input
+                            type="checkbox"
+                            value={"xf"}
+                            onChange={this.handleGranulationChange}
+                          ></Input>
                           xf
-                          </Label>
-                          <Label style={divStyle2}>
-                            <Input
-                              type="checkbox"
-                              value={"xxf"}
-                              onChange={this.handleGranulationChange}
-                            ></Input>
+                        </Label>
+                        <Label style={divStyle2}>
+                          <Input
+                            type="checkbox"
+                            value={"xxf"}
+                            onChange={this.handleGranulationChange}
+                          ></Input>
                           xxf
-                          </Label>
-                          <Label style={divStyle2}>
-                            <Input
-                              type="checkbox"
-                              value={"xxxf"}
-                              onChange={this.handleGranulationChange}
-                            ></Input>
+                        </Label>
+                        <Label style={divStyle2}>
+                          <Input
+                            type="checkbox"
+                            value={"xxxf"}
+                            onChange={this.handleGranulationChange}
+                          ></Input>
                           xxxf
-                          </Label>
-                        
-                          
-                        </FormGroup>
-                      </div>
-                      <div>
-                      <div
-                      className={
-                        this.hasError("granulationType-checkbox")
-                          ? "inline-errormsg"
-                          : "hidden"
-                      }
-                    >
-                      Lütfen seçim yapınız.
+                        </Label>
+                      </FormGroup>
                     </div>
+                    <div>
+                      <div
+                        className={
+                          this.hasError("granulationType-checkbox")
+                            ? "inline-errormsg"
+                            : "hidden"
+                        }
+                      >
+                        Lütfen seçim yapınız.
+                      </div>
                     </div>
 
-                  <div className="form-group">
-                    <Button color="primary" onClick={this.accept}>
-                      Kabul
-                    </Button>{" "}
-                    <Button color="danger" onClick={this.reject}>
-                      İptal
-                    </Button>
-                  </div>
-                </form>
-                <div></div>
+                    <div className="form-group">
+                      <Button color="primary" onClick={this.accept}>
+                        Kabul
+                      </Button>{" "}
+                      <Button color="danger" onClick={this.reject}>
+                        Vazgeç
+                      </Button>
+                    </div>
+                  </form>
+                  <div></div>
+                </div>
               </div>
-            
-            
-           
-            </div>
             </div>
           </div>
         </div>

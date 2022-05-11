@@ -294,7 +294,6 @@ class ListRawProductComponent extends Component {
   }
 
   performAccept_preProcessing(row) {
-    // TODO: product sayfası için işlemleri yap... Product olarak üretilecektir.
     RawProductService.getRawProductById(row.id)
       .then((res) => {
         let rawProduct = res.data;

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import ProductService from "../../../services/ProductService";
 import LocationService from "../../../services/LocationService";
@@ -20,7 +20,7 @@ class RawProductAcceptState extends Component {
 
       errors: [],
 
-      processDate: '',
+      processDate: "",
       location: [],
       product_LocationList: [],
     };
@@ -35,7 +35,8 @@ class RawProductAcceptState extends Component {
         this.setState({ product_LocationList: res.data });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: RAW-ACC-01");
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: RAW-ACC-01");
         notify();
       });
   }
@@ -51,7 +52,11 @@ class RawProductAcceptState extends Component {
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.location[0], this.state.processDate);
+      this.state.callback_accept(
+        this.state.data,
+        this.state.location[0],
+        this.state.processDate
+      );
     }
   }
 
@@ -70,13 +75,12 @@ class RawProductAcceptState extends Component {
     return (
       <div>
         <div className="container">
-         <ToastContainer />
+          <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
-             Ham Ürünler Kabul
+              Ham Ürünler Kabul
               <div className="card-body">
                 <form>
-            
                   <div className="form-group">
                     <label>
                       Yeni Lokasyon:{" "}
@@ -106,13 +110,12 @@ class RawProductAcceptState extends Component {
                     </div>
                   </div>
 
-           
                   <div className="form-group">
                     <Button color="primary" onClick={this.accept}>
                       Tamam
                     </Button>{" "}
                     <Button color="danger" onClick={this.reject}>
-                      İptal
+                      Vazgeç
                     </Button>
                   </div>
                 </form>

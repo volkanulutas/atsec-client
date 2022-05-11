@@ -210,7 +210,7 @@ class ProductPackingState extends Component {
                       Kabul
                     </Button>{" "}
                     <Button color="danger" onClick={this.reject}>
-                      İptal
+                      Vazgeç
                     </Button>
                   </div>
                 </form>

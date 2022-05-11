@@ -119,7 +119,7 @@ class PackingProductBarcodeState extends Component {
                       Tamam
                     </Button>{" "}
                     <Button color="danger" onClick={this.reject}>
-                      İptal
+                      Vazgeç
                     </Button>
                   </div>
                 </form>

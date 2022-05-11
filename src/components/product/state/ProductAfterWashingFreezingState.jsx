@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
 
 import { Typeahead } from "react-bootstrap-typeahead";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import LocationService from "../../../services/LocationService";
 
@@ -14,7 +14,7 @@ class ProductAfterWashingFreezingState extends Component {
 
     this.state = {
       multiple: false,
-      data: props.data, 
+      data: props.data,
       callback_accept: props.callback_accept,
       callback_modalToggle: props.callback_modalToggle,
 
@@ -32,12 +32,12 @@ class ProductAfterWashingFreezingState extends Component {
 
   componentDidMount() {
     LocationService.getLocationsByType("REJECT")
-    .then((res) => {
-      this.setState({ product_LocationList: res.data });
-    })
-    .catch((ex) => {
-      console.error(ex);
-    });
+      .then((res) => {
+        this.setState({ product_LocationList: res.data });
+      })
+      .catch((ex) => {
+        console.error(ex);
+      });
   }
 
   accept(event) {
@@ -76,13 +76,13 @@ class ProductAfterWashingFreezingState extends Component {
     return (
       <div>
         <div className="container">
-         <ToastContainer />
+          <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
               Dondurucuya Koy (After Delipidation)
               <div className="card-body">
                 <form>
-                <div className="form-group">
+                  <div className="form-group">
                     <label>
                       Yeni Lokasyon:{" "}
                       {this.state.location[0] === undefined
@@ -111,13 +111,12 @@ class ProductAfterWashingFreezingState extends Component {
                     </div>
                   </div>
 
-           
                   <div className="form-group">
                     <Button color="primary" onClick={this.accept}>
                       Kabul
                     </Button>{" "}
                     <Button color="danger" onClick={this.reject}>
-                      İptal
+                      Vazgeç
                     </Button>
                   </div>
                 </form>

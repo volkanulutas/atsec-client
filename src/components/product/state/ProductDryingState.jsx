@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
 
 import { Typeahead } from "react-bootstrap-typeahead";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class ProductDryingState extends Component {
   constructor(props) {
@@ -18,9 +18,9 @@ class ProductDryingState extends Component {
 
       errors: [],
 
-      processDate: '',
-      beginningDate: '',
-      endDate: '',
+      processDate: "",
+      beginningDate: "",
+      endDate: "",
       dampValue: 0,
     };
     // callback
@@ -33,52 +33,50 @@ class ProductDryingState extends Component {
     this.changeDampValueHandler = this.changeDampValueHandler.bind(this);
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   changeDampValueHandler = (event) => {
     var value = event.target.value;
-    this.setState({dampValue: value});
-  }
+    this.setState({ dampValue: value });
+  };
 
-  handleBeginningDateChange(event){
+  handleBeginningDateChange(event) {
     this.setState({ beginningDate: event.target.value });
   }
 
-  handleEndDateChange(event){
+  handleEndDateChange(event) {
     this.setState({ endDate: event.target.value });
   }
 
-  handleProcessDateChange(event){
+  handleProcessDateChange(event) {
     this.setState({ processDate: event.target.value });
   }
 
   accept(event) {
     event.preventDefault();
-  
+
     var errors = [];
 
-    if (this.state.processDate === '') {
+    if (this.state.processDate === "") {
       errors.push("processDate");
     }
-    if (this.state.beginningDate === '') {
+    if (this.state.beginningDate === "") {
       errors.push("beginningDate");
     }
     var dampValueInt;
     try {
-      dampValueInt  = parseInt(this.state.dampValue);
-    } catch{
+      dampValueInt = parseInt(this.state.dampValue);
+    } catch {
       dampValueInt = 0;
     }
 
-    if(dampValueInt >= 6) {
+    if (dampValueInt >= 6) {
       errors.push("dampValue");
-    }
-    else {
+    } else {
       this.state.dampValue = dampValueInt + "";
     }
 
-    if (this.state.endDate === '') {
+    if (this.state.endDate === "") {
       errors.push("endDate");
     }
 
@@ -110,101 +108,112 @@ class ProductDryingState extends Component {
               Kurutma
               <div className="card-body">
                 <form>
-                <div className="form-group">
-                  <label>İşlem Tarihi</label>
-                  <input
-                    type="datetime-local"
-                    id="processDate"
-                    name="processDate"
-                    className={
-                      this.hasError("processDate")
-                        ? "form-control is-invalid"
-                        : "form-control"
-                    }
-                    value={this.state.processDate}
-                    onChange={this.handleProcessDateChange}
-                  />
-                  <div
-                    className={
-                      this.hasError("processDate")
-                        ? "inline-errormsg"
-                        : "hidden"
-                    }
-                  >
-                    İşlem Tarihini girmelisiniz.
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Kurutma Başlangıç Tarihi</label>
-                  <input
-                    type="datetime-local"
-                    id="beginningDate"
-                    name="beginningDate"
-                    className={
-                      this.hasError("beginningDate")
-                        ? "form-control is-invalid"
-                        : "form-control"
-                    }
-                    value={this.state.beginningDate}
-                    onChange={this.handleBeginningDateChange}
-                  />
-                  <div
-                    className={
-                      this.hasError("beginningDate")
-                        ? "inline-errormsg"
-                        : "hidden"
-                    }
-                  >
-                    Kurutma Başlangıç Tarihini girmelisiniz.
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Kurutma Bitirme Tarihi</label>
-                  <input
-                    type="datetime-local"
-                    id="endDate"
-                    name="endDate"
-                    className={
-                      this.hasError("endDate")
-                        ? "form-control is-invalid"
-                        : "form-control"
-                    }
-                    value={this.state.endDate}
-                    onChange={this.handleEndDateChange}
-                  />
-                  <div
-                    className={
-                      this.hasError("endDate")
-                        ? "inline-errormsg"
-                        : "hidden"
-                    }
-                  >
-                    Kurutma Bitirme Tarihini girmelisiniz.
-                  </div>
-                </div>
-
-                <div className="form-group">
-                                <label>Nem Tayini % Değerini Gir: [6'dan küçük değer]</label>
-                                <input type="number" name="dampValue"
-                             
-                                className={this.hasError("dampValue") 
-                                ? "form-control is-invalid" 
-                                : "form-control"}
-                                value={this.state.dampValue} onChange={this.changeDampValueHandler} />
-                                <div className={this.hasError("dampValue") ? "inline-errormsg" : "hidden"}>
-                                    Nem değeri uygun aralıkta değil, Kurutma işlemini tekrarlayınız.
-                                </div>
+                  <div className="form-group">
+                    <label>İşlem Tarihi</label>
+                    <input
+                      type="datetime-local"
+                      id="processDate"
+                      name="processDate"
+                      className={
+                        this.hasError("processDate")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.processDate}
+                      onChange={this.handleProcessDateChange}
+                    />
+                    <div
+                      className={
+                        this.hasError("processDate")
+                          ? "inline-errormsg"
+                          : "hidden"
+                      }
+                    >
+                      İşlem Tarihini girmelisiniz.
+                    </div>
                   </div>
 
+                  <div className="form-group">
+                    <label>Kurutma Başlangıç Tarihi</label>
+                    <input
+                      type="datetime-local"
+                      id="beginningDate"
+                      name="beginningDate"
+                      className={
+                        this.hasError("beginningDate")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.beginningDate}
+                      onChange={this.handleBeginningDateChange}
+                    />
+                    <div
+                      className={
+                        this.hasError("beginningDate")
+                          ? "inline-errormsg"
+                          : "hidden"
+                      }
+                    >
+                      Kurutma Başlangıç Tarihini girmelisiniz.
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Kurutma Bitirme Tarihi</label>
+                    <input
+                      type="datetime-local"
+                      id="endDate"
+                      name="endDate"
+                      className={
+                        this.hasError("endDate")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.endDate}
+                      onChange={this.handleEndDateChange}
+                    />
+                    <div
+                      className={
+                        this.hasError("endDate") ? "inline-errormsg" : "hidden"
+                      }
+                    >
+                      Kurutma Bitirme Tarihini girmelisiniz.
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>
+                      Nem Tayini % Değerini Gir: [6'dan küçük değer]
+                    </label>
+                    <input
+                      type="number"
+                      name="dampValue"
+                      className={
+                        this.hasError("dampValue")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.dampValue}
+                      onChange={this.changeDampValueHandler}
+                    />
+                    <div
+                      className={
+                        this.hasError("dampValue")
+                          ? "inline-errormsg"
+                          : "hidden"
+                      }
+                    >
+                      Nem değeri uygun aralıkta değil, Kurutma işlemini
+                      tekrarlayınız.
+                    </div>
+                  </div>
 
                   <div className="form-group">
                     <Button color="primary" onClick={this.accept}>
                       Kabul
                     </Button>{" "}
                     <Button color="danger" onClick={this.reject}>
-                      İptal
+                      Vazgeç
                     </Button>
                   </div>
                 </form>

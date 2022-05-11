@@ -626,7 +626,7 @@ class CreateRawProductComponent extends Component {
                     onClick={this.cancel.bind(this)}
                     style={{ marginLeft: "10px" }}
                   >
-                    İptal
+                    Vazgeç
                   </button>
                 </form>
               </div>

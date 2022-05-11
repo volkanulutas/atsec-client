@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
 import { Button } from "reactstrap";
 
 import LocationService from "../../../services/LocationService";
@@ -105,7 +105,7 @@ class PerformAcceptRawProduct extends Component {
                       Tamam
                     </Button>{" "}
                     <Button color="danger" onClick={this.reject}>
-                      İptal
+                      Vazgeç
                     </Button>
                   </div>
                 </form>

@@ -33,7 +33,10 @@ class DeleteModal extends React.Component {
   render() {
     return (
       <div>
-        <Button color="danger" onClick={this.toggle} /*disabled={!this.state.permissionDelete}*/ >
+        <Button
+          color="danger"
+          onClick={this.toggle} /*disabled={!this.state.permissionDelete}*/
+        >
           Sil
         </Button>
         <Modal
@@ -48,7 +51,7 @@ class DeleteModal extends React.Component {
           </ModalBody>
           <ModalFooter>
             <Button color="success" onClick={this.toggle}>
-              İptal
+              Vazgeç
             </Button>{" "}
             <Button color="danger" onClick={this.delete}>
               Sil

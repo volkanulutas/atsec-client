@@ -1,17 +1,21 @@
 import React, { Component } from "react";
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import LocationService from "../../services/LocationService";
 
 class CreateLocationComponent extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       id: this.props.match === undefined ? "_add" : this.props.match.params.id,
-      isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
+      isEditable:
+        this.props.match === undefined
+          ? true
+          : this.props.match.params.state === "view"
+          ? false
+          : true,
       name: "",
       definition: "",
       deleted: false,
@@ -29,7 +33,8 @@ class CreateLocationComponent extends Component {
     if (this.state.id === "_add") {
       return;
     } else {
-     LocationService.getLocationById(this.state.id).then((res) => {
+      LocationService.getLocationById(this.state.id)
+        .then((res) => {
           let location = res.data;
           this.setState({
             name: location.name,
@@ -80,7 +85,8 @@ class CreateLocationComponent extends Component {
           this.props.history.push("/locations");
         })
         .catch((ex) => {
-          const notify = () => toast("Konum kaydedilemedi. Hata Kodu: CRT-LOC-01");
+          const notify = () =>
+            toast("Konum kaydedilemedi. Hata Kodu: CRT-LOC-01");
           notify();
         });
     } else {
@@ -91,13 +97,14 @@ class CreateLocationComponent extends Component {
           this.props.history.push("/locations");
         })
         .catch((ex) => {
-          const notify = () => toast("Konum güncellenemedi. Hata Kodu: CRT-LOC-02");
+          const notify = () =>
+            toast("Konum güncellenemedi. Hata Kodu: CRT-LOC-02");
           notify();
         });
     }
 
     // If opened as modal
-    if(this.state.callbackModalYes){
+    if (this.state.callbackModalYes) {
       this.state.callbackModalYes();
     }
   };
@@ -106,10 +113,9 @@ class CreateLocationComponent extends Component {
     event.preventDefault();
 
     // If opened as modal
-    if(this.state.callbackModalNo){
+    if (this.state.callbackModalNo) {
       this.state.callbackModalNo();
-    }
-    else{
+    } else {
       this.props.history.push("/locations");
     }
   };
@@ -138,7 +144,7 @@ class CreateLocationComponent extends Component {
     return (
       <div>
         <div className="container">
-         <ToastContainer />
+          <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
               {this.getTitle()}
@@ -188,7 +194,7 @@ class CreateLocationComponent extends Component {
                     onClick={this.cancel.bind(this)}
                     style={{ marginLeft: "10px" }}
                   >
-                    İptal
+                    Vazgeç
                   </button>
                 </form>
               </div>

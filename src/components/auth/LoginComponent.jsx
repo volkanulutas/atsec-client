@@ -244,7 +244,7 @@ class LoginComponent extends Component {
                           className="btn btn-danger"
                           onClick={this.handleHideModal}
                         >
-                          İptal
+                          Vazgeç
                         </button>{" "}
                         <button
                           className="btn btn-success"

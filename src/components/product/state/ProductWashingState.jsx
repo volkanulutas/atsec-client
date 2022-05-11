@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import ProductService from "../../../services/ProductService";
 import LocationService from "../../../services/LocationService";
-
 
 class ProductWashingState extends Component {
   constructor(props) {
@@ -20,8 +19,8 @@ class ProductWashingState extends Component {
 
       errors: [],
 
-      processDate: '',
-      
+      processDate: "",
+
       location: [],
       product_LocationList: [],
 
@@ -41,25 +40,27 @@ class ProductWashingState extends Component {
 
   componentDidMount() {
     LocationService.getLocationsByType("REJECT")
-    .then((res) => {
-      this.setState({ product_LocationList: res.data });
-    })
-    .catch((ex) => {
-      const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-PRD-WSH-02");
-      notify();
-    });
+      .then((res) => {
+        this.setState({ product_LocationList: res.data });
+      })
+      .catch((ex) => {
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-PRD-WSH-02");
+        notify();
+      });
 
     ProductService.getWashingTypeList()
       .then((res) => {
         this.setState({ product_WashingList: res.data });
       })
       .catch((ex) => {
-        const notify = () => toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-PRD-WSH-01");
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: LST-PRD-WSH-01");
         notify();
       });
   }
 
-  handleProcessDateChange(event){
+  handleProcessDateChange(event) {
     this.setState({ processDate: event.target.value });
   }
 
@@ -70,7 +71,7 @@ class ProductWashingState extends Component {
     if (this.state.checkedItems.size !== 10) {
       errors.push("washing-checkbox");
     }
-    if (this.state.processDate === '') {
+    if (this.state.processDate === "") {
       errors.push("processDate");
     }
 
@@ -78,7 +79,11 @@ class ProductWashingState extends Component {
 
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.selectedRadio, this.state.processDate);
+      this.state.callback_accept(
+        this.state.data,
+        this.state.selectedRadio,
+        this.state.processDate
+      );
     }
   }
 
@@ -113,80 +118,78 @@ class ProductWashingState extends Component {
 
     return (
       <div>
-      <div className="container">
-       <ToastContainer />
-        <div className="row">
-          <div className="card col-md-6 offset-md-3 offset-md-3">
-          Defatting...
-            <div className="card-body">
-              <form>
-              <div className="form-group">
-                  <label>İşlem Tarihi</label>
-                  <input
-                    type="datetime-local"
-                    id="arrivalDate"
-                    name="arrivalDate"
-                    className={
-                      this.hasError("processDate")
-                        ? "form-control is-invalid"
-                        : "form-control"
-                    }
-                    value={this.state.processDate}
-                    onChange={this.handleProcessDateChange}
-                  />
-                  <div
-                    className={
-                      this.hasError("processDate")
-                        ? "inline-errormsg"
-                        : "hidden"
-                    }
-                  >
-                    İşlem Tarihini girmelisiniz.
-                  </div>
-                </div>
-                <div className="form-group">
-                  {this.state.product_WashingList.map((item) => (
-                    <div>
-
-                    <br></br>
-                    <Label>
-                      <Input
-                        type="checkbox"
-                        value={item}
-                        onChange={this.handleChange}
-                      ></Input>
-                      {item}
-                    </Label>
-                    <br></br>
+        <div className="container">
+          <ToastContainer />
+          <div className="row">
+            <div className="card col-md-6 offset-md-3 offset-md-3">
+              Defatting...
+              <div className="card-body">
+                <form>
+                  <div className="form-group">
+                    <label>İşlem Tarihi</label>
+                    <input
+                      type="datetime-local"
+                      id="arrivalDate"
+                      name="arrivalDate"
+                      className={
+                        this.hasError("processDate")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.processDate}
+                      onChange={this.handleProcessDateChange}
+                    />
+                    <div
+                      className={
+                        this.hasError("processDate")
+                          ? "inline-errormsg"
+                          : "hidden"
+                      }
+                    >
+                      İşlem Tarihini girmelisiniz.
                     </div>
-                  ))}
-
-                  <div
-                    className={
-                      this.hasError("washing-checkbox")
-                        ? "inline-errormsg"
-                        : "hidden"
-                    }
-                  >
-                    Lütfen tüm alanları seçiniz.
                   </div>
-                </div>
-               <div className="form-group">
-                  <Button color="primary" onClick={this.accept}>
-                    Tamam
-                  </Button>{" "}
-                  <Button color="danger" onClick={this.reject}>
-                    İptal
-                  </Button>
-                </div>
-              </form>
+                  <div className="form-group">
+                    {this.state.product_WashingList.map((item) => (
+                      <div>
+                        <br></br>
+                        <Label>
+                          <Input
+                            type="checkbox"
+                            value={item}
+                            onChange={this.handleChange}
+                          ></Input>
+                          {item}
+                        </Label>
+                        <br></br>
+                      </div>
+                    ))}
+
+                    <div
+                      className={
+                        this.hasError("washing-checkbox")
+                          ? "inline-errormsg"
+                          : "hidden"
+                      }
+                    >
+                      Lütfen tüm alanları seçiniz.
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <Button color="primary" onClick={this.accept}>
+                      Tamam
+                    </Button>{" "}
+                    <Button color="danger" onClick={this.reject}>
+                      Vazgeç
+                    </Button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
- );
+    );
   }
 }
 

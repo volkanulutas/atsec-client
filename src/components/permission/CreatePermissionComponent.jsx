@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import PermissionService from "../../services/PermissionService";
 
@@ -9,7 +9,12 @@ class CreatePermissionComponent extends Component {
     super(props);
     this.state = {
       id: this.props.match === undefined ? "_add" : this.props.match.params.id,
-      isEditable: this.props.match === undefined ? true : (this.props.match.params.state === "view" ? false : true),
+      isEditable:
+        this.props.match === undefined
+          ? true
+          : this.props.match.params.state === "view"
+          ? false
+          : true,
       name: "",
       definition: "",
       deleted: false,
@@ -87,7 +92,8 @@ class CreatePermissionComponent extends Component {
           this.props.history.push("/permissions");
         })
         .catch((ex) => {
-          const notify = () => toast("Yetki güncellenemedi. Hata Kodu: CRT-PRM-01");
+          const notify = () =>
+            toast("Yetki güncellenemedi. Hata Kodu: CRT-PRM-01");
           notify();
         });
     } else {
@@ -98,24 +104,27 @@ class CreatePermissionComponent extends Component {
           notify();
         })
         .catch((ex) => {
-          const notify = () => toast("Yetki başarılı bir şekilde güncellendi. Hata Kodu: CRT-PRM-02");
+          const notify = () =>
+            toast(
+              "Yetki başarılı bir şekilde güncellendi. Hata Kodu: CRT-PRM-02"
+            );
           notify();
         });
     }
-    
+
     // If opened as modal
-    if(this.state.callbackModalYes){
-       this.state.callbackModalYes();
+    if (this.state.callbackModalYes) {
+      this.state.callbackModalYes();
     }
   };
 
   cancel = (event) => {
-      // If opened as modal
-      if(this.state.callbackModalNo){
-          this.state.callbackModalNo();
-      } else {
-          this.props.history.push('/permissions');
-      } 
+    // If opened as modal
+    if (this.state.callbackModalNo) {
+      this.state.callbackModalNo();
+    } else {
+      this.props.history.push("/permissions");
+    }
   };
 
   getTitle() {
@@ -142,7 +151,7 @@ class CreatePermissionComponent extends Component {
     return (
       <div>
         <div className="container">
-         <ToastContainer />
+          <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
               {this.getTitle()}
@@ -195,7 +204,7 @@ class CreatePermissionComponent extends Component {
                     onClick={this.cancel.bind(this)}
                     style={{ marginLeft: "10px" }}
                   >
-                    İptal
+                    Vazgeç
                   </button>
                 </form>
               </div>

@@ -23,8 +23,10 @@ class ProductPackingState extends Component {
       date: "",
       lot: "",
       processDate: "",
-      packingSize: [],
+      packingNumber: "",
       product_PackingSizeList: [],
+      packingSize: new Map([]),
+      packingItemNumber: new Map(),
     };
     // callback
     this.accept = this.accept.bind(this);
@@ -33,6 +35,10 @@ class ProductPackingState extends Component {
     this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
     this.changeDateHandler = this.changeDateHandler.bind(this);
     this.changeNumberHandler = this.changeNumberHandler.bind(this);
+    this.changePackingNumberHandler =
+      this.changePackingNumberHandler.bind(this);
+    this.changePackingItemNumberHandler =
+      this.changePackingItemNumberHandler.bind(this);
   }
 
   componentDidMount() {
@@ -47,12 +53,87 @@ class ProductPackingState extends Component {
       });
   }
 
+  changePackingItemNumberHandler(event, count) {
+    var value = event.target.value;
+    this.setState((prevState) => ({
+      packingItemNumber: prevState.packingItemNumber.set(count + "", value),
+    }));
+  }
+
+  getPacking(multiple) {
+    return (
+      <div>
+        {Array(this.state.packingNumber)
+          .fill(0)
+          .map((_, i) => (
+            <div className="form-group">
+              <div>
+                <Typeahead
+                  multiple={multiple}
+                  id="select-packingSize"
+                  onChange={(selected) => {
+                    this.setState((prevState) => ({
+                      packingSize: prevState.packingSize.set(i + "", selected),
+                    }));
+                  }}
+                  labelKey="name"
+                  options={this.state.product_PackingSizeList}
+                  placeholder="Paketleme Boyutunu Seç..."
+                  selected={this.state.packingSize.get(i + "")}
+                />
+              </div>
+
+              <div
+                className={
+                  this.hasError("packingSize" + i)
+                    ? "inline-errormsg"
+                    : "hidden"
+                }
+              >
+                Paketleme Boyutunu seçmelisiniz.
+              </div>
+              <div>
+                <label>Paket Sayısı:</label>
+                <input
+                  type="number"
+                  placeholder="1"
+                  name="packingNumber"
+                  className={
+                    this.hasError("date")
+                      ? "form-control is-invalid"
+                      : "form-control"
+                  }
+                  value={this.state.packingItemNumber.get(i + "")}
+                  onChange={(e) => this.changePackingItemNumberHandler(e, i)}
+                />
+                <div
+                  className={
+                    this.hasError("packingNumber" + i)
+                      ? "inline-errormsg"
+                      : "hidden"
+                  }
+                >
+                  Paket Sayısı Girilmemiş.
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
+    );
+  }
+
   changeDateHandler(event) {
     var date = event.target.value;
     var splittedDate = date.split("-");
     var lotTmp = splittedDate[1] + splittedDate[0] + "";
     this.setState({ date: event.target.value });
     this.setState({ lot: lotTmp });
+  }
+
+  changePackingNumberHandler(event) {
+    this.setState({
+      packingNumber: Math.max(parseInt(event.target.value, 10), 0),
+    });
   }
 
   changeNumberHandler(event) {
@@ -72,7 +153,14 @@ class ProductPackingState extends Component {
 
     var errors = [];
 
-    if (this.state.packingSize[0] === undefined) {
+    alert(
+      this.state.packingSize.size +
+        " " +
+        this.state.packingNumber +
+        " " +
+        this.state.packingItemNumber.size
+    );
+    if (this.state.packingSize.length !== this.state.packingNumber) {
       errors.push("packingSize");
     }
     if (this.state.processDate === "") {
@@ -90,7 +178,9 @@ class ProductPackingState extends Component {
         donor: donorTmp,
         number: this.state.number,
       };
-      this.state.callback_accept(this.state.data, packingProduct);
+
+      console.log("");
+      // this.state.callback_accept(this.state.data, packingProduct);
     }
   }
 
@@ -141,35 +231,32 @@ class ProductPackingState extends Component {
                   </div>
 
                   <div className="form-group">
-                    <label>
-                      Paketleme Boyutu:{" "}
-                      {this.state.packingSize[0] === undefined
-                        ? "Seçilmedi"
-                        : this.state.packingSize[0].name}
-                    </label>
-                    <div>
-                      <Typeahead
-                        multiple={multiple}
-                        id="select-packingSize-quarantina"
-                        onChange={(selected) => {
-                          this.setState({ packingSize: selected });
-                        }}
-                        labelKey="name"
-                        options={this.state.product_PackingSizeList}
-                        placeholder="Paketleme Boyutunu Seç..."
-                        selected={this.state.packingSize}
-                      />
-                    </div>
+                    <label>Paket Sayısı:</label>
+                    <input
+                      type="number"
+                      placeholder="1"
+                      name="packingNumber"
+                      className={
+                        this.hasError("date")
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      value={this.state.packingNumber}
+                      onChange={this.changePackingNumberHandler}
+                    />
                     <div
                       className={
-                        this.hasError("packingSize")
+                        this.hasError("packingNumber")
                           ? "inline-errormsg"
                           : "hidden"
                       }
                     >
-                      Paketleme Boyutunu seçmelisiniz.
+                      Paket Sayısı Girilmemiş.
                     </div>
                   </div>
+
+                  {this.getPacking(multiple)}
+
                   <div className="form-group">
                     <label>Gamaya Gönderim Tarihi:</label>
                     <input

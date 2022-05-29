@@ -18,6 +18,8 @@ class ProductDryingState extends Component {
 
       errors: [],
 
+      checkedItems: new Map(),
+
       processDate: "",
       beginningDate: "",
       endDate: "",
@@ -30,10 +32,13 @@ class ProductDryingState extends Component {
     this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
     this.handleBeginningDateChange = this.handleBeginningDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
+    this.handleSteriliteChange = this.handleSteriliteChange.bind(this);
     this.changeDampValueHandler = this.changeDampValueHandler.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.state.checkedItems.set("Strelite Testi", false);
+  }
 
   changeDampValueHandler = (event) => {
     var value = event.target.value;
@@ -46,6 +51,15 @@ class ProductDryingState extends Component {
 
   handleEndDateChange(event) {
     this.setState({ endDate: event.target.value });
+  }
+
+  handleSteriliteChange(event) {
+    var isChecked = event.target.checked;
+    var item = event.target.value;
+
+    this.setState((prevState) => ({
+      checkedItems: prevState.checkedItems.set(item, isChecked),
+    }));
   }
 
   handleProcessDateChange(event) {
@@ -78,6 +92,11 @@ class ProductDryingState extends Component {
 
     if (this.state.endDate === "") {
       errors.push("endDate");
+    }
+
+    alert(this.state.checkedItems.get("Strelite Testi"));
+    if (this.state.checkedItems.get("Strelite Testi") == false) {
+      errors.push("strelite");
     }
 
     this.setState({ errors: errors });
@@ -205,6 +224,25 @@ class ProductDryingState extends Component {
                     >
                       Nem değeri uygun aralıkta değil, Kurutma işlemini
                       tekrarlayınız.
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <Label>
+                      <Input
+                        type="checkbox"
+                        value="Strelite Testi"
+                        onChange={this.handleSteriliteChange}
+                      ></Input>
+                      Strelite Testi
+                    </Label>
+
+                    <div
+                      className={
+                        this.hasError("strelite") ? "inline-errormsg" : "hidden"
+                      }
+                    >
+                      Strelite Testi onayını vermelisiniz.
                     </div>
                   </div>
 

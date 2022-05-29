@@ -227,12 +227,6 @@ class ListProductComponent extends Component {
             callback_accept={this.performCourseGrinding_accept}
             callback_reject={this.performCourseGrinding_reject}
           />
-        </div>
-      );
-    } else if (row.status === "Öğütme (Course) Sonrası") {
-      // Course Öğütme Sonrası -> Öğütme (Course)
-      return (
-        <div>
           <ProductCoarseModal
             style={{ marginRight: "5px" }}
             initialModalState={false}
@@ -240,6 +234,21 @@ class ListProductComponent extends Component {
             callback_accept={this.performCoarseState_accept}
             callback_reject={this.performCoarseState_reject}
           />
+        </div>
+      );
+    } else if (row.status === "Öğütme (Course) Sonrası") {
+      // Course Öğütme Sonrası -> Öğütme (Course)
+      return (
+        <div>
+          <div>
+            <ProductCoarseModal
+              style={{ marginRight: "5px" }}
+              initialModalState={false}
+              data={row}
+              callback_accept={this.performCoarseState_accept}
+              callback_reject={this.performCoarseState_reject}
+            />
+          </div>
         </div>
       );
     } else if (row.status === "Dondurma 2 Sonrası") {
@@ -445,6 +454,8 @@ class ListProductComponent extends Component {
   performPacking_reject(row, data) {}
 
   performPacking(row, data) {
+    console.log("volkan: " + JSON.stringify(data));
+
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
@@ -473,15 +484,8 @@ class ListProductComponent extends Component {
         notify();
       });
 
-    for (var i = 0; i < data.number; i++) {
-      var packingProduct = {
-        size: data.size,
-        lot: data.lot,
-        date: data.date,
-        donor: data.donor,
-        partitionId: i + 1,
-      };
-      PackingProductService.createProduct(packingProduct)
+    for (var i = 0; i < data.length; i++) {
+      PackingProductService.createProduct(data)
         .then((res) => {
           const notify = () => toast("Paketlenmiş ürün oluşturuldu.");
           notify();
@@ -663,11 +667,14 @@ class ListProductComponent extends Component {
       .then((res) => {
         let product = res.data;
 
-        product.status = "Öğütme (Course) Sonrası";
+        // product.status = "Öğütme (Course) Sonrası";
+        product.status = "Dondurma 2 Sonrası";
+
         product.granulationType = granulationTypeList;
 
         let statusDate = {
-          productStatus: "Öğütme (Course) Sonrası",
+          // productStatus: "Öğütme (Course) Sonrası",
+          productStatus: "Dondurma 2 Sonrası",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);

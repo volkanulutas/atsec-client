@@ -2,7 +2,6 @@ import React from "react";
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 
 import ProductFreezingState from "../state/ProductFreezingState";
-import ProductGranulationState from "../state/ProductGranulationState";
 
 class ProductFreezingModal extends React.Component {
   constructor(props) {
@@ -38,9 +37,7 @@ class ProductFreezingModal extends React.Component {
           fade={this.state.fade}
           className={this.props.className}
         >
-          <ModalHeader toggle={this.toggle}>
-            Ön İşlem -> Dondurucu
-          </ModalHeader>
+          <ModalHeader toggle={this.toggle}>Ön İşlem -> Dondurucu</ModalHeader>
           <ModalBody>
             <ProductFreezingState
               errors={this.errors}

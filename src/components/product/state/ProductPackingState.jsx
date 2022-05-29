@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FormGroup, Label, Input, Button, ButtonGroup } from "reactstrap";
+import { Button } from "reactstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -23,12 +23,11 @@ class ProductPackingState extends Component {
       date: "",
       lot: "",
       processDate: "",
-      packingNumber: "",
+      packingNumber: 0,
       product_PackingSizeList: [],
       packingSize: new Map([]),
       packingItemNumber: new Map(),
     };
-    // callback
     this.accept = this.accept.bind(this);
     this.reject = this.reject.bind(this);
 
@@ -96,7 +95,7 @@ class ProductPackingState extends Component {
                 <label>Paket Sayısı:</label>
                 <input
                   type="number"
-                  placeholder="1"
+                  placeholder="0"
                   name="packingNumber"
                   className={
                     this.hasError("date")
@@ -150,37 +149,46 @@ class ProductPackingState extends Component {
 
   accept(event) {
     event.preventDefault();
-
     var errors = [];
 
-    alert(
-      this.state.packingSize.size +
-        " " +
-        this.state.packingNumber +
-        " " +
-        this.state.packingItemNumber.size
-    );
-    if (this.state.packingSize.length !== this.state.packingNumber) {
+    if (this.state.date === "") {
+      errors.push("date");
+    }
+    if (this.state.packingNumber === 0) {
+      errors.push("packingNumber");
+    }
+    if (this.state.packingSize.size !== this.state.packingNumber) {
       errors.push("packingSize");
     }
     if (this.state.processDate === "") {
       errors.push("processDate");
     }
     this.setState({ errors: errors });
-
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
       var donorTmp = this.state.data.donor;
-      let packingProduct = {
-        size: this.state.packingSize[0],
-        lot: this.state.lot,
-        date: this.convertDate(this.state.date),
-        donor: donorTmp,
-        number: this.state.number,
-      };
 
-      console.log("");
-      // this.state.callback_accept(this.state.data, packingProduct);
+      const values = Array.from(this.state.packingSize.values());
+      const valuesArray = [];
+      for (var i = 0; i < values.length; i++) {
+        valuesArray.push(values[i][0]);
+      }
+      const valuesItem = Array.from(this.state.packingItemNumber.values());
+
+      const packingProductList = [];
+      for (let i = 0; i < values.length; i++) {
+        let packingProduct = {
+          packingProduct: valuesArray[i],
+          packingProductItem: valuesItem[i],
+          lot: this.state.lot,
+          date: this.convertDate(this.state.date),
+          donor: donorTmp,
+          number: this.state.number,
+          number: this.state.packingNumber,
+        };
+        packingProductList.push(packingProduct);
+      }
+      this.state.callback_accept(this.state.data, packingProductList);
     }
   }
 
@@ -231,13 +239,12 @@ class ProductPackingState extends Component {
                   </div>
 
                   <div className="form-group">
-                    <label>Paket Sayısı:</label>
+                    <label>Paket Adedi:</label>
                     <input
                       type="number"
-                      placeholder="1"
                       name="packingNumber"
                       className={
-                        this.hasError("date")
+                        this.hasError("packingNumber")
                           ? "form-control is-invalid"
                           : "form-control"
                       }
@@ -251,7 +258,7 @@ class ProductPackingState extends Component {
                           : "hidden"
                       }
                     >
-                      Paket Sayısı Girilmemiş.
+                      Paket Adedi Girilmemiş.
                     </div>
                   </div>
 
@@ -281,16 +288,6 @@ class ProductPackingState extends Component {
                   </div>
                   <div className="form-group">
                     <label>LOT: </label> {this.state.lot}
-                  </div>
-                  <div className="form-group">
-                    <label>Adet:</label>
-                    <input
-                      placeholder="Adeti:"
-                      name="number"
-                      className="form-control"
-                      value={this.state.number}
-                      onChange={this.changeNumberHandler}
-                    />
                   </div>
                   <div className="form-group">
                     <Button color="primary" onClick={this.accept}>

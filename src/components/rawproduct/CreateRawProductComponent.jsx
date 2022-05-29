@@ -111,10 +111,8 @@ class CreateRawProductComponent extends Component {
   };
 
   componentDidMount() {
-    alert("hello");
     LocationService.getLocationsByType("NORMAL")
       .then((res) => {
-        alert("location: " + JSON.stringify(res.data));
         this.setState({ product_LocationNormalList: res.data });
       })
       .catch((ex) => {

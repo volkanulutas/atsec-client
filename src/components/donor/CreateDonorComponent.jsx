@@ -320,7 +320,6 @@ class CreateDonorComponent extends Component {
         deleted: this.state.deleted,
       };
       if (this.state.id === "_add") {
-        alert("create");
         // create user
         DonorService.createDonor(donor)
           .then((res) => {
@@ -346,7 +345,6 @@ class CreateDonorComponent extends Component {
             }
           });
       } else {
-        alert("update");
         DonorService.updateDonor(this.state.id, donor)
           .then((res) => {
             const notify = () =>

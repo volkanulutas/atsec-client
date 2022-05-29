@@ -236,21 +236,6 @@ class ListProductComponent extends Component {
           />
         </div>
       );
-    } else if (row.status === "Öğütme (Course) Sonrası") {
-      // Course Öğütme Sonrası -> Öğütme (Course)
-      return (
-        <div>
-          <div>
-            <ProductCoarseModal
-              style={{ marginRight: "5px" }}
-              initialModalState={false}
-              data={row}
-              callback_accept={this.performCoarseState_accept}
-              callback_reject={this.performCoarseState_reject}
-            />
-          </div>
-        </div>
-      );
     } else if (row.status === "Dondurma 2 Sonrası") {
       // Delipidation -> Kimyasal Sterilizasyon
       return (

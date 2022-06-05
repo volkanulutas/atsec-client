@@ -25,9 +25,9 @@ class ProductAfterWashingSterilationState extends Component {
       dampCheckboxDisabled2: true,
 
       product_PreprocessingList: [
-        "Kimyasal Sterilizasyon Çözeltisinin Hazırlanması >> Desikatöre Ekle",
-        "Desikatörde 200 Milibar 4 Saat Vakum altında Sterilizasyon",
-        "PBS 4 Yıkama Yap",
+        "Kimyasal Sterilizasyon Çözeltisinin Hazırlanması",
+        "4 Saat Vakum altında Sterilizasyon",
+        "PBS İle Yıkama",
       ],
 
       checkedItems: new Map(),

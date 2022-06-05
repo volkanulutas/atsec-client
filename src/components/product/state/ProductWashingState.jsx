@@ -122,7 +122,7 @@ class ProductWashingState extends Component {
           <ToastContainer />
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
-              Defatting...
+              Defatting İşlemi
               <div className="card-body">
                 <form>
                   <div className="form-group">

@@ -60,6 +60,7 @@ class MasterRawProduct extends Component {
       issueTissueDate: "",
 
       information: "bilgi",
+      signerInfo: "signerInfo",
       deleted: false,
 
       tissueCarryCase: false,
@@ -91,8 +92,6 @@ class MasterRawProduct extends Component {
       messageExtra: "",
       extraFilesInfos: [],
 
-      responsibleSigner: "",
-
       errors: [],
     };
 
@@ -111,6 +110,8 @@ class MasterRawProduct extends Component {
 
     this.changeArrivalDateHandler = this.changeArrivalDateHandler.bind(this);
     this.changeInformationHandler = this.changeInformationHandler.bind(this);
+    this.changeSignerInfoHandler = this.changeSignerInfoHandler.bind(this);
+
     this.changeIssueTissueDateHandler =
       this.changeIssueTissueDateHandler.bind(this);
 
@@ -130,8 +131,6 @@ class MasterRawProduct extends Component {
     this.uploadConfirmationFile = this.uploadConfirmationFile.bind(this);
     this.uploadTransferFile = this.uploadTransferFile.bind(this);
     this.uploadExtraFile = this.uploadExtraFile.bind(this);
-
-    this.changeResponsibleandler = this.changeResponsibleHandler.bind(this);
 
     // Step3
     this.acceptRawProduct_accept = this.acceptRawProduct_accept.bind(this);
@@ -165,7 +164,11 @@ class MasterRawProduct extends Component {
       definition: this.state.definition,
       information: this.state.information,
       deleted: this.state.deleted,
-      responsibleSigner: this.state.responsibleSigner,
+      signerInfo: this.state.signerInfo,
+      tissueCarryCase: this.state.tissueCarryCase,
+      sterialBag: this.state.sterialBag,
+      dataLogger: this.state.dataLogger,
+      temperature: this.state.temperature,
     };
 
     if (isUpdate) {
@@ -244,11 +247,13 @@ class MasterRawProduct extends Component {
           let locationTemp = [product.location];
           let statusNameTemp = [product.statusName];
           let doctorNameTemp = product.doctorName;
-          let responsibleSignerTemp = product.responsibleSigner;
+          let signerInfoTemp = product.signerInfo;
           let tissueCarryCaseTemp = product.tissueCarryCase;
           let sterialBagTemp = product.sterialBag;
           let dataLoggerTemp = product.dataLogger;
           let temperatureTemp = product.temperature;
+          let informationTemp = product.information;
+          let definitionTemp = product.definition;
 
           this.setState({
             id: idTemp,
@@ -256,15 +261,17 @@ class MasterRawProduct extends Component {
             tissueType: tissueTypeTemp,
             location: locationTemp,
             doctorName: doctorNameTemp,
+            definition: definitionTemp,
             issueTissueDate: issueTissueDateStr,
             arrivalDate: arrivalDateStr,
-            responsibleSigner: responsibleSignerTemp,
-            information: product.information,
             statusName: statusNameTemp,
             deleted: product.deleted,
             tissueCarryCase: tissueCarryCaseTemp,
             sterialBag: sterialBagTemp,
             dataLogger: dataLoggerTemp,
+            information: informationTemp,
+            definition: definitionTemp,
+            signerInfo: signerInfoTemp,
             temperature: temperatureTemp,
           });
         })
@@ -277,6 +284,7 @@ class MasterRawProduct extends Component {
   }
 
   handleTissueCarryCase = (event) => {
+    alert(event.target.checked);
     var isChecked = event.target.checked;
     var item = event.target.value;
     this.setState({ tissueCarryCase: isChecked });
@@ -306,11 +314,15 @@ class MasterRawProduct extends Component {
     this.setState({ arrivalDate: event.target.value });
   };
 
-  changeResponsibleHandler = (event) => {
-    this.setState({ responsibleSigner: event.target.value });
-  };
-
   acceptRawProduct_accept = (event) => {
+    let statusTemp = [];
+    statusTemp[0] = "Kabul";
+
+    this.setState({ statusName: statusTemp });
+    this.saveRawProduct();
+
+    this.props.history.push("/rawproducts");
+    /*
     RawProductService.getRawProductById(this.state.id)
       .then((res) => {
         let rawProduct = res.data;
@@ -328,6 +340,7 @@ class MasterRawProduct extends Component {
       .catch((ex) => {
         console.error(ex);
       });
+      */
   };
 
   acceptRawProduct_reject = (event) => {
@@ -335,6 +348,14 @@ class MasterRawProduct extends Component {
   };
 
   rejectRawProduct_accept = (event) => {
+    let statusTemp = [];
+    statusTemp[0] = "Red";
+
+    this.setState({ statusName: statusTemp });
+    this.saveRawProduct();
+
+    this.props.history.push("/rawproducts");
+    /*
     RawProductService.getRawProductById(this.state.id)
       .then((res) => {
         let rawProduct = res.data;
@@ -352,6 +373,7 @@ class MasterRawProduct extends Component {
       .catch((ex) => {
         console.error(ex);
       });
+      */
   };
 
   rejectRawProduct_reject = (event) => {
@@ -360,6 +382,10 @@ class MasterRawProduct extends Component {
 
   changeInformationHandler = (event) => {
     this.setState({ information: event.target.value });
+  };
+
+  changeSignerInfoHandler = (event) => {
+    this.setState({ signerInfo: event.target.value });
   };
 
   setDonor(data) {
@@ -411,8 +437,8 @@ class MasterRawProduct extends Component {
     if (selectedExtraFiles === undefined) {
       errors.push("extraFile");
     }
-    if (this.state.responsibleSigner === "") {
-      errors.push("responsibleSigner");
+    if (this.state.signerInfo === "") {
+      errors.push("signerInfo");
     }
     this.setState({ errors: errors });
     if (errors.length > 0) {
@@ -489,7 +515,7 @@ class MasterRawProduct extends Component {
       if (this.state.dataLogger === false) {
         errors.push("dataLogger");
       }
-      if (this.state.temperature === "") {
+      if (this.state.temperature === "" || this.state.temperature === 0) {
         errors.push("temperature");
       }
 
@@ -725,7 +751,7 @@ class MasterRawProduct extends Component {
               <Step3
                 currentStep={this.state.currentStep}
                 handleChange={this.handleChange}
-                responsibleSigner={this.state.responsibleSigner}
+                signerInfo={this.state.signerInfo}
                 id={this.state.id}
                 isEditable={this.state.isEditable}
                 multiple={this.state.multiple}
@@ -734,7 +760,7 @@ class MasterRawProduct extends Component {
                 uploadConfirmationFile={this.uploadConfirmationFile}
                 uploadTransferFile={this.uploadTransferFile}
                 uploadExtraFile={this.uploadExtraFile}
-                changeResponsibleandler={this.changeResponsibleHandler}
+                changeSignerInfoHandler={this.changeSignerInfoHandler}
                 acceptRawProduct_accept={this.acceptRawProduct_accept}
                 acceptRawProduct_reject={this.acceptRawProduct_reject}
                 rejectRawProduct_accept={this.rejectRawProduct_accept}

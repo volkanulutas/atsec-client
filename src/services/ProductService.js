@@ -27,6 +27,7 @@ class ProductService {
   }
 
   createProduct(product) {
+    console.log(JSON.stringify(product));
     return axios.post(API_BASE_URL + API_URL_PRODUCT, product, {
       headers: authHeader(),
     });
@@ -39,6 +40,7 @@ class ProductService {
   }
 
   updateProduct(id, product) {
+    console.log(JSON.stringify(product));
     return axios.put(API_BASE_URL + API_URL_PRODUCT + id, product, {
       headers: authHeader(),
     });

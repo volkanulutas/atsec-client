@@ -20,6 +20,8 @@ class ProductGranulationState extends Component {
 
       errors: [],
 
+      isDiscradGranulation: false,
+
       processDate: "",
 
       granulationTypeList: [],
@@ -32,6 +34,8 @@ class ProductGranulationState extends Component {
     this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
     this.accept = this.accept.bind(this);
     this.reject = this.reject.bind(this);
+
+    this.discardGranulation = this.discardGranulation.bind(this);
   }
 
   componentDidMount() {
@@ -70,29 +74,42 @@ class ProductGranulationState extends Component {
   accept(event) {
     event.preventDefault();
 
-    var errors = [];
+    if (this.state.isDiscradGranulation === true) {
+      var errors = [];
 
-    if (this.state.granulationTypeList.length === 0) {
-      errors.push("granulationType-checkbox");
-    }
-    if (this.state.processDate === "") {
-      errors.push("processDate");
-    }
+      if (this.state.granulationTypeList.length === 0) {
+        errors.push("granulationType-checkbox");
+      }
+      if (this.state.processDate === "") {
+        errors.push("processDate");
+      }
 
-    this.setState({ errors: errors });
-    if (errors.length <= 0) {
+      this.setState({ errors: errors });
+      if (errors.length <= 0) {
+        this.state.callback_modalToggle();
+        this.state.callback_accept(
+          this.state.data,
+          this.state.granulationTypeList,
+          this.state.processDate
+        );
+      }
+    } else {
       this.state.callback_modalToggle();
-      this.state.callback_accept(
-        this.state.data,
-        this.state.granulationTypeList,
-        this.state.processDate
-      );
+      this.state.callback_accept(this.state.data, null, null);
     }
   }
 
   reject(event) {
     event.preventDefault();
     this.state.callback_modalToggle();
+  }
+
+  discardGranulation(event) {
+    event.preventDefault();
+
+    this.setState({ isDiscradGranulation: event.target.value });
+
+    this.accept(event);
   }
 
   hasError(key) {
@@ -189,6 +206,11 @@ class ProductGranulationState extends Component {
                       >
                         Lütfen seçim yapınız.
                       </div>
+                    </div>
+                    <div className="form-group">
+                      <Button color="primary" onClick={this.discardGranulation}>
+                        Öğütme İşlemini Atla
+                      </Button>{" "}
                     </div>
 
                     <div className="form-group">

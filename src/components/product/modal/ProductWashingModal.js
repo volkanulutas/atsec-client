@@ -37,7 +37,7 @@ class ProductWashingModal extends React.Component {
           fade={this.state.fade}
           className={this.props.className}
         >
-          <ModalHeader toggle={this.toggle}>Defatting...</ModalHeader>
+          <ModalHeader toggle={this.toggle}>Defatting İşlemi</ModalHeader>
           <ModalBody>
             <ProductWashingState
               errors={this.errors}

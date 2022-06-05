@@ -20,7 +20,6 @@ class ProductDryingState extends Component {
 
       checkedItems: new Map(),
 
-      processDate: "",
       beginningDate: "",
       endDate: "",
       dampValue: 0,
@@ -29,7 +28,6 @@ class ProductDryingState extends Component {
     this.accept = this.accept.bind(this);
     this.reject = this.reject.bind(this);
 
-    this.handleProcessDateChange = this.handleProcessDateChange.bind(this);
     this.handleBeginningDateChange = this.handleBeginningDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
     this.handleSteriliteChange = this.handleSteriliteChange.bind(this);
@@ -62,18 +60,11 @@ class ProductDryingState extends Component {
     }));
   }
 
-  handleProcessDateChange(event) {
-    this.setState({ processDate: event.target.value });
-  }
-
   accept(event) {
     event.preventDefault();
 
     var errors = [];
 
-    if (this.state.processDate === "") {
-      errors.push("processDate");
-    }
     if (this.state.beginningDate === "") {
       errors.push("beginningDate");
     }
@@ -93,16 +84,16 @@ class ProductDryingState extends Component {
     if (this.state.endDate === "") {
       errors.push("endDate");
     }
-
-    alert(this.state.checkedItems.get("Strelite Testi"));
-    if (this.state.checkedItems.get("Strelite Testi") == false) {
+    if (
+      this.state.checkedItems.get("Strelite Testi İçin Örnek Alımı") == false
+    ) {
       errors.push("strelite");
     }
 
     this.setState({ errors: errors });
     if (errors.length <= 0) {
       this.state.callback_modalToggle();
-      this.state.callback_accept(this.state.data, this.state.processDate);
+      this.state.callback_accept(this.state.data);
     }
   }
 
@@ -127,31 +118,6 @@ class ProductDryingState extends Component {
               Kurutma
               <div className="card-body">
                 <form>
-                  <div className="form-group">
-                    <label>İşlem Tarihi</label>
-                    <input
-                      type="datetime-local"
-                      id="processDate"
-                      name="processDate"
-                      className={
-                        this.hasError("processDate")
-                          ? "form-control is-invalid"
-                          : "form-control"
-                      }
-                      value={this.state.processDate}
-                      onChange={this.handleProcessDateChange}
-                    />
-                    <div
-                      className={
-                        this.hasError("processDate")
-                          ? "inline-errormsg"
-                          : "hidden"
-                      }
-                    >
-                      İşlem Tarihini girmelisiniz.
-                    </div>
-                  </div>
-
                   <div className="form-group">
                     <label>Kurutma Başlangıç Tarihi</label>
                     <input
@@ -231,10 +197,10 @@ class ProductDryingState extends Component {
                     <Label>
                       <Input
                         type="checkbox"
-                        value="Strelite Testi"
+                        value="Strelite Testi İçin Örnek Alımı"
                         onChange={this.handleSteriliteChange}
                       ></Input>
-                      Strelite Testi
+                      Strelite Testi İçin Örnek Alımı
                     </Label>
 
                     <div
@@ -242,7 +208,7 @@ class ProductDryingState extends Component {
                         this.hasError("strelite") ? "inline-errormsg" : "hidden"
                       }
                     >
-                      Strelite Testi onayını vermelisiniz.
+                      Strelite Testi İçin Örnek Alımı onayını vermelisiniz.
                     </div>
                   </div>
 

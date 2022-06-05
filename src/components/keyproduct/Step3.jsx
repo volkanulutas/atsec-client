@@ -274,19 +274,19 @@ const Step3 = (props) => {
           <label>İşlem Sorumlusu:</label>
           <input
             placeholder=""
-            name="responsibleSigner"
+            name="signerInfo"
             className={
-              props.hasError("responsibleSigner")
+              props.hasError("signerInfo")
                 ? "form-control is-invalid"
                 : "form-control"
             }
-            value={props.responsibleSigner}
-            onChange={props.changeResponsibleHandler}
+            value={props.signerInfo}
+            onChange={props.changeSignerInfoHandler}
             disabled={!props.isEditable}
           />
           <div
             className={
-              props.hasError("responsibleSigner") ? "inline-errormsg" : "hidden"
+              props.hasError("signerInfo") ? "inline-errormsg" : "hidden"
             }
           >
             İşlem sorumlusunu girmelisiniz.

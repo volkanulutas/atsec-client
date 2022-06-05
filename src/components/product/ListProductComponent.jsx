@@ -236,7 +236,7 @@ class ListProductComponent extends Component {
           />
         </div>
       );
-    } else if (row.status === "Dondurma 2 Sonrası") {
+    } else if (row.status === "Öğütme Sonrası") {
       // Delipidation -> Kimyasal Sterilizasyon
       return (
         <div>
@@ -270,7 +270,7 @@ class ListProductComponent extends Component {
           />
         </div>
       );
-    } else if (row.status === "Kurutma") {
+    } else if (row.status === "Kimyasal Sterilizasyon Sonrası") {
       return (
         <div>
           <ProductDryingModal
@@ -316,10 +316,10 @@ class ListProductComponent extends Component {
       .then((res) => {
         let product = res.data;
         product.location = data;
-        product.status = "Dondurma 2 Sonrası";
+        product.status = "Öğütme Sonrası";
 
         let statusDate = {
-          productStatus: "Dondurma 2 Sonrası",
+          productStatus: "Öğütme Sonrası",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
@@ -515,18 +515,12 @@ class ListProductComponent extends Component {
 
   performMoisture_reject(row) {}
 
-  performDrying_accept(row, processDate) {
+  performDrying_accept(row) {
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
 
         product.status = "Paketleme Öncesi";
-
-        let statusDate = {
-          productStatus: "Paketleme Öncesi",
-          processDate: new Date(processDate).getTime(),
-        };
-        product.productStatusDateRequests.push(statusDate);
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {
@@ -552,10 +546,10 @@ class ListProductComponent extends Component {
       .then((res) => {
         let product = res.data;
 
-        product.status = "Kurutma";
+        product.status = "Kimyasal Sterilizasyon Sonrası";
 
         let statusDate = {
-          productStatus: "Kurutma",
+          productStatus: "Kimyasal Sterilizasyon Sonrası",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
@@ -653,13 +647,13 @@ class ListProductComponent extends Component {
         let product = res.data;
 
         // product.status = "Öğütme (Course) Sonrası";
-        product.status = "Dondurma 2 Sonrası";
+        product.status = "Öğütme Sonrası";
 
         product.granulationType = granulationTypeList;
 
         let statusDate = {
           // productStatus: "Öğütme (Course) Sonrası",
-          productStatus: "Dondurma 2 Sonrası",
+          productStatus: "Öğütme Sonrası",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
@@ -683,12 +677,15 @@ class ListProductComponent extends Component {
 
   performFreezingState_reject(row, data) {}
 
-  performPreProcessingState_accept(row, productFormTypeList, processDate) {
+  performPreProcessingState_accept(
+    row,
+    productFormTypeList,
+    preProcessingTypes,
+    processDate
+  ) {
     ProductService.getProductById(row.id)
       .then((res) => {
         let product = res.data;
-
-        product.status = "Ön İşlem - Kabul";
 
         let statusDate = {
           productStatus: "Ön İşlem - Kabul",
@@ -696,9 +693,9 @@ class ListProductComponent extends Component {
         };
         product.productStatusDateRequests.push(statusDate);
 
-        var preProcessingList = ["Kesme", "Defatting", "Kartilaj Alma"];
-        product.performPreProcessingType = preProcessingList;
+        product.status = "Ön İşlem - Kabul";
         product.productFormType = productFormTypeList;
+        product.preProcessingTypes = preProcessingTypes;
 
         ProductService.updateProduct(row.id, product)
           .then((res) => {

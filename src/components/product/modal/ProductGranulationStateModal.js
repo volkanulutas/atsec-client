@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 
-import ProductFreezingState from "../state/ProductFreezingState";
 import ProductGranulationState from "../state/ProductGranulationState";
 
 class ProductGranulationStateModal extends React.Component {

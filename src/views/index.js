@@ -42,12 +42,10 @@ import ListPackingProductComponent from "../components/packingproduct/ListPackin
 
 import CreatePackingProductComponent from "../components/packingproduct/CreatePackingProductComponent";
 
-
 import CreateProductComponent from "../components/product/CreateProductComponent";
 
 import ListRawProductComponent from "../components/rawproduct/ListRawProductComponent";
 import CreateRawProductComponent from "../components/rawproduct/CreateRawProductComponent";
-
 
 import MasterRawProduct from "../components/keyproduct/MasterRawProduct";
 
@@ -68,7 +66,6 @@ import ViewRejectArchiveComponent from "../components/rawproduct/rejectarchive/V
 
 import AuthService from "../services/AuthService";
 
-
 const pageList = [];
 
 const allPageList = [
@@ -86,7 +83,7 @@ const allPageList = [
   {
     name: "Kullanıcılar",
     path: "/users/",
-    id: "USER_PAGE_PERMISSION", 
+    id: "USER_PAGE_PERMISSION",
     component: ListUserComponent,
   },
   {
@@ -102,7 +99,7 @@ const allPageList = [
   {
     name: "Roller",
     path: `/roles/`,
-    id: "ROLE_PAGE_PERMISSION", 
+    id: "ROLE_PAGE_PERMISSION",
     component: ListRoleComponent,
   },
   {
@@ -118,7 +115,7 @@ const allPageList = [
   {
     name: "Yetkiler",
     path: "/permissions/",
-    id: "PERMISSION_PAGE_PERMISSION", 
+    id: "PERMISSION_PAGE_PERMISSION",
     component: ListPermissionComponent,
   },
   /*
@@ -137,7 +134,7 @@ const allPageList = [
   {
     name: "Donör Listesi",
     path: "/donors/",
-    id: "DONOR_PAGE_PERMISSION", 
+    id: "DONOR_PAGE_PERMISSION",
     component: ListDonorComponent,
   },
   {
@@ -153,7 +150,7 @@ const allPageList = [
   {
     name: "Müşteri Listesi",
     path: "/customers/",
-    id: "CUSTOMER_PAGE_PERMISSION", 
+    id: "CUSTOMER_PAGE_PERMISSION",
     component: ListCustomerComponent,
   },
   {
@@ -169,13 +166,13 @@ const allPageList = [
   {
     name: "Ham Ürün Listesi",
     path: "/rawproducts/",
-    id: "RAWPRODUCT_PAGE_PERMISSION2", 
+    id: "RAWPRODUCT_PAGE_PERMISSION2",
     component: ListRawProductComponent,
   },
   {
     name: "Ham Ürün Listesi",
     path: "/add-rawproduct/:state/:id",
-    id: "RAWPRODUCT_PAGE_PERMISSION2", 
+    id: "RAWPRODUCT_PAGE_PERMISSION2",
     component: MasterRawProduct,
   },
   {
@@ -191,7 +188,7 @@ const allPageList = [
   {
     name: "Doku Tipi Listesi",
     path: "/tissuetypes/",
-    id: "TISSUETYPE_PAGE_PERMISSION", 
+    id: "TISSUETYPE_PAGE_PERMISSION",
     component: ListTissueTypeComponent,
   },
   {
@@ -207,7 +204,7 @@ const allPageList = [
   {
     name: "Donör Kurum Listesi",
     path: "/donorinstitutes/",
-    id: "DONORINSTITUDE_PAGE_PERMISSION", 
+    id: "DONORINSTITUDE_PAGE_PERMISSION",
     component: ListDonorInstituteComponent,
   },
   {
@@ -223,17 +220,16 @@ const allPageList = [
   {
     name: "Ürün Listesi",
     path: "/products/",
-    id: "PRODUCT_PAGE_PERMISSION", 
+    id: "PRODUCT_PAGE_PERMISSION",
     component: ListProductComponent,
   },
 
   {
     name: "Paketlenmiş Ürün Listesi",
     path: "/packingproducts/",
-    id: "PACKINGPRODUCT_PAGE_PERMISSION", 
+    id: "PACKINGPRODUCT_PAGE_PERMISSION",
     component: ListPackingProductComponent,
   },
-
 
   {
     name: "Paketlenmiş Ürün Ekle/Güncelle",
@@ -275,7 +271,7 @@ const allPageList = [
   {
     name: "Ham Ürün Red Arşivi",
     path: "/rejectarchives/",
-    id: "RAWPRODUCTREJECT_PAGE_PERMISSION", 
+    id: "RAWPRODUCTREJECT_PAGE_PERMISSION",
     component: ListRejectArchiveComponent,
   },
   {

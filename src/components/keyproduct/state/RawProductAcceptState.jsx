@@ -30,7 +30,7 @@ class RawProductAcceptState extends Component {
   }
 
   componentDidMount() {
-    LocationService.getLocationsByType("ACCEPT")
+    LocationService.getLocationsByType("REJECT")
       .then((res) => {
         this.setState({ product_LocationList: res.data });
       })

@@ -1,10 +1,13 @@
 import React from "react";
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
+import axios from "axios";
+// import pdf from "../modal/test.pdf";
 
-import ViewBarcodePdfComponent from "../../product/ViewBarcodePdfComponent";
-import PackingProductBarcodeService from "../../../services/PackingProductBarcodeService";
+import PdfViewer from "../../pdfmanagement/PdfViewer";
+import ViewBarcodePdfComponent from "../ViewBarcodePdfComponent";
+import DonorBarcodeService from "../../../services/DonorBarcodeService";
 
-class PackingProductBarcodeModal extends React.Component {
+class DonorBarcodeModal extends React.Component {
   constructor(props) {
     super(props);
 
@@ -12,7 +15,7 @@ class PackingProductBarcodeModal extends React.Component {
       showPdf: false,
       pdf: null,
 
-      packingProductId: props.packingProductId,
+      productId: props.productId,
 
       modal: props.initialModalState,
       data: props.data,
@@ -25,6 +28,7 @@ class PackingProductBarcodeModal extends React.Component {
     this.toggle = this.toggle.bind(this);
     this.yes = this.yes.bind(this);
     this.no = this.no.bind(this);
+    this.createBarcode = this.createBarcode.bind(this);
     this.createBarcode2 = this.createBarcode2.bind(this);
   }
 
@@ -57,14 +61,24 @@ class PackingProductBarcodeModal extends React.Component {
       />
     );
   }
+  createBarcode() {
+    var status = this.state.showPdf;
+    this.setState({ showPdf: !status });
+  }
 
   createBarcode2() {
-    PackingProductBarcodeService.getBarcode(this.props.packingProductId);
+    DonorBarcodeService.getBarcode(this.props.productId);
   }
 
   render() {
     return (
       <div>
+        <PdfViewer
+          // pdf={pdf}
+          pdf={this.state.pdf}
+          onCancel={() => this.setState({ showPdf: false })}
+          visible={this.state.showPdf}
+        />
         <Button
           color="success"
           className="vlu-left-margin"
@@ -78,4 +92,4 @@ class PackingProductBarcodeModal extends React.Component {
   }
 }
 
-export default PackingProductBarcodeModal;
+export default DonorBarcodeModal;

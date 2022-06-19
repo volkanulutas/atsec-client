@@ -1,13 +1,118 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { FormGroup, Label, Input } from "reactstrap";
+import ViewModel from "../util/modal/ViewModel";
+import { connect } from "react-redux";
 
+import { addPdf_BloodResult, addPdf_PreConfirm } from "../../actions";
+import store from "../../store";
 import AddModal from "../util/modal/AddModal";
+import { ADDPDF_BLOOD_RESULT, ADDPDF_PRE_CONFIRM } from "../../constants";
 
 const Step1 = (props) => {
+  const [viewPdf_BloodResult, setViewPdf_BloodResult] = useState(null);
+  const [pdfFile_BloodResult, setPdfFile_BloodResult] = useState(null);
+  const [pdfFileError_BloodResult, setPdfFileError_BloodResult] = useState("");
+
+  const [viewPdf_PreConfirm, setViewPdf_PreConfirm] = useState(null);
+  const [pdfFile_PreConfirm, setPdfFile_PreConfirm] = useState(null);
+  const [pdfFileError_PreConfirm, setPdfFileError_PreConfirm] = useState("");
+
+  const [progressPreConfirm, setProgressPreConfirm] = useState(null);
+
   if (props.currentStep !== 1) {
     return null;
   }
+
+  const fileType = ["application/pdf"];
+
+  const handlePdfFileSubmit_BloodResult = (e) => {
+    let selectedFile = e.target.files[0];
+    if (selectedFile) {
+      if (selectedFile && fileType.includes(selectedFile.type)) {
+        let reader = new FileReader();
+        reader.readAsDataURL(selectedFile);
+        reader.onloadend = (e) => {
+          setPdfFile_BloodResult(e.target.result);
+          setPdfFileError_BloodResult("");
+
+          props.addPdf_BloodResult(e.target.result);
+        };
+      } else {
+        setPdfFile_BloodResult(null);
+        props.addPdf_BloodResult(null);
+        setPdfFileError_BloodResult("Lütfen PDF dosyasını seçiniz.");
+      }
+    } else {
+      console.log("Dosya Seç:");
+    }
+  };
+
+  const handlePdfFileSubmit_PreConfirm = (e) => {
+    let selectedFile = e.target.files[0];
+    if (selectedFile) {
+      if (selectedFile && fileType.includes(selectedFile.type)) {
+        let reader = new FileReader();
+        reader.readAsDataURL(selectedFile);
+        reader.onloadend = (e) => {
+          setPdfFile_PreConfirm(e.target.result);
+          setPdfFileError_PreConfirm("");
+
+          props.addPdf_PreConfirm(e.target.result);
+        };
+      } else {
+        setPdfFile_PreConfirm(null);
+        props.addPdf_PreConfirm(null);
+        setPdfFileError_PreConfirm("Lütfen PDF dosyasını seçiniz.");
+      }
+    } else {
+      console.log("Dosya Seç:");
+    }
+  };
+
+  const handlePdfFileChange_PreConfirm = (e) => {
+    let selectedFile = e.target.files[0];
+    if (selectedFile) {
+      if (selectedFile && fileType.includes(selectedFile.type)) {
+        let reader = new FileReader();
+        reader.readAsDataURL(selectedFile);
+        reader.onloadend = (e) => {
+          setPdfFile_PreConfirm(e.target.result);
+          setPdfFileError_PreConfirm("");
+
+          props.addPdf_Confirmation(e.target.result);
+        };
+      } else {
+        setPdfFile_PreConfirm(null);
+        props.addPdf_PreConfirm(null);
+        setPdfFileError_PreConfirm("Lütfen PDF dosyası seçiniz.");
+      }
+    } else {
+      console.log("Dosya Seç:");
+    }
+  };
+
+  const handlePdfFileChange_BloodResult = (e) => {
+    let selectedFile = e.target.files[0];
+    if (selectedFile) {
+      if (selectedFile && fileType.includes(selectedFile.type)) {
+        let reader = new FileReader();
+        reader.readAsDataURL(selectedFile);
+        reader.onloadend = (e) => {
+          setPdfFile_BloodResult(e.target.result);
+          setPdfFileError_BloodResult("");
+
+          props.addPdf_BloodResult(e.target.result);
+        };
+      } else {
+        setPdfFile_BloodResult(null);
+        props.addPdf_BloodResult(null);
+        setPdfFileError_BloodResult("Lütfen PDF dosyası seçiniz.");
+      }
+    } else {
+      console.log("Dosya Seç:");
+    }
+  };
 
   return (
     <>
@@ -134,6 +239,66 @@ const Step1 = (props) => {
           </div>
         </div>
 
+        <form className="form-group">
+          <label>Kan Sonuçları:</label>
+          <input
+            type="file"
+            className="form-control"
+            required
+            onChange={handlePdfFileChange_BloodResult}
+          />
+          {pdfFileError_BloodResult && (
+            <div className="error-msg">{pdfFileError_BloodResult}</div>
+          )}
+          <br></br>
+          <button
+            onClick={handlePdfFileSubmit_BloodResult}
+            className="btn btn-success btn-lg"
+          >
+            Yükle
+          </button>
+
+          <ViewModel
+            class="vlu-left-margin"
+            initialModalState={false}
+            component={"ViewPdfComponent"}
+            callback={props.viewPdf_BloodResult}
+            isEditable={props.isEditable}
+            viewPdf={viewPdf_BloodResult}
+            viewPdfType={ADDPDF_BLOOD_RESULT}
+          />
+        </form>
+
+        <form className="form-group">
+          <label>Ön Kabul Formu:</label>
+          <input
+            type="file"
+            className="form-control"
+            required
+            onChange={handlePdfFileChange_PreConfirm}
+          />
+          {pdfFileError_PreConfirm && (
+            <div className="error-msg">{pdfFileError_PreConfirm}</div>
+          )}
+          <br></br>
+          <button
+            onClick={handlePdfFileSubmit_PreConfirm}
+            className="btn btn-success btn-lg"
+          >
+            Yükle
+          </button>
+
+          <ViewModel
+            class="vlu-left-margin"
+            initialModalState={false}
+            component={"ViewPdfComponent"}
+            callback={props.viewPdf_PreConfirm}
+            isEditable={props.isEditable}
+            viewPdf={viewPdf_PreConfirm}
+            viewPdfType={ADDPDF_PRE_CONFIRM}
+          />
+        </form>
+
         <div className="form-group">
           <label>
             Doku Tipi:{" "}
@@ -212,4 +377,13 @@ const Step1 = (props) => {
   );
 };
 
-export default Step1;
+function mapStateToProps(state) {
+  return {
+    pdfFile_BloodResult: state.pdfFile_BloodResult,
+  };
+}
+
+export default connect(mapStateToProps, {
+  addPdf_BloodResult,
+  addPdf_PreConfirm,
+})(Step1);

@@ -70,6 +70,7 @@ class MasterRawProduct extends Component {
 
       product_StatusNameList: ["Red", "Kabul"],
       product_LocationList: [],
+      product_AcceptLocationList: [],
       product_DonorList: [],
       product_TissueTypeList: [],
 
@@ -209,6 +210,16 @@ class MasterRawProduct extends Component {
           toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-RAW-03");
         notify();
       });
+    LocationService.getLocationsByType("REJECT")
+      .then((res) => {
+        this.setState({ product_AcceptLocationList: res.data });
+      })
+      .catch((ex) => {
+        const notify = () =>
+          toast("Sunucu ile iletişim kurulamadı. Hata Kodu: CRT-RAW-03");
+        notify();
+      });
+
     DonorService.getAllDonors()
       .then((res) => {
         this.setState({ product_DonorList: res.data });
@@ -284,7 +295,6 @@ class MasterRawProduct extends Component {
   }
 
   handleTissueCarryCase = (event) => {
-    alert(event.target.checked);
     var isChecked = event.target.checked;
     var item = event.target.value;
     this.setState({ tissueCarryCase: isChecked });
@@ -754,6 +764,9 @@ class MasterRawProduct extends Component {
                 signerInfo={this.state.signerInfo}
                 id={this.state.id}
                 isEditable={this.state.isEditable}
+                product_AcceptLocationList={
+                  this.state.product_AcceptLocationList
+                }
                 multiple={this.state.multiple}
                 error={this.state.errors}
                 hasError={this.hasError}

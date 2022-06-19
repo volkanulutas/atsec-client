@@ -6,6 +6,7 @@ import CreateTissueTypeComponent from "../../../components/tissuetype/CreateTiss
 import CreateDonorInstituteComponent from "../../../components/donorinstitute/CreateDonorInstituteComponent";
 import CreateDonorComponent from "../../../components/donor/CreateDonorComponent";
 import ViewPdfComponent from "../../../components/keyproduct/ViewPdfComponent";
+import CreateCustomerComponent from "../../customer/CreateCustomerComponent";
 
 class AddModal extends React.Component {
   constructor(props) {
@@ -32,7 +33,7 @@ class AddModal extends React.Component {
 
   yes() {
     this.toggle();
-    if(this.state.callback) {
+    if (this.state.callback) {
       this.state.callback(this.state.data);
     }
     /*
@@ -44,38 +45,65 @@ class AddModal extends React.Component {
     */
   }
 
-  no(){
+  no() {
     this.toggle();
   }
 
-  findComponent(){
-    if("CreateLocationComponent" === this.state.component){
-      return <CreateLocationComponent 
-      callbackModalYes={this.yes}
-      callbackModalNo={this.no}/>;
-    } else if("CreateTissueTypeComponent" === this.state.component) {
-      return <CreateTissueTypeComponent 
-      callbackModalYes={this.yes}
-      callbackModalNo={this.no}/>;
-    } else if("CreateDonorInstituteComponent" === this.state.component) {
-      return <CreateDonorInstituteComponent 
-      callbackModalYes={this.yes}
-      callbackModalNo={this.no}/>;
-    } else if("CreateDonorComponent" === this.state.component){
-      return <CreateDonorComponent 
-      callbackModalYes={this.yes}
-      callbackModalNo={this.no}/>;
-    } else if("ViewPdfComponent" === this.state.component){
-      return <ViewPdfComponent 
-      callbackModalYes={this.yes}
-      callbackModalNo={this.no}/>;
+  findComponent() {
+    if ("CreateLocationComponent" === this.state.component) {
+      return (
+        <CreateLocationComponent
+          callbackModalYes={this.yes}
+          callbackModalNo={this.no}
+        />
+      );
+    } else if ("CreateTissueTypeComponent" === this.state.component) {
+      return (
+        <CreateTissueTypeComponent
+          callbackModalYes={this.yes}
+          callbackModalNo={this.no}
+        />
+      );
+    } else if ("CreateDonorInstituteComponent" === this.state.component) {
+      return (
+        <CreateDonorInstituteComponent
+          callbackModalYes={this.yes}
+          callbackModalNo={this.no}
+        />
+      );
+    } else if ("CreateDonorComponent" === this.state.component) {
+      return (
+        <CreateDonorComponent
+          callbackModalYes={this.yes}
+          callbackModalNo={this.no}
+        />
+      );
+    } else if ("ViewPdfComponent" === this.state.component) {
+      return (
+        <ViewPdfComponent
+          callbackModalYes={this.yes}
+          callbackModalNo={this.no}
+        />
+      );
+    } else if ("CreateCustomerComponent") {
+      return (
+        <CreateCustomerComponent
+          callbackModalYes={this.yes}
+          callbackModalNo={this.no}
+        />
+      );
     }
   }
 
   render() {
     return (
       <div>
-        <Button color="success" className="width-select2" onClick={this.toggle} disabled={!this.state.isEditable}>
+        <Button
+          color="success"
+          className="width-select2"
+          onClick={this.toggle}
+          disabled={!this.state.isEditable}
+        >
           +
         </Button>
         <Modal
@@ -85,9 +113,8 @@ class AddModal extends React.Component {
           className={this.props.className}
         >
           <ModalHeader toggle={this.toggle}>Modal</ModalHeader>
-            {this.findComponent()}
-          <ModalFooter>
-          </ModalFooter>
+          {this.findComponent()}
+          <ModalFooter></ModalFooter>
         </Modal>
       </div>
     );

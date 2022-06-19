@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ProductService from "../../services/ProductService";
 import CustomerService from "../../services/CustomerService";
 import AddModal from "../util/modal/AddModal";
+import DonorService from "../../services/DonorService";
 
 class CreateProductComponent extends Component {
   constructor(props) {
@@ -21,11 +22,8 @@ class CreateProductComponent extends Component {
           : true,
       multiple: false,
 
-      donor: {},
+      donor: [],
       customer: [], // Typeahead needs array.
-      status: "",
-      type: "",
-      secCode: "",
       preProcessingType: [],
       definition: "",
       information: "",
@@ -33,14 +31,13 @@ class CreateProductComponent extends Component {
 
       errors: [],
       product_CustomerList: [],
+      product_DonorList: [],
       // modal property
       callbackModalYes: props.callbackModalYes,
       callbackModalNo: props.callbackModalNo,
     };
     this.saveProduct = this.saveProduct.bind(this);
     this.changeCustomerHandler = this.changeCustomerHandler.bind(this);
-    this.changeStatusHandler = this.changeStatusHandler.bind(this);
-    this.changeTypeHandler = this.changeTypeHandler.bind(this);
     this.changePreProcessingTypeHandler =
       this.changePreProcessingTypeHandler.bind(this);
     this.changeDefinitionHandler = this.changeDefinitionHandler.bind(this);
@@ -48,6 +45,14 @@ class CreateProductComponent extends Component {
   }
 
   componentDidMount() {
+    DonorService.getAllDonors()
+      .then((res) => {
+        this.setState({ product_DonorList: res.data });
+      })
+      .catch((ex) => {
+        console.error(ex);
+      });
+
     CustomerService.getAllCustomers()
       .then((res) => {
         this.setState({ product_CustomerList: res.data });
@@ -64,14 +69,13 @@ class CreateProductComponent extends Component {
           let product = res.data;
 
           let customerTemp = [product.customer];
+          let donorTemp = [product.donor];
           this.setState({
-            donor: product.donor,
+            donor: donorTemp,
             customer: customerTemp,
             definition: product.definition,
             status: product.status,
-            type: product.type,
             information: product.information,
-            secCode: product.secCode,
             preProcessingType: product.preProcessingType,
           });
           console.log("product: " + JSON.stringify(product));
@@ -88,20 +92,8 @@ class CreateProductComponent extends Component {
     this.setState({ definition: event.target.value });
   };
 
-  changeStatusHandler = (event) => {
-    this.setState({ status: event.target.value });
-  };
-
-  changeTypeHandler = (event) => {
-    this.setState({ type: event.target.value });
-  };
-
   changeInformationHandler = (event) => {
     this.setState({ information: event.target.value });
-  };
-
-  changeSecCodeHandler = (event) => {
-    this.setState({ secCode: event.target.value });
   };
 
   changeDonorHandler = (event) => {
@@ -124,6 +116,10 @@ class CreateProductComponent extends Component {
       errors.push("customer");
     }
 
+    if (this.state.donor[0] === undefined) {
+      errors.push("donor");
+    }
+
     this.setState({ errors: errors });
     if (errors.length > 0) {
       return false;
@@ -139,16 +135,14 @@ class CreateProductComponent extends Component {
     let product = {
       id: idParam,
       definition: this.state.definition,
-      status: this.state.status,
-      type: this.state.type,
       information: this.state.information,
-      secCode: this.state.secCode,
-      donor: this.state.donor,
       customer: this.state.customer[0],
+      donor: this.state.donor[0],
       deleted: this.state.deleted,
     };
 
     if (this.state.id === "_add") {
+      console.log(JSON.stringify(product));
       ProductService.createProduct(product)
         .then((res) => {
           const notify = () => toast("Ürün başarılı bir şekilde kaydedildi.");
@@ -179,6 +173,14 @@ class CreateProductComponent extends Component {
       this.state.callbackModalYes();
     }
   };
+
+  addCreateCustomerComponent() {
+    window.location.reload();
+  }
+
+  addCreateDonorComponent() {
+    window.location.reload();
+  }
 
   cancel = (event) => {
     // If opened as modal
@@ -217,15 +219,43 @@ class CreateProductComponent extends Component {
               <div className="card-body">
                 <form>
                   <div className="form-group">
-                    <label>Donor Id:</label>
-                    <input
-                      placeholder="Donor Id:"
-                      name="donor.code"
-                      className="form-control"
-                      value={this.state.donor.code}
-                      onChange={this.changeDonorHandler}
-                      disabled={!this.state.isEditable}
-                    />
+                    <label>
+                      Donor Id:{" "}
+                      {this.state.donor[0] === undefined
+                        ? "Seçilmedi"
+                        : this.state.donor[0].id +
+                          " - " +
+                          this.state.donor[0].code}
+                    </label>
+
+                    <div>
+                      <Typeahead
+                        multiple={multiple}
+                        id="select-donor"
+                        onChange={(selected) => {
+                          this.setState({ donor: selected });
+                        }}
+                        labelKey="code"
+                        options={this.state.product_DonorList}
+                        placeholder="Donor Seç..."
+                        selected={this.state.donor}
+                        disabled={!this.state.isEditable}
+                      />
+                      <div
+                        className={
+                          this.hasError("donor") ? "inline-errormsg" : "hidden"
+                        }
+                      >
+                        Donor girmelisiniz.
+                      </div>
+                      <AddModal
+                        style={{ marginRight: "5px" }}
+                        initialModalState={false}
+                        component={"CreateDonorComponent"}
+                        callback={this.addCreateDonorComponent}
+                        isEditable={this.state.isEditable}
+                      />
+                    </div>
                   </div>
 
                   <div className="form-group">
@@ -263,8 +293,9 @@ class CreateProductComponent extends Component {
                       <AddModal
                         style={{ marginRight: "5px" }}
                         initialModalState={false}
-                        callback={this.delete}
-                        disabled={!this.state.isEditable}
+                        component={"CreateCustomerComponent"}
+                        callback={this.addCreateCustomerComponent}
+                        isEditable={this.state.isEditable}
                       />
                     </div>
                   </div>
@@ -277,39 +308,6 @@ class CreateProductComponent extends Component {
                       className="form-control"
                       value={this.state.definition}
                       onChange={this.changeDefinitionHandler}
-                      disabled={!this.state.isEditable}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Türü:</label>
-                    <input
-                      placeholder="Türü:"
-                      name="type"
-                      className="form-control"
-                      value={this.state.type}
-                      disabled={!this.state.isEditable}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Durumu:</label>
-                    <input
-                      placeholder="Durumu:"
-                      name="status"
-                      className="form-control"
-                      value={this.state.status}
-                      disabled={!this.state.isEditable}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>SEC Kodu:</label>
-                    <input
-                      placeholder="SEC Kodu:"
-                      name="secCode"
-                      className="form-control"
-                      value={this.state.secCode}
                       disabled={!this.state.isEditable}
                     />
                   </div>

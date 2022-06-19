@@ -209,7 +209,7 @@ class ProductPreprocessingState extends Component {
                       </div>
                       <br></br>
                       <div className="form-group">
-                        <label>İşlem Tarihi2</label>
+                        <label>İşlem Tarihi</label>
                         <input
                           type="datetime-local"
                           id="arrivalDate"

@@ -111,6 +111,14 @@ class ListPackingProductComponent extends Component {
                   >
                     Görüntüle
                   </button>
+
+                  <PackingProductBarcodeModal
+                    packingProductId={row.id}
+                    class="vlu-left-margin"
+                    initialModalState={false}
+                    product={row}
+                    isEditable={true}
+                  />
                 </div>
 
                 {this.checkstatus(row)}

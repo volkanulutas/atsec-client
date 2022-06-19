@@ -30,8 +30,7 @@ import ProductAfterWashingSterilationModal from "./modal/ProductAfterWashingSter
 import ProductDryingModal from "./modal/ProductDryingModal";
 import ProductMoistureModal from "./modal/ProductMoistureModal";
 
-import ProductBarcodeModal from "../product/modal/ProductBarcodeModal";
-import store from "../../store";
+import DonorBarcodeModal from "./modal/DonorBarcodeModal";
 
 const { SearchBar } = Search;
 
@@ -176,7 +175,7 @@ class ListProductComponent extends Component {
             callback_accept={this.performPreProcessingState_accept}
             callback_reject={this.performPreProcessingState_reject}
           />
-          <ProductBarcodeModal
+          <DonorBarcodeModal
             productId={row.id}
             class="vlu-left-margin"
             initialModalState={false}
@@ -187,13 +186,22 @@ class ListProductComponent extends Component {
       );
     } else if (row.status === "Paketleme Öncesi") {
       return (
-        <ProductPackingModal
-          style={{ marginRight: "5px" }}
-          initialModalState={false}
-          data={row}
-          callback_accept={this.performPacking}
-          callback_reject={this.performPacking_reject}
-        />
+        <div>
+          <ProductPackingModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            data={row}
+            callback_accept={this.performPacking}
+            callback_reject={this.performPacking_reject}
+          />
+          <DonorBarcodeModal
+            productId={row.id}
+            class="vlu-left-margin"
+            initialModalState={false}
+            product={row}
+            isEditable={true}
+          />
+        </div>
       );
     } else if (row.status === "Ön İşlem - Kabul") {
       return (
@@ -206,14 +214,13 @@ class ListProductComponent extends Component {
             callback_accept={this.performFreezingState_accept}
             callback_reject={this.performFreezingState_reject}
           />
-          <button
-            type="button"
-            style={{ marginRight: "5px" }}
-            // onClick={() => this.viewProduct(row)}
-            className="btn btn-success"
-          >
-            Etiket Oluştur
-          </button>
+          <DonorBarcodeModal
+            productId={row.id}
+            class="vlu-left-margin"
+            initialModalState={false}
+            product={row}
+            isEditable={true}
+          />
         </div>
       );
     } else if (row.status === "Dondurma 1 Sonrası") {
@@ -227,12 +234,12 @@ class ListProductComponent extends Component {
             callback_accept={this.performCourseGrinding_accept}
             callback_reject={this.performCourseGrinding_reject}
           />
-          <ProductCoarseModal
-            style={{ marginRight: "5px" }}
+          <DonorBarcodeModal
+            productId={row.id}
+            class="vlu-left-margin"
             initialModalState={false}
-            data={row}
-            callback_accept={this.performCoarseState_accept}
-            callback_reject={this.performCoarseState_reject}
+            product={row}
+            isEditable={true}
           />
         </div>
       );
@@ -246,6 +253,20 @@ class ListProductComponent extends Component {
             data={row}
             callback_accept={this.performWashing_accept}
             callback_reject={this.performWashing_reject}
+          />
+          <ProductCoarseModal
+            style={{ marginRight: "5px" }}
+            initialModalState={false}
+            data={row}
+            callback_accept={this.performCoarseState_accept}
+            callback_reject={this.performCoarseState_reject}
+          />
+          <DonorBarcodeModal
+            productId={row.id}
+            class="vlu-left-margin"
+            initialModalState={false}
+            product={row}
+            isEditable={true}
           />
         </div>
       );
@@ -268,6 +289,13 @@ class ListProductComponent extends Component {
             callback_accept={this.performAfterWashingSterilation_accept}
             callback_reject={this.performAfterWashingSterilation_reject}
           />
+          <DonorBarcodeModal
+            productId={row.id}
+            class="vlu-left-margin"
+            initialModalState={false}
+            product={row}
+            isEditable={true}
+          />
         </div>
       );
     } else if (row.status === "Kimyasal Sterilizasyon Sonrası") {
@@ -279,6 +307,13 @@ class ListProductComponent extends Component {
             data={row}
             callback_accept={this.performDrying_accept}
             callback_reject={this.performDrying_reject}
+          />
+          <DonorBarcodeModal
+            productId={row.id}
+            class="vlu-left-margin"
+            initialModalState={false}
+            product={row}
+            isEditable={true}
           />
         </div>
       );
@@ -292,6 +327,13 @@ class ListProductComponent extends Component {
             callback_accept={this.performMoisture_accept}
             callback_reject={this.performMoisture_reject}
           />
+          <DonorBarcodeModal
+            productId={row.id}
+            class="vlu-left-margin"
+            initialModalState={false}
+            product={row}
+            isEditable={true}
+          />
         </div>
       );
     } else if (row.status === "Dondurma 3 Sonrası") {
@@ -303,6 +345,13 @@ class ListProductComponent extends Component {
             data={row}
             callback_accept={this.performAfterWashingSterilation_accept}
             callback_reject={this.performAfterWashingSterilation_reject}
+          />
+          <DonorBarcodeModal
+            productId={row.id}
+            class="vlu-left-margin"
+            initialModalState={false}
+            product={row}
+            isEditable={true}
           />
         </div>
       );
@@ -316,10 +365,10 @@ class ListProductComponent extends Component {
       .then((res) => {
         let product = res.data;
         product.location = data;
-        product.status = "Öğütme Sonrası";
+        product.status = "Defatting Sonrası";
 
         let statusDate = {
-          productStatus: "Öğütme Sonrası",
+          productStatus: "Defatting Sonrası",
           processDate: new Date(processDate).getTime(),
         };
         product.productStatusDateRequests.push(statusDate);
